@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://muhammad-subhan-portfolio-2026.msa-910.chatgpt.site/sitemap.xml
+Sitemap: https://muhammadsubhan.pages.dev/sitemap.xml

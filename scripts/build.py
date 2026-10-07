@@ -176,7 +176,7 @@ add('projects.html','Making the thinking visible.','Projects','This portfolio as
  'The content distinguishes completed study from intended next steps, volunteering from industry participation, and language development from fluency. It also consolidates duplicate course entries that appear in more than one LinkedIn section. These decisions are part of the project’s usefulness: readers should be able to understand the evidence without having to decode the structure of the source profile.',
  'A portfolio should also be usable at different levels of attention. A visitor can read a short overview, inspect a specific course, follow an event reflection, or use search to find a topic. Quick-scan controls on long pages provide a summary without removing the full narrative.'),
  sec('Interaction with a purpose',
- 'The homepage scroll sequence connects curiosity, perspective, and direction. Its motion follows the reading progression, while reduced-motion support provides a static version. Filters help narrow learning records and event topics. Related-page links connect a capability to an example rather than leaving it as a claim.',
+ 'The homepage scroll sequence connects curiosity, perspective, and direction. Its motion follows the reading progression, while short viewports use an unpinned layout to keep each chapter readable. Filters help narrow learning records and event topics. Related-page links connect a capability to an example rather than leaving it as a claim.',
  'The contact page prepares an editable email draft based on the purpose of a conversation. It does not pretend to deliver a message through a service that is not connected. That is a small example of a broader principle: an interaction should make its actual outcome clear.'),
  sec('What this project demonstrates',
  'The website demonstrates a personal effort to organise information, communicate a developing identity, and build a useful record of learning. It was created with AI-assisted development; it is not presented as evidence that I independently wrote every line of code. Its value is in the brief, the content choices, and the practical result.',
@@ -199,12 +199,9 @@ add('contact.html','A conversation with a purpose.','Contact','For student oppor
 ],contact=True,related=['about.html','direction.html','experience.html'])
 
 from details import populate
+from experiences import populate_experiences
 populate(add,sec,PROFILE)
-try:
- from experiences import populate_experiences
- populate_experiences(add,sec,PROFILE)
-except ModuleNotFoundError:
- pass
+populate_experiences(add,sec,PROFILE)
 add('journal/archive.html','Every question, in one place.','Journal','The complete collection of portfolio reflections, with a direct route to each full entry.',[
  sec('The complete reading list','This archive brings together every long-form journal entry in the portfolio. Each begins with an experience or learning activity in my original LinkedIn record and develops one question from it. The list above is the complete portfolio journal, rather than only the three selected reflections on the homepage.','Choose the subject that interests you, read the full entry, or follow its source link to the original post. The journal hub provides topic filters if you want to narrow the collection before choosing a page.'),
  sec('Three connected themes','Technology entries consider AI capability, identity, authorisation, and the transition from a demonstration to dependable use. Business entries consider the human purpose of development and the commercial setting around an innovation. Learning entries consider resilience, structured study, and how to test understanding.','These themes overlap because the underlying questions overlap. A new system has users, an organisation, and responsibilities around it. A learning tool needs more than an organised explanation. A physical project needs the people who give it a purpose.'),

@@ -6,7 +6,7 @@ import json, re, math
 ROOT=Path(__file__).resolve().parent.parent
 OUT=ROOT/'dist'
 PROFILE='https://www.linkedin.com/in/ms910/'
-ORIGIN='https://muhammad-subhan-portfolio-2026.msa-910.chatgpt.site'
+ORIGIN='https://muhammadsubhan.pages.dev'
 PAGES={}
 def E(s):return escape(str(s),quote=True)
 def add(path,title,category,description,sections=None,**kw):

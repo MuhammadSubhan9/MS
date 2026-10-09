@@ -26,8 +26,10 @@ The preview runs on http://127.0.0.1:4173 with a real 404 response. Cloudflare h
 
 The current portrait is the exact approved AI preview with tie and suit adjustments, before the rejected facial blemish edit. Its file is `assets/portrait-approved.png`. The original supplied photograph remains preserved. The UNESCO homepage PNG is retained without resizing or compression. Fonts are local, with licence files included.
 
-Motion stays enabled as requested. Short or narrow phone screens use the unpinned story layout for readability. Intro-seen state is session-scoped. The contact composer prepares a draft for `ms@ahmadbaqa.com` in the visitor's email application; it sends and stores nothing itself. Existing Google Analytics and Microsoft Clarity integrations remain in the shared template. There is no application backend or npm dependency tree.
+Motion stays enabled as requested. Phone screens use a compact animated sticky story in portrait and landscape. Stable small-viewport units and the measured sticky height keep the scroll calculation aligned with the layout; only short desktop windows use the unpinned fallback. Intro-seen state is session-scoped. The contact composer prepares a draft for `ms@ahmadbaqa.com` in the visitor's email application; it sends and stores nothing itself. Existing Google Analytics and Microsoft Clarity integrations remain in the shared template. There is no application backend or npm dependency tree.
 
 ## Verification of the simplified structure
 
 All ten generated pages were checked at 320, 375, 390, 430, 768, 1024, 1366, 1440, and 1920 pixels: 90 page/viewport checks, with no horizontal overflow, missing completed images, or journal wording in the page, menu, or footer. Build validation checks internal links, fragments, heading structure, asset paths, search/sitemap route completeness, metadata, and redirect destinations. Certificate links lead directly to the original providers; event links lead to the original posts.
+
+The phone scroll repair was checked through all three chapters at 320×568, 375×667, 390×740, 390×844, 430×932, 844×390 landscape, 768×1024 tablet, and 1440×900 desktop: 24 phase/layout checks with no mobile copy clipping, evidence-board clipping, control overflow, or horizontal overflow. This is browser viewport testing, not a claim of physical-device Safari testing.

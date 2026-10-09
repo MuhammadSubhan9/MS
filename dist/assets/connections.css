@@ -35,3 +35,17 @@
 @media print{.connection-toggle{display:block!important}.connection-thought{opacity:1!important;transform:none!important}.connection-lens{background:transparent;color:#202421}.connection-node,.connection-label,.connection-thought{color:#202421}.connection-lens:after{display:none}}
 
 .profile-portrait img{mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 80%,transparent);mask-composite:intersect;-webkit-mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 80%,transparent);-webkit-mask-composite:source-in}
+
+/* Keep the identity anchored to the portrait rather than the old image frame. */
+.hero-portrait .portrait-caption{left:50%;right:auto;bottom:2px;transform:translateX(-50%);width:max-content;max-width:100%;padding:12px 8px 0;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;line-height:1.1}
+.portrait-caption:before{content:'';height:1px;width:30px;background:#571e3040;margin-bottom:3px}
+.portrait-caption .portrait-name{font-family:var(--serif);font-size:clamp(23px,2.4vw,31px);color:var(--wine);letter-spacing:-.025em;white-space:nowrap}
+.portrait-name em{font-weight:400}
+.portrait-caption .portrait-details{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);line-height:1.6}
+.portrait-details i{font-style:normal;padding-inline:6px;color:var(--wine)}
+@media(max-width:600px){.hero-portrait .portrait-caption{padding-top:5px;gap:3px;bottom:0}.portrait-caption .portrait-name{font-size:clamp(17px,4.4vw,24px)}.portrait-caption .portrait-details{font-size:8px;letter-spacing:.08em}.portrait-caption:before{width:22px;margin-bottom:2px}}
+/* A shorter reading rhythm, with a gentle lift as the pinned story releases. */
+.story-scroll:not(.static-story){height:250vh;border-radius:0 0 calc(var(--story-exit,0)*40px) calc(var(--story-exit,0)*40px)}
+.story-scroll:not(.static-story) .story-inner{transform:translateY(calc(var(--story-exit,0)*-18px));opacity:calc(1 - var(--story-exit,0)*.18)}
+@media(max-width:600px){.story-scroll:not(.static-story){height:240vh}.static-story .story-copy{gap:28px}.static-story .story-sticky{padding-block:45px}.static-story .scene-panel{margin-bottom:24px}}
+@media print{.story-scroll:not(.static-story){height:auto;border-radius:0}.story-scroll:not(.static-story) .story-inner{transform:none;opacity:1}}

@@ -208,5 +208,7 @@ add('journal/archive.html','Every question, in one place.','Journal','The comple
  sec('Where each essay began','The essays grew from my original posts, which are linked at the end of each page. I have given the ideas more room here, so the longer essay may go beyond what I wrote at the time. The event pages tell the story of the visit; the journal follows the thought it prompted.','I am writing from the perspective of a student trying to understand the subjects that interest me. Some questions are still open, and others will change as I learn more. The journal gives me a place to work through that uncertainty, practise clearer explanations, and come back to an idea later.'),
  sec('How the collection can grow','I want each new essay to contribute something: an observation I had missed, a connection I understand better, or a question that deserves more attention. A longer page is only useful if there is a reason to keep reading. I would rather develop a thought carefully than add words just to fill space.','The collection connects to the rest of the site through courses, events, and my interest in corporate law. You can follow those links wherever they lead your curiosity. For me, the value is in seeing how an idea travels from one setting to another and becomes more useful along the way.')
 ],is_archive=True,related=['journal.html','events.html','direction.html'])
+from portfolio import prepare
+prepare(PAGES,OUT)
 from render import render
 render(PAGES,OUT,ORIGIN,PROFILE)

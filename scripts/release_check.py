@@ -105,11 +105,20 @@ for label,values in [('title',[p.title for p in documents.values()]),('descripti
 
 index = json.loads((OUT/'assets/search.json').read_text(encoding='utf-8'))
 expected = {p['path'] for p in index}
-check(len(index)==48 and len(expected)==48, 'Expected all 48 searchable content routes')
+release_routes={'index.html','about.html','journey.html','education.html','direction.html','direction/technology.html','direction/transactions.html','portfolio.html','contact.html'}
+check(expected==release_routes, 'Search must contain precisely the current nine content routes')
 check(set(documents)==expected|{'404.html'}, 'Generated route set differs from search index')
+for line in (OUT/'_redirects').read_text(encoding='utf-8').splitlines():
+    source, target, status = line.split()
+    url = urlsplit(target)
+    rel = url.path.lstrip('/')
+    check(status == '301' and rel in expected, f'Invalid consolidation redirect: {source}')
+    if url.fragment and rel in documents:
+        ids = {attrs.get('id') for _,attrs in documents[rel].tags}
+        check(url.fragment in ids, f'Missing redirect section: {target}')
 urls = ET.parse(OUT/'sitemap.xml').getroot()
 sitemap = [e.text for e in urls.iter('{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
-check(len(sitemap)==48 and len(set(sitemap))==48,'Sitemap must contain all 48 unique routes')
+check(len(sitemap)==len(release_routes) and len(set(sitemap))==len(release_routes),'Sitemap must contain each current route exactly once')
 for rel,doc in documents.items():
     if rel!='404.html':
         canonical=next(a['href'] for t,a in doc.tags if t=='link' and a.get('rel')=='canonical')

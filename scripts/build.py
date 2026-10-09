@@ -31,7 +31,7 @@ add('about.html','A person before a profession.','About','A student in Riyadh, d
  sec('The standards I want to develop',
  'I am still early in this journey, and I want to put the work in. That means taking school seriously, reading with care, improving my writing, and learning from people with more experience. I want to understand what I am talking about, and be comfortable asking questions when I do not.',
  'I wanted this website to bring those parts of my life together: what I have studied, where I have been, what caught my attention, and where I hope to go next. There is more to that story than a list of course titles. The connections between them are what interest me most.'),
-],image='portrait.jpg',image_alt='Muhammad Subhan, photographed in a suit and tie',image_caption='Muhammad Subhan · Riyadh',related=['education.html','direction.html','journal.html'])
+],image='portrait-approved.png',image_alt='Muhammad Subhan, photographed in a suit and tie',image_caption='Muhammad Subhan · Riyadh',related=['education.html','direction.html','journal.html'])
 
 add('education.html','The work beneath the ambition.','Education','International A Levels, a British-curriculum foundation, and a deliberate next academic step.',[
  sec('My academic foundation',

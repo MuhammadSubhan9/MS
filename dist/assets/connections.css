@@ -1,0 +1,37 @@
+/* A light on the portrait frame; the photograph itself stays untouched. */
+.hero-portrait{background:transparent;overflow:hidden;display:flex;justify-content:center;align-items:flex-start}
+.hero-portrait:before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 42%,rgba(224,205,174,.32),transparent 67%);pointer-events:none}
+.hero-portrait img{position:relative;width:auto;height:100%;max-width:100%;object-fit:contain;object-position:center;filter:none;mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 78%,transparent);mask-composite:intersect;-webkit-mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 78%,transparent);-webkit-mask-composite:source-in}
+.hero-portrait .portrait-caption{z-index:3;background:none;color:var(--ink);padding:14px 12px 0;font-size:11px}
+.hero-portrait.portrait-lit{isolation:isolate;--light-x:50%;--light-y:35%}
+.portrait-light{position:absolute;inset:0;z-index:2;border:2px solid transparent;pointer-events:none;opacity:0;transition:opacity .65s ease; background:radial-gradient(ellipse 180px 180px at var(--light-x) var(--light-y),rgba(255,234,191,.95),rgba(200,169,114,.32) 45%,transparent 75%) border-box;mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);mask-composite:exclude;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor}
+.portrait-lit.light-active .portrait-light{opacity:1}
+.portrait-lit:after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 25px 1px rgba(230,201,150,.1);opacity:0;transition:opacity .65s ease}
+.portrait-lit.light-active:after{opacity:1}
+.connection-card{display:flex;flex-direction:column;min-width:0}
+.connection-card[hidden]{display:none}
+.connection-card>.card{flex:1}
+.connection-lens{background:#371522;color:#f7f2e9;padding:20px 24px;position:relative;border:1px solid #571e30;border-top:0;overflow:hidden}
+.connection-toggle{display:block;width:100%;text-align:left;background:none;color:inherit;border:0;padding:0;font:inherit;cursor:pointer}
+.connection-toggle[hidden]{display:none}
+.connection-toggle:focus-visible{outline:2px solid #dfc79d;outline-offset:6px;border-radius:2px}
+.connection-label{display:flex;align-items:center;justify-content:space-between;text-transform:uppercase;letter-spacing:.12em;font-size:10px;line-height:1.5;color:#dfc79d}
+.connection-label>span{font-size:20px;transition:transform .45s ease}
+.connection-chain{display:flex;align-items:center;gap:8px;margin-top:15px;font-size:12px;line-height:1.5;min-height:36px}
+.connection-node{flex:0 1 auto;transition:color .4s ease,transform .5s ease}
+.connection-line{flex:1 0 12px;height:1px;background:#8d6870;position:relative}
+.connection-line:before{content:'';position:absolute;inset:0;background:#dfc79d;transform:scaleX(0);transform-origin:left;transition:transform .65s cubic-bezier(.2,.7,.2,1)}
+.connection-line:after{content:'';position:absolute;right:0;top:-2px;width:4px;height:4px;border-top:1px solid #dfc79d;border-right:1px solid #dfc79d;transform:rotate(45deg);opacity:.5;transition:opacity .4s}
+.connection-thought{font-size:12px;line-height:1.65;margin:15px 0 0;min-height:6.6em;color:#e9dfe1}
+.lens-ready .connection-thought{opacity:0;transform:translateY(7px);transition:opacity .4s ease,transform .5s ease}
+.lens-ready:not(.lens-open):after{content:'An experience. A question. A connection.';position:absolute;bottom:24px;left:24px;right:24px;font-family:var(--serif);font-size:20px;line-height:1.25;color:#c9afb4;pointer-events:none}
+.lens-open .connection-thought{opacity:1;transform:translateY(0)}
+.lens-open .connection-line:before{transform:scaleX(1)}
+.lens-open .connection-line:nth-of-type(4):before{transition-delay:.16s}
+.lens-open .connection-line:after{opacity:1}
+.lens-open .connection-node{color:#dfc79d;transform:translateY(-2px)}
+.lens-open .connection-label>span{transform:rotate(45deg)}
+@media(max-width:430px){.connection-lens{padding:18px 20px}.connection-chain{gap:6px;font-size:11px}.connection-line{flex-basis:8px}.lens-ready:not(.lens-open):after{left:20px;right:20px}}
+@media print{.connection-toggle{display:block!important}.connection-thought{opacity:1!important;transform:none!important}.connection-lens{background:transparent;color:#202421}.connection-node,.connection-label,.connection-thought{color:#202421}.connection-lens:after{display:none}}
+
+.profile-portrait img{mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 80%,transparent);mask-composite:intersect;-webkit-mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 80%,transparent);-webkit-mask-composite:source-in}

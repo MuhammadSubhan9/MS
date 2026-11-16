@@ -1,0 +1,124 @@
+{
+  "part": "Part One",
+  "chapter": "Room Tone",
+  "pages": [
+    [
+      "The woman on the screen said she had never been afraid of her husband. In the take before it she had said she had never been afraid of him until that morning. I had been asked to use the shorter version.",
+      "I moved the cursor back to the beginning of her answer.",
+      "‘How much do they lose if we keep the whole sentence?’",
+      "Noah looked at the running time on his laptop. ‘Four seconds.’",
+      "‘They can find four seconds.’",
+      "‘Tell the director.’",
+      "‘I did.’",
+      "‘Tell him again with a number attached.’"
+    ],
+    [
+      "He went back to his captions. On my monitor the woman’s mouth waited half open. She had been filmed at a kitchen table with a basket of clean washing behind her. Someone had put a red cardigan on top of the pile to bring colour into the frame. Through the headphones I could hear the refrigerator starting beneath her first answer and stopping in the second. Removing four seconds would take a little work. Restoring what the four seconds meant would take an email nobody wanted to write.",
+      "The longer take got a marker. At ten that morning, a documentary with too many producers seemed enough trouble for one week.",
+      "Our editing room was the smaller of two rooms above a print shop near Dalston. Its window opened six inches on to a brick wall. The wall had a pale rectangle where a sign had been removed, and for three months I had meant to ask what the sign had said. We rented the room on Mondays and Thursdays, when the company downstairs needed the other room for client meetings. Everything we owned could be carried away at the end of a session. Even the good chair belonged to the print shop."
+    ],
+    [
+      "Noah had taken the chair with the loose back. He was twenty-seven and considered this an adequate reason to ignore it. I had put a folded invoice under one of its wheels because the rocking was audible through the microphone we used for temporary voice tracks. He had objected to the invoice more than the chair.",
+      "‘You’re using their money to repair their furniture,’ he had said.",
+      "The invoice was six weeks overdue.",
+      "Halfway through the email about the woman’s answer, a message appeared in the corner of the screen.",
+      {
+        "kind": "subject",
+        "text": "Marianne Pike. Bellwether: appointment record naming you."
+      },
+      "Pike could have been anyone. Marianne Pike, writing from Bellwether, could not. The message sat unopened while I read the name again.",
+      "Marianne had worked in the office at Bellwether. I remembered a woman wearing a knitted waistcoat over a blouse, slipping folded banknotes into a brown envelope at the end of the day. My mother had told me it was petty cash. For a long time I had thought petty described the amount.",
+      "The message was addressed only to me."
+    ],
+    [
+      {
+        "kind": "email",
+        "text": "Dear Daniel,"
+      },
+      {
+        "kind": "email",
+        "text": "I am assisting with reconciliation of the records held by Bellwether Estates before their transfer. I have found an appointment record which names you. It appears to be current rather than historical. I do not know whether you have seen it."
+      },
+      {
+        "kind": "email",
+        "text": "I attach a copy of the relevant page. I have removed contact details belonging to other people. There is also a short audio file catalogued against your name, which I am authorised to send to you. I would prefer to explain the circumstances by telephone. My number is below."
+      },
+      {
+        "kind": "email",
+        "text": "This is not an invitation from me. Please do not take it as one."
+      },
+      {
+        "kind": "email",
+        "text": "Yours sincerely,"
+      },
+      {
+        "kind": "email",
+        "text": "Marianne Pike"
+      },
+      "Noah asked whether I had sent the director the note.",
+      "‘One minute.’",
+      "The first attachment was a scan of a single sheet. The right edge carried a crescent of darkness where the paper had not lain flat. Along the top someone had written an internal reference in blue ink. Below it, in a plain printed grid, were the date, the location and my name."
+    ],
+    [
+      {
+        "kind": "record",
+        "text": "17 NOVEMBER 2026. 14:00. BELLWETHER."
+      },
+      {
+        "kind": "record",
+        "text": "R11: CONSOLIDATED REVIEW."
+      },
+      {
+        "kind": "record",
+        "text": "REVIEWER: DANIEL VANE."
+      },
+      "I enlarged the page. Part of the lower section had been covered by a grey rectangle before it was scanned. What remained was a list of arrangements: access, recording, seating. Beneath them a final instruction had been boxed.",
+      {
+        "kind": "record",
+        "text": "Obtain reviewer’s exact wording. Do not substitute a summary."
+      },
+      "Seventeen years on the seventeenth. The date had needed no calendar since my mother disappeared.",
+      "There had been meetings before: appointments I chose, appointments I was taken to, others I left before anyone could persuade me to stay. The most recent was in January of the previous year. Outside the station afterwards, I tore Robert Ashcombe’s proposed statement into a public bin. We hadn’t spoken since.",
+      "Now he seemed to have made another appointment.",
+      "I checked the sender’s address. It used the estate company’s domain. That proved very little. I opened a browser, found a public contact number for the office and wrote it down before I touched the number in her email."
+    ],
+    [
+      "‘Everything all right?’ Noah asked.",
+      "‘Someone’s sent me something from home.’",
+      "He turned his laptop away from the light. ‘Good home or actual home?’",
+      "‘Mereford.’",
+      "He waited. I put the headphones back on.",
+      "The second attachment lasted forty-three seconds. There was a click at the beginning, then the soft continuous noise of a room with a poor microphone. I heard myself breathing before I heard my voice. It sounded closer to the microphone than I remembered sitting.",
+      "Ashcombe said, ‘Before we begin again, I want to make sure these are your words.’",
+      "A pause. A small impact, possibly a mug put down.",
+      "Then I said, ‘I saw his hand come up.’",
+      "The file ended shortly afterwards. I played it again. My voice was flatter than it usually sounded to me. There were rooms I could identify from a reflection in a vowel, but I could not identify this one. The words were familiar. The pause before them was familiar too, although I could not have said why."
+    ],
+    [
+      "I took off the headphones.",
+      "‘Can you give me the room for ten minutes?’",
+      "Noah stood without asking me to explain. He gathered his laptop and charger, then came back for his tea.",
+      "‘Send the director the note,’ he said. ‘Before whatever this is eats the afternoon.’",
+      "I sent it. I wrote that shortening the answer would change its meaning, attached the longer version and requested a decision. It was a reasonable email. I remember being pleased by that, as if a reasonable email could demonstrate that I was still having a reasonable day.",
+      "The woman who answered the estate’s public number asked me to hold. While I waited, I looked again at the sheet. *Reviewer* made the meeting sound like my idea. At Bellwether I answered questions. My own had rarely got far.",
+      "Marianne came on the line.",
+      "‘Daniel?’",
+      "‘You emailed me.’",
+      "‘Yes.’"
+    ],
+    [
+      "‘How did you get this address?’",
+      "‘It was in the correspondence from last year. I checked the company name on your website before using it.’",
+      "‘Is Robert there?’",
+      "‘No. I’m in the estate office.’",
+      "‘Does he know you’ve sent it?’",
+      "‘I haven’t spoken to him.’",
+      "Through her end of the call I heard someone move a box across a hard floor. There was a second voice, too distant to make out, and she said, away from the telephone, ‘I’ll come through in a moment.’",
+      "‘Who arranged this?’ I asked.",
+      "‘That’s what I don’t know.’",
+      "‘It has a time and a room.’",
+      "‘It does.’",
+      "‘Then somebody knows.’"
+    ]
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "descriptor": "Personal portfolio",
+  "portrait": {
+    "src": "/images/portrait-768.webp",
+    "alt": "Muhammad Subhan in a suit and tie.",
+    "width": 768,
+    "height": 1365,
+    "sources": [
+      { "src": "/images/portrait-384.webp", "width": 384 },
+      { "src": "/images/portrait-768.webp", "width": 768 }
+    ]
+  },
+  "introduction": [
+    "I’m a student interested in how things work, from the choices behind a design to the decisions people make in a group. Here I keep a record of what I’m studying and working on."
+  ],
+  "currentFocus": "International A Levels in Mathematics, Physics and Computer Science.",
+  "futureDirection": "I’m considering a degree in law and want to understand how organisations make decisions.",
+  "biography": [
+    "I’m interested in the work that happens before a finished result. In computing that might mean comparing two ways to organise information. In a group project it might mean figuring out what someone needs before deciding what to make.",
+    "My subjects give me different ways to approach a problem. Outside class, I like projects that let me try an idea and see where it holds up."
+  ],
+  "interests": [
+    "Aviation interests me for the coordination it takes to run a flight. I’m also curious about how software can make everyday tasks easier."
+  ],
+  "education": [
+    {
+      "date": "2025–2027",
+      "title": "International A Levels",
+      "status": "In progress",
+      "current": true,
+      "description": "Mathematics, Physics and Computer Science.",
+      "details": [
+        "The three subjects combine problem solving, experimental work and programming."
+      ]
+    },
+    {
+      "date": "2023–2025",
+      "title": "Secondary education",
+      "status": "Completed",
+      "description": "Broad secondary curriculum leading into sixth form."
+    }
+  ],
+  "experience": [
+    {
+      "date": "2026",
+      "title": "Student reading group",
+      "role": "Discussion organiser",
+      "description": "Prepared reading notes and led small group discussions on technology and everyday decisions.",
+      "outcome": "Collected the group’s questions in a shared reading list.",
+      "details": [
+        "Each session started with a short reading and one question for the group."
+      ]
+    }
+  ],
+  "workIntroduction": "A selection of independent projects and activities, with longer notes where there is more to show.",
+  "projects": [
+    {
+      "slug": "unesco-ai-forum",
+      "title": "UNESCO Global Forum on the Ethics of AI",
+      "category": "Event",
+      "description": "An experience in Riyadh that prompted me to think about who takes responsibility when AI is put into use.",
+      "selected": true,
+      "image": {
+        "src": "/images/forum-1280.webp",
+        "alt": "Audience and stage at the fourth UNESCO Global Forum on the Ethics of AI in Riyadh.",
+        "width": 1280,
+        "height": 852,
+        "sources": [
+          { "src": "/images/forum-640.webp", "width": 640 },
+          { "src": "/images/forum-1280.webp", "width": 1280 }
+        ]
+      },
+      "body": [
+        "I went expecting a technology event. The question I took away was who should be responsible for the decisions made once a tool is working."
+      ]
+    },
+    {
+      "slug": "layout-study",
+      "title": "Designing a personal website",
+      "category": "Independent project",
+      "date": "2026",
+      "description": "An editorial site that makes education, interests and work easy to find, while keeping the homepage brief.",
+      "body": [
+        "A personal site has to introduce someone quickly and give interested readers somewhere to go next. The page structure came first, followed by typography, responsive layouts and accessibility checks."
+      ],
+      "sections": [
+        {
+          "title": "Structure",
+          "paragraphs": [
+            "I used separate pages for background, work and contact. A short homepage gives each of those pages a clear entry point."
+          ]
+        },
+        {
+          "title": "Implementation",
+          "paragraphs": [
+            "Education entries share dates and titles up front. Supporting information opens on demand, which keeps the chronology compact."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "activity-record",
+      "title": "Organising a reading list",
+      "category": "Research notes",
+      "date": "2025",
+      "description": "A short index that groups readings by topic and separates source material from personal notes."
+    }
+  ],
+  "writing": [
+    {
+      "slug": "sample-article",
+      "title": "The questions behind a good index",
+      "category": "Essay",
+      "date": "2026-11-15",
+      "description": "What people need to see first when they open a list of unfamiliar material.",
+      "body": [
+        "A useful index begins with the reader’s question. A date might matter when catching up on changes. A subject or title matters more when the reader already knows what they are trying to find."
+      ],
+      "sections": [
+        {
+          "title": "Keep the first decision small",
+          "paragraphs": [
+            "Choose a few signals that help the reader decide what to open. A short description or a clear title usually does more work than a collection of tags."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "useful-notes",
+      "title": "When notes become useful again",
+      "category": "Essay",
+      "date": "2026-10-09",
+      "description": "A good note records enough context to make sense weeks later.",
+      "body": [
+        "The most useful notes tell me why I saved something and where it came from. A short sentence at the top can save a second reading later."
+      ]
+    }
+  ],
+  "contact": {
+    "email": "portfolio-preview@example.com",
+    "links": [],
+    "cv": null,
+    "introduction": "You can get in touch by email about student opportunities, projects or shared interests."
+  }
+}

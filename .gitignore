@@ -1,7 +1,3 @@
-node_modules/
-.sites-runtime/
+.preview/
 artifacts/
-*.tar.gz
-
-__pycache__/
-*.pyc
+.codex-attachments/

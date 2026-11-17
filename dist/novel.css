@@ -691,6 +691,58 @@ html:has(.novel-reader-dialog[open]) { overflow: hidden; }
 .novel-footer p { color: var(--cream); font: 600 clamp(1.75rem, 3vw, 3.3rem)/1 var(--serif); }
 .novel-footer div span { font-size: .91rem; }
 
+.novel-release {
+  padding-block: clamp(3.5rem, 7vw, 7rem);
+  border-block: 1px solid var(--dim-rule);
+  background: radial-gradient(ellipse at 0 50%, #5035204a, transparent 65%), #17120e;
+}
+.release-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(2rem, 6vw, 6rem); }
+.release-copy h2 { margin-block: .8rem 1.4rem; font: 600 clamp(2.5rem, 4.5vw, 5rem)/.95 var(--serif); letter-spacing: -.035em; }
+.release-copy h2 em { color: var(--copper); }
+.release-copy > p:last-child { max-width: 40ch; color: var(--type-muted); font-size: 1.06rem; }
+.novel-release-form { display: grid; gap: .8rem; }
+.novel-release-form > label { font-size: .95rem; }
+.release-input-row { display: flex; flex-wrap: wrap; gap: .6rem; }
+.release-input-row > input {
+  flex: 1 1 12rem;
+  min-width: 0;
+  min-height: 50px;
+  padding: .7rem .85rem;
+  border: 1px solid #9c7b5a;
+  border-radius: 2px;
+  background: #221a13;
+  color: var(--cream);
+  font: inherit;
+}
+.release-input-row > input::placeholder { color: #b2a08d; opacity: 1; }
+.release-input-row > .novel-button { justify-content: center; }
+.release-input-row > .novel-button:disabled { opacity: .7; cursor: progress; }
+.release-consent { display: flex; align-items: flex-start; gap: .6rem; color: var(--type-muted); cursor: pointer; }
+.release-consent input { flex: none; width: 1.1rem; height: 1.1rem; margin: .15rem 0; accent-color: var(--copper); }
+.release-consent span { max-width: 48ch; }
+.release-honey { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.release-status { padding: .8rem 1rem; border-inline-start: 2px solid var(--copper); background: #2c2118; color: var(--cream); }
+.release-status:empty { padding: 0; margin-top: -.8rem; border: 0; background: none; }
+.release-status[data-kind="error"] { border-color: #f1b4a4; color: #f5cec1; }
+.release-status[data-kind="success"]::before { content: '✓'; display: inline-block; margin-inline-end: .55rem; color: var(--copper); }
+.release-privacy { color: var(--type-muted); font-size: .9rem; }
+.release-privacy summary { display: flex; align-items: center; width: fit-content; min-height: 44px; cursor: pointer; text-decoration: underline; text-underline-offset: .22em; }
+.release-privacy p { margin-top: .2rem; }
+.release-result { max-width: 44rem; padding-block: clamp(3rem, 8vw, 7rem); }
+.release-result h1 { margin-block: 1rem; font: 600 clamp(2.5rem, 6vw, 5rem)/1 var(--serif); }
+.release-result p { margin-block: 1rem; }
+.release-result form, .release-result > a { margin-block-start: 1.5rem; }
+@media (max-width: 780px) {
+  .release-layout { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .release-status:not(:empty) { animation: release-status-in 220ms ease-out both; }
+}
+@keyframes release-status-in {
+  from { opacity: 0; translate: 0 .25rem; }
+  to { opacity: 1; translate: 0; }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
   .novel-hero[data-entrance] .shelf-world { animation: shelf-exposure 2050ms var(--cut) both; }

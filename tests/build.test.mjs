@@ -68,6 +68,8 @@ test('public build excludes fixture data and includes production SEO', async () 
   assert.match(novel, /id="synopsis"/);
   assert.match(novel, /The woman on the screen said she had never been afraid of her husband/);
   assert.match(novel, /Then somebody knows/);
+  assert.match(novel, /action="\/api\/novel\/subscribe" method="post"/);
+  assert.match(novel, /name="consent" type="checkbox" value="yes" required/);
   const legacyNovel = await readFile(`${output}/writing/the-eleventh-rehearsal/index.html`, 'utf8');
   assert.match(legacyNovel, /http-equiv="refresh" content="0;url=\/writing\/"/);
   await assert.rejects(readFile(`${output}/writing/sample-article/index.html`), { code: 'ENOENT' });

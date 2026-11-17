@@ -818,6 +818,7 @@ details p { padding: .2rem 0; }
 .now-copy {
   max-width: 62ch;
   font-size: clamp(1.12rem, 2.2vw, 1.35rem);
+  font-style: italic;
 }
 @media (max-width: 700px) {
   .now-panel { grid-template-columns: minmax(0, 1fr); }

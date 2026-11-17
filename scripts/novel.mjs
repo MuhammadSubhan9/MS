@@ -65,6 +65,7 @@ export function novelContent(book, author) {
         <p class="novel-hook">${escape(book.description)}</p>
         <div class="novel-hero-actions">
           <a class="novel-button" href="#excerpt" data-open-reader>Open the book <span aria-hidden="true">↗</span></a>
+          <a class="novel-text-link" href="#release-updates">Release updates <span aria-hidden="true">↓</span></a>
         </div>
       </div>
       <div class="novel-shelf">
@@ -119,6 +120,34 @@ export function novelContent(book, author) {
         <div data-inline-reader>${reader(book, author)}</div>
       </div>
     </section>
+    <section class="novel-release" id="release-updates" aria-labelledby="release-title" tabindex="-1">
+      <div class="novel-wrap release-layout">
+        <div class="release-copy">
+          <p class="novel-label">The release announcement</p>
+          <h2 id="release-title">The next chapter,<br><em>in your inbox.</em></h2>
+          <p>I’m still writing <cite>The Eleventh Rehearsal</cite>. Leave your email and I’ll let you know when it’s released.</p>
+        </div>
+        <form class="novel-release-form" action="/api/novel/subscribe" method="post" data-clarity-mask="true">
+          <label for="release-email">Email address</label>
+          <div class="release-input-row">
+            <input id="release-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required>
+            <button class="novel-button" type="submit">Notify me <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="release-honey" aria-hidden="true">
+            <label for="release-website">Website</label>
+            <input id="release-website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <label class="release-consent"><input name="consent" type="checkbox" value="yes" required>
+            <span>Email me once when <cite>The Eleventh Rehearsal</cite> is released.</span>
+          </label>
+          <p class="release-status" role="status" aria-atomic="true"></p>
+          <details class="release-privacy">
+            <summary>About this signup</summary>
+            <p>Your email is stored on Cloudflare for this announcement. You can unsubscribe through the link in the release email, or <a href="mailto:ms@ahmadbaqa.com">contact me</a> to remove your address sooner.</p>
+          </details>
+        </form>
+      </div>
+    </section>
     <dialog class="novel-reader-dialog" aria-label="The Eleventh Rehearsal excerpt">
       <div class="reader-dialog-inner">
         <div class="reader-top">
@@ -151,6 +180,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
   <link rel="preload" href="/fonts/welcome-editorial.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/novel.css">
   <script src="/novel.js" defer blocking="render"></script>
+  <script src="/novel-subscription.js" defer></script>
   ${data.now ? commandAssets : ''}
   ${clarityTag(data, origin, ready)}
   ${google.head}

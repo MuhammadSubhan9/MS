@@ -1,24 +1,10 @@
 import {
-  action, arrow, chronology, escape, formatDate, hasDetail, image, paragraphs, projectEntry,
+  action, arrow, chronology, escape, hasDetail, image, paragraphs, projectEntry,
   publicationDate, safeLink, section,
 } from './components.mjs';
 import { findNovel, novelContent, novelPath, oldNovelPath } from './novel.mjs';
 import { contactPage } from './contact.mjs';
-
-function nowPage(content) {
-  const [date, ...lines] = content.trim().split(/\r?\n/);
-  const copy = lines.join('\n').trim().split(/\n\s*\n/).filter(Boolean);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !copy.length) {
-    throw new Error('Start content/now.txt with a YYYY-MM-DD date followed by at least one paragraph.');
-  }
-  return `<article class="now-page">
-    <header class="now-heading">
-      <h1>Now</h1>
-      <p class="meta">Last updated <time datetime="${date}">${formatDate(date)}</time></p>
-    </header>
-    <div class="reading now-copy">${paragraphs(copy)}</div>
-  </article>`;
-}
+import { nowPage } from './now.mjs';
 
 function homePage(data, { hasAbout, hasContact, selected }) {
   const { education, projects, portrait, writing, contact } = data;

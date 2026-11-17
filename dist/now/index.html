@@ -23,6 +23,7 @@
 
   <link rel="stylesheet" href="/commands.css">
   <script src="/commands.js" defer></script>
+  <script src="/now-editor.js" defer></script>
   <script src="/site.js" defer></script>
 </head>
 <body>
@@ -35,13 +36,30 @@
       <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/">About</a><a href="/work/">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
     </div>
   </header>
-  <main class="container" id="main" tabindex="-1"><article class="now-page">
-    <header class="now-heading">
-      <h1>Now</h1>
-      <p class="meta">Last updated <time datetime="2026-11-17">17 November 2026</time></p>
-    </header>
-    <div class="reading now-copy"><p>I’m studying Mathematics, Physics and Computer Science at International A Level in Riyadh.</p><p>Outside school, I’m working on The Eleventh Rehearsal, a psychological thriller about memory and the stories people tell about the past.</p><p>I’m working on my German and learning Latin.</p></div>
-  </article></main>
+  <main class="container" id="main" tabindex="-1"><!-- now:content -->
+    <article class="now-page" data-now-revision="0">
+      <header class="now-heading">
+        <h1>Now</h1>
+        <p class="meta">Last updated <time datetime="2026-11-17">17 November 2026</time></p>
+      </header>
+      <div class="reading now-copy"><p>I’m studying Mathematics, Physics and Computer Science at International A Level in Riyadh.</p><p>Outside school, I’m working on The Eleventh Rehearsal, a psychological thriller about memory and the stories people tell about the past.</p><p>I’m working on my German and learning Latin.</p></div>
+    </article>
+    <!-- /now:content -->
+    <dialog class="command-palette now-editor" aria-labelledby="now-editor-title">
+      <form class="command-form" data-now-form>
+        <div class="command-heading">
+          <h2 id="now-editor-title">Edit Now</h2>
+          <button type="button" data-close-editor>Close</button>
+        </div>
+        <label for="now-editor-text">What are you doing now?</label>
+        <textarea id="now-editor-text" rows="8" maxlength="4000" aria-describedby="now-editor-help" required autofocus></textarea>
+        <p class="command-feedback" id="now-editor-help">Separate paragraphs with a blank line.</p>
+        <label for="now-editor-code">Publishing code</label>
+        <input id="now-editor-code" type="password" maxlength="128" autocomplete="off" required>
+        <button class="command-submit" type="submit">Publish update</button>
+        <p class="command-feedback" role="status" data-editor-status></p>
+      </form>
+    </dialog></main>
   <footer class="site-footer"><div class="container footer-inner">
     <div class="footer-identity">
       <a class="footer-name" href="/">Muhammad Subhan</a>
@@ -61,7 +79,7 @@
       </div>
       <label class="command-label" for="command-input">Type a command</label>
       <input id="command-input" type="text" placeholder="Type a command…" autocomplete="off" autocapitalize="none" spellcheck="false" autofocus>
-      <a class="command-result" href="https://github.com/MuhammadSubhan9/MS/edit/main/content/now.txt" hidden>Edit Now on GitHub <span aria-hidden="true">↗</span></a>
+      <a class="command-result" href="/now/#edit" hidden>Edit Now <span aria-hidden="true">→</span></a>
       <p class="command-feedback" role="status"></p>
     </form>
   </dialog>

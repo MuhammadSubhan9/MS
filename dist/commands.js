@@ -33,12 +33,12 @@ if (typeof palette?.showModal === 'function') {
   form.addEventListener('submit', event => {
     event.preventDefault();
     if (matchesEditCommand()) {
-      palette.close();
-      location.assign(result.href);
+      result.click();
     } else {
       feedback.textContent = 'No command found.';
     }
   });
 
+  result.addEventListener('click', () => palette.close());
   palette.querySelector('[data-close-commands]').addEventListener('click', () => palette.close());
 }

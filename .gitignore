@@ -1,3 +1,5 @@
 .preview/
 artifacts/
 .codex-attachments/
+/.dev.vars*
+/.wrangler/

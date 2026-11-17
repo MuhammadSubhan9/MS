@@ -221,6 +221,22 @@
   .contact-form-row { grid-template-columns: minmax(0, 1fr); }
 }
 
+.contact-actions { display: flex; flex-wrap: wrap; gap: .45rem; }
+.contact-save {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  min-height: 44px;
+  padding: .55rem .7rem;
+  border: 1px solid var(--contact-brass);
+  background: var(--contact-brass);
+  color: var(--contact-ink);
+  font-weight: 650;
+  line-height: 1.25;
+  text-decoration: none;
+}
+.contact-save:hover { border-color: #ebd1a4; background: #ebd1a4; }
+
 .contact-copy {
   min-height: 44px;
   padding: .55rem .65rem;

@@ -50,6 +50,11 @@ test('public build excludes fixture data and includes production SEO', async () 
   assert.ok(!html.includes('Private design preview'));
   const contact = await readFile(`${output}/contact/index.html`, 'utf8');
   assert.ok(contact.includes('href="mailto:ms@ahmadbaqa.com"'));
+  assert.ok(contact.includes(`href="${source.contact.vcard}" download`));
+  const vcard = await readFile(output + source.contact.vcard, 'utf8');
+  assert.ok(vcard.startsWith('BEGIN:VCARD\r\nVERSION:3.0\r\n'));
+  assert.ok(vcard.includes(`FN:${source.name}\r\n`));
+  assert.ok(vcard.includes(`EMAIL;TYPE=INTERNET:${source.contact.email}\r\n`));
   const novel = await readFile(`${output}/writing/index.html`, 'utf8');
   assert.match(novel, /<h1[^>]*><span>The Eleventh<\/span> <em>Rehearsal<\/em><\/h1>/);
   assert.match(novel, /id="synopsis"/);

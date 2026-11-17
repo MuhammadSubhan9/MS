@@ -48,11 +48,12 @@ function messageForm(endpoint, topics) {
 }
 
 export function contactPage(contact, name) {
-  const { email, links, cv, phone, topics = [], formEndpoint } = contact;
+  const { email, links, cv, phone, vcard, topics = [], formEndpoint } = contact;
   if (email && !/^[^\s@<>"?&#]+@[^\s@<>"?&#]+\.[^\s@<>"?&#]+$/.test(email)) throw new Error('Invalid email');
   const telephone = phone?.replace(/[\s()-]/g, '');
   if (phone && !/^\+?[0-9]{5,15}$/.test(telephone)) throw new Error('Invalid telephone number');
   if (cv && (!cv.startsWith('/') || !/\.pdf$/i.test(cv))) throw new Error('CV requires a local PDF path');
+  if (vcard && (!vcard.startsWith('/') || !/\.vcf$/i.test(vcard))) throw new Error('vCard requires a local VCF path');
   const mail = email ? `mailto:${escape(email)}` : '';
   const methods = [
     phone ? ['Telephone', `<a href="tel:${telephone}">${escape(phone)}</a>`] : null,
@@ -72,10 +73,13 @@ export function contactPage(contact, name) {
         ${email ? `<section class="contact-feature" aria-labelledby="contact-email-title">
           <h2 class="eyebrow" id="contact-email-title">Email</h2>
           <a class="contact-address" href="${mail}">${escape(email)}</a>
-          <button class="contact-copy" type="button" aria-label="Copy address" data-copy-email="${escape(email)}" hidden>
-            <span class="contact-copy-icon" aria-hidden="true"><span class="contact-copy-sheets"></span><span class="contact-copy-check"></span></span>
-            <span class="contact-copy-labels" aria-hidden="true"><span>Copy address</span><span>Copied!</span></span>
-          </button>
+          <div class="contact-actions">
+            ${vcard ? `<a class="contact-save" href="${safeLink(vcard)}" download>Save contact <span aria-hidden="true">↓</span></a>` : ''}
+            <button class="contact-copy" type="button" aria-label="Copy address" data-copy-email="${escape(email)}" hidden>
+              <span class="contact-copy-icon" aria-hidden="true"><span class="contact-copy-sheets"></span><span class="contact-copy-check"></span></span>
+              <span class="contact-copy-labels" aria-hidden="true"><span>Copy address</span><span>Copied!</span></span>
+            </button>
+          </div>
           <p class="contact-copy-status" role="status"><span class="visually-hidden" data-copy-feedback></span></p>
         </section>` : ''}
         ${methods.length ? `<dl class="contact-list">${methods.map(([label, link]) =>

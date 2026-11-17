@@ -39,7 +39,10 @@ function messageForm(endpoint, topics) {
         </div>
       </details>
       <button class="button-link contact-send" type="submit"><span>Send message</span>${arrow}</button>
-      <p class="contact-form-status" role="status"></p>
+      <p class="contact-form-status" role="status">
+        <span class="contact-confirm-mark" aria-hidden="true"></span>
+        <span class="contact-status-text"></span>
+      </p>
     </form>
   </section>`;
 }

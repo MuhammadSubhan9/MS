@@ -33,6 +33,7 @@ if (contactForm) {
   const requiredFields = [...contactForm.querySelectorAll('[required]')];
   const submitButton = contactForm.querySelector('button[type="submit"]');
   const status = contactForm.querySelector('.contact-form-status');
+  const statusText = status.querySelector('.contact-status-text');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
   function updateError(field) {
@@ -53,13 +54,16 @@ if (contactForm) {
   }
 
   function report(message, state) {
-    status.textContent = message;
-    status.dataset.state = state;
+    if (state) status.dataset.state = state;
+    else delete status.dataset.state;
+    statusText.textContent = message;
   }
 
   contactForm.addEventListener('input', event => {
     if (event.target.hasAttribute('aria-invalid')) updateError(event.target);
-    if (status.dataset.state === 'validation' && !contactForm.querySelector('[aria-invalid]')) report('', '');
+    if (status.dataset.state === 'sent' || (status.dataset.state === 'validation' && !contactForm.querySelector('[aria-invalid]'))) {
+      report('', '');
+    }
   });
 
   contactForm.addEventListener('submit', async event => {
@@ -100,6 +104,13 @@ if (contactForm) {
         const unchanged = [...new FormData(contactForm)].every(([name, value]) => value.trim() === data.get(name));
         if (unchanged) contactForm.reset();
         report('Message sent.', 'sent');
+        const button = submitButton.getBoundingClientRect();
+        const focus = document.activeElement;
+        if (button.bottom > 0 && button.top < innerHeight
+          && (focus === document.body || focus === submitButton)
+          && status.getBoundingClientRect().bottom > innerHeight) {
+          status.scrollIntoView({ block: 'nearest', behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+        }
       } else {
         report(response.status === 429 ? 'Please wait a moment before trying again.' : 'Your message could not be sent. Please try again.', 'failure');
       }

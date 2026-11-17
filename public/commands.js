@@ -1,4 +1,4 @@
-const palette = document.querySelector('.command-palette');
+const palette = document.querySelector('#command-title')?.closest('dialog');
 
 if (typeof palette?.showModal === 'function') {
   const form = palette.querySelector('form');

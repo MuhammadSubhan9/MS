@@ -1,6 +1,7 @@
 import { action, escape, safeLink } from './components.mjs';
 import { renderNovelPage } from './novel.mjs';
 import { commandAssets, commandPalette } from './commands.mjs';
+import { clarityTag } from './analytics.mjs';
 
 const welcome = `<dialog class="opening" aria-label="Welcome to Muhammad Subhan’s portfolio">
     <div class="opening-top"><span><b>MS</b>A developing perspective</span><button type="button" autofocus>Skip intro</button></div>
@@ -63,6 +64,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   ${data.now ? commandAssets : ''}
   ${home && data.now ? '<script src="/now-editor.js" defer></script>' : ''}
   <script src="/site.js" defer></script>
+  ${clarityTag(data, origin, ready)}
 </head>
 <body${contact ? ' class="contact-document"' : ''}>
   ${home ? welcome : ''}

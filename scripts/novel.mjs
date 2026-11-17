@@ -1,5 +1,6 @@
 import { escape, image, paragraphs, safeLink } from './components.mjs';
 import { commandAssets, commandPalette } from './commands.mjs';
+import { clarityTag } from './analytics.mjs';
 import excerpt from '../content/eleventh-rehearsal.json' with { type: 'json' };
 
 const slug = 'the-eleventh-rehearsal';
@@ -150,6 +151,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
   <link rel="stylesheet" href="/novel.css">
   <script src="/novel.js" defer blocking="render"></script>
   ${data.now ? commandAssets : ''}
+  ${clarityTag(data, origin, ready)}
 </head>
 <body class="novel-page">
   <a class="novel-skip" href="#main">Skip to content</a>

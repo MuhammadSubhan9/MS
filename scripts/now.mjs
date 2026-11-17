@@ -29,7 +29,7 @@ export function nowSection(content) {
     throw new Error(`Start content/now.txt with a YYYY-MM-DD date and up to ${nowLimit} characters of text.`);
   }
   return `${renderNowContent({ date, text })}
-    <dialog class="command-palette now-editor" aria-labelledby="now-editor-title">
+    <dialog class="command-palette now-editor" aria-labelledby="now-editor-title" data-clarity-mask="true">
       <form class="command-form" data-now-form>
         <div class="command-heading">
           <h2 id="now-editor-title">Edit Now</h2>

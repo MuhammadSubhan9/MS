@@ -1,6 +1,6 @@
 import { escape, image, paragraphs, safeLink } from './components.mjs';
 import { commandAssets, commandPalette } from './commands.mjs';
-import { clarityTag } from './analytics.mjs';
+import { clarityTag, googleAnalytics } from './analytics.mjs';
 import excerpt from '../content/eleventh-rehearsal.json' with { type: 'json' };
 
 const slug = 'the-eleventh-rehearsal';
@@ -133,6 +133,7 @@ export function novelContent(book, author) {
 export function renderNovelPage({ data, page, origin, ready }) {
   const title = `${page.label} · ${data.name}`;
   const cover = safeLink(page.cover);
+  const google = googleAnalytics(data, origin, ready);
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -152,6 +153,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
   <script src="/novel.js" defer blocking="render"></script>
   ${data.now ? commandAssets : ''}
   ${clarityTag(data, origin, ready)}
+  ${google.head}
 </head>
 <body class="novel-page">
   <a class="novel-skip" href="#main">Skip to content</a>
@@ -167,7 +169,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
   </header>
   <main id="main" tabindex="-1" class="novel-main">${page.body}</main>
   <footer class="novel-footer novel-wrap">
-    <div><p>${escape(page.label)}</p><span>A novel in progress by ${escape(data.name)}</span></div>
+    <div><p>${escape(page.label)}</p><span>A novel in progress by ${escape(data.name)}</span>${google.controls}</div>
     <a class="novel-text-link" href="/">Back to the portfolio <span aria-hidden="true">↗</span></a>
   </footer>
   ${data.now ? commandPalette : ''}

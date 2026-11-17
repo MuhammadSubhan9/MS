@@ -60,6 +60,7 @@ test('public build excludes fixture data and includes production SEO', async () 
   const novel = await readFile(`${output}/writing/index.html`, 'utf8');
   for (const page of [html, contact, novel]) {
     assert.equal(page.split(`data-clarity-project="${source.analytics.clarityProject}"`).length, 2);
+    assert.equal(page.split(`data-ga4-id="${source.analytics.googleMeasurementId}"`).length, 2);
     assert.ok(page.includes(`data-analytics-origin="${source.seo.origin}"`));
   }
   assert.match(contact, /<form class="contact-form"[^>]*data-clarity-mask="true"/);
@@ -106,6 +107,7 @@ test('preview routes, local links, redirects and HTTP errors work', async () => 
       assert.equal(response.status, 200);
       const html = await response.text();
       assert.ok(!html.includes('data-clarity-project'), 'Preview builds should not load Clarity');
+      assert.ok(!html.includes('data-ga4-id'), 'Preview builds should not load Google Analytics');
       for (const [,href] of html.matchAll(/(?:href|src)="(\/[^"#]*)/g)) {
         assert.equal((await fetch(origin + href)).status, 200, href);
       }

@@ -1,7 +1,7 @@
 import { action, escape, safeLink } from './components.mjs';
 import { renderNovelPage } from './novel.mjs';
 import { commandAssets, commandPalette } from './commands.mjs';
-import { clarityTag } from './analytics.mjs';
+import { clarityTag, googleAnalytics } from './analytics.mjs';
 
 const welcome = `<dialog class="opening" aria-label="Welcome to Muhammad Subhan’s portfolio">
     <div class="opening-top"><span><b>MS</b>A developing perspective</span><button type="button" autofocus>Skip intro</button></div>
@@ -38,6 +38,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   const footerPages = navigation.filter(item => item.path !== '/' && item.path !== '/contact/');
   const footerContact = navigation.some(item => item.path === '/contact/');
   const footerNow = data.now ? '<a class="footer-link" href="/#now">Now</a>' : '';
+  const google = googleAnalytics(data, origin, ready);
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -65,6 +66,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   ${home && data.now ? '<script src="/now-editor.js" defer></script>' : ''}
   <script src="/site.js" defer></script>
   ${clarityTag(data, origin, ready)}
+  ${google.head}
 </head>
 <body${contact ? ' class="contact-document"' : ''}>
   ${home ? welcome : ''}
@@ -81,6 +83,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
     <div class="footer-identity">
       <a class="footer-name" href="/">${escape(data.name)}</a>
       <small>© <span data-year>${new Date().getFullYear()}</span></small>
+      ${google.controls}
     </div>
     ${footerPages.length || footerContact || footerNow ? `<nav class="footer-nav" aria-label="Footer">
       ${footerPages.map(item => `<a class="footer-link" href="${item.path}">${item.path === '/writing/' ? 'Writing' : escape(item.label)}</a>`).join('')}

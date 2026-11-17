@@ -1,0 +1,38 @@
+.analytics-preferences {
+  flex-basis: 100%;
+  margin: 0;
+  font: 400 .9rem/1.45 system-ui, sans-serif;
+}
+.analytics-preferences summary {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 44px;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: .18em;
+  cursor: pointer;
+}
+.analytics-options {
+  max-width: 24rem;
+  padding: .85rem;
+  border: 1px solid #b4a58e;
+  border-radius: .65rem;
+  background: #f2ede3;
+  color: #292824;
+}
+.analytics-preferences .analytics-options p { color: inherit; font: inherit; }
+.analytics-preferences .analytics-options a { display: inline; color: inherit; text-decoration: underline; }
+.analytics-choices { display: flex; flex-wrap: wrap; gap: .5rem; margin-block-start: .6rem; }
+.analytics-choices button {
+  min-height: 44px;
+  padding: .3rem .55rem;
+  border: 1px solid #8f816b;
+  border-radius: .35rem;
+  background: #f8f1e6;
+  color: #292824;
+  font: inherit;
+  cursor: pointer;
+}
+.analytics-choices button[aria-pressed="true"] { background: #263d35; color: #f2ede3; }
+.analytics-preferences :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }

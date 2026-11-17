@@ -801,8 +801,32 @@ details p { padding: .2rem 0; }
 .footer-nav { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem clamp(.65rem, 2vw, 1.5rem); }
 .footer-link { font-size: .95rem; border-block-end: 1px solid transparent; }
 .footer-link:hover { border-color: var(--emerald); }
+.footer-link[aria-current="page"] { border-color: var(--accent); color: var(--accent); }
 .footer-contact { border-color: var(--emerald); color: var(--ink); background: #f5ebdd; }
 .footer-contact:hover { background: #ddceb9; }
+
+.now-page {
+  max-width: 52rem;
+  margin-inline: auto;
+  padding: clamp(1.35rem, 5vw, 4rem);
+  border: 1px solid var(--rule);
+  border-block-start: 3px solid var(--emerald);
+  background: radial-gradient(ellipse at 100% 0, #e8dac4, transparent 58%), #f8f0e3;
+}
+.now-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .35rem 1.5rem;
+  padding-block-end: clamp(.8rem, 3vw, 1.45rem);
+  border-block-end: 1px solid var(--rule);
+}
+.now-copy {
+  max-width: 62ch;
+  margin-block-start: clamp(1.15rem, 3.3vw, 2rem);
+  font-size: clamp(1.12rem, 2.2vw, 1.35rem);
+}
 
 @media (max-width: 700px) {
   html { scroll-padding-top: 5rem; }

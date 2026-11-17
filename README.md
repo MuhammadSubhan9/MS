@@ -28,3 +28,5 @@ Warm ivory, stone beige and charcoal form the base palette. Forest emerald (#285
 ## Verification and publication
 
 Cloudflare Pages serves the committed `dist/` directory from the `main` branch. Run `node --test`, then include the rebuilt `dist/` alongside the source changes in each release commit. The repository contains the public portfolio copy and reading excerpt. Keep supporting documents, drafts and credentials out of it. Use `public/_redirects` to keep legacy URLs working.
+
+To update Now, press Ctrl+K (or Cmd+K on Mac), type `edit now` and press Enter. In GitHub, edit `content/now.txt` and commit it to `main`. Keep the first line in YYYY-MM-DD format and separate each paragraph with a blank line. GitHub Actions rebuilds the page and commits its generated HTML for Cloudflare.

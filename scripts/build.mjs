@@ -37,6 +37,7 @@ async function verifyLocalFiles(pages) {
 
 export async function build({ preview = false } = {}) {
   const data = JSON.parse(await readFile(new URL('../content/site.json', import.meta.url), 'utf8'));
+  data.now = await readFile(new URL('../content/now.txt', import.meta.url), 'utf8');
   if (preview) {
     Object.assign(data, JSON.parse(await readFile(new URL('../tests/fixtures.json', import.meta.url), 'utf8')));
   }

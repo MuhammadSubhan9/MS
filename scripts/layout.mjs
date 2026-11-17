@@ -1,5 +1,6 @@
 import { action, escape, safeLink } from './components.mjs';
 import { renderNovelPage } from './novel.mjs';
+import { commandAssets, commandPalette } from './commands.mjs';
 
 const welcome = `<dialog class="opening" aria-label="Welcome to Muhammad Subhan’s portfolio">
     <div class="opening-top"><span><b>MS</b>A developing perspective</span><button type="button" autofocus>Skip intro</button></div>
@@ -35,6 +36,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   }).join('');
   const footerPages = navigation.filter(item => item.path !== '/' && item.path !== '/contact/');
   const footerContact = navigation.some(item => item.path === '/contact/');
+  const footerNow = data.now ? `<a class="footer-link" href="/now/"${page.path === '/now/' ? ' aria-current="page"' : ''}>Now</a>` : '';
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -58,6 +60,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   <script src="/navigation-motion.js" blocking="render"></script>
   ${home ? '<link rel="stylesheet" href="/intro.css">\n  <script src="/intro.js" defer blocking="render"></script>' : ''}
   ${contact ? '<link rel="stylesheet" href="/contact.css">\n  <script src="/contact.js" defer></script>' : ''}
+  ${data.now ? commandAssets : ''}
   <script src="/site.js" defer></script>
 </head>
 <body${contact ? ' class="contact-document"' : ''}>
@@ -76,11 +79,13 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
       <a class="footer-name" href="/">${escape(data.name)}</a>
       <small>© <span data-year>${new Date().getFullYear()}</span></small>
     </div>
-    ${footerPages.length || footerContact ? `<nav class="footer-nav" aria-label="Footer">
+    ${footerPages.length || footerContact || footerNow ? `<nav class="footer-nav" aria-label="Footer">
       ${footerPages.map(item => `<a class="footer-link" href="${item.path}">${item.path === '/writing/' ? 'Writing' : escape(item.label)}</a>`).join('')}
+      ${footerNow}
       ${footerContact ? action('/contact/', 'Get in touch', 'button-link footer-contact') : ''}
     </nav>` : ''}
   </div></footer>
+  ${data.now ? commandPalette : ''}
 </body>
 </html>`;
 }

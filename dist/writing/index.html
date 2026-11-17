@@ -15,6 +15,8 @@
   <link rel="preload" href="/fonts/welcome-editorial.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/novel.css">
   <script src="/novel.js" defer blocking="render"></script>
+  <link rel="stylesheet" href="/commands.css">
+  <script src="/commands.js" defer></script>
 </head>
 <body class="novel-page">
   <a class="novel-skip" href="#main">Skip to content</a>
@@ -167,5 +169,17 @@
     <div><p>The Eleventh Rehearsal</p><span>A novel in progress by Muhammad Subhan</span></div>
     <a class="novel-text-link" href="/">Back to the portfolio <span aria-hidden="true">↗</span></a>
   </footer>
+  <dialog class="command-palette" aria-labelledby="command-title">
+    <form class="command-form">
+      <div class="command-heading">
+        <h2 id="command-title">Commands</h2>
+        <button type="button" data-close-commands>Close</button>
+      </div>
+      <label class="command-label" for="command-input">Type a command</label>
+      <input id="command-input" type="text" placeholder="Type a command…" autocomplete="off" autocapitalize="none" spellcheck="false" autofocus>
+      <a class="command-result" href="https://github.com/MuhammadSubhan9/MS/edit/main/content/now.txt" hidden>Edit Now on GitHub <span aria-hidden="true">↗</span></a>
+      <p class="command-feedback" role="status"></p>
+    </form>
+  </dialog>
 </body>
 </html>

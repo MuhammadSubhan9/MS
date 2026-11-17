@@ -1,4 +1,5 @@
 import { escape, image, paragraphs, safeLink } from './components.mjs';
+import { commandAssets, commandPalette } from './commands.mjs';
 import excerpt from '../content/eleventh-rehearsal.json' with { type: 'json' };
 
 const slug = 'the-eleventh-rehearsal';
@@ -148,6 +149,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
   <link rel="preload" href="/fonts/welcome-editorial.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/novel.css">
   <script src="/novel.js" defer blocking="render"></script>
+  ${data.now ? commandAssets : ''}
 </head>
 <body class="novel-page">
   <a class="novel-skip" href="#main">Skip to content</a>
@@ -166,6 +168,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
     <div><p>${escape(page.label)}</p><span>A novel in progress by ${escape(data.name)}</span></div>
     <a class="novel-text-link" href="/">Back to the portfolio <span aria-hidden="true">↗</span></a>
   </footer>
+  ${data.now ? commandPalette : ''}
 </body>
 </html>`;
 }

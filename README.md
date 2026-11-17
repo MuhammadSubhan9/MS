@@ -29,6 +29,6 @@ Warm ivory, stone beige and charcoal form the base palette. Forest emerald (#285
 
 Cloudflare Pages serves the committed `dist/` directory from the `main` branch. Run `node --test`, then include the rebuilt `dist/` alongside the source changes in each release commit. The repository contains the public portfolio copy and reading excerpt. Keep supporting documents, drafts and credentials out of it. Use `public/_redirects` to keep legacy URLs working.
 
-To update Now, press Ctrl+K (or Cmd+K on Mac), type `edit now` and press Enter. You can also go to `/now/#edit`. Edit the text, enter the publishing code and select **Publish update**. Saving updates the date in Riyadh time.
+To update the Now section on the homepage, press Ctrl+K (or Cmd+K on Mac), type `edit now` and press Enter. You can also go to `/#edit`. Edit the text, enter the publishing code and select **Publish update**. Saving updates the date in Riyadh time.
 
 The production Pages project needs a D1 binding named `NOW_DB` provisioned with `scripts/now-schema.sql`, and an encrypted secret named `NOW_EDITOR_CODE`. Use a random code of 24 to 128 characters without whitespace. Keep it out of the repository. The build uses `content/now.txt` for the initial page. The deployed editor stores later updates in D1.

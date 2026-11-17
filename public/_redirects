@@ -1,3 +1,5 @@
+/now /#now 301
+/now/ /#now 301
 /about.html /about/ 301
 /education.html /about/#education 301
 /education /about/#education 301

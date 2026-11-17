@@ -1,4 +1,4 @@
-import { nowEnd, nowStart, renderNowContent } from '../../scripts/now.mjs';
+import { nowEnd, nowStart, renderNowContent } from '../scripts/now.mjs';
 
 export async function onRequestGet({ request, env, next }) {
   if (!env.NOW_DB) return next();

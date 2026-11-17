@@ -19,7 +19,11 @@ openEditor();
 editor.querySelector('[data-close-editor]').addEventListener('click', () => editor.close());
 editor.addEventListener('close', () => {
   code.value = '';
-  if (location.hash === '#edit') history.replaceState(history.state, '', location.pathname + location.search);
+  if (location.hash === '#edit') {
+    history.replaceState(history.state, '', location.pathname + location.search + '#now');
+    snapshot.focus();
+    snapshot.scrollIntoView({ block: 'start', behavior: 'instant' });
+  }
 });
 
 form.addEventListener('submit', async event => {
@@ -52,7 +56,7 @@ form.addEventListener('submit', async event => {
     code.value = '';
     message.textContent = 'Published. Visitors can see your update now.';
   } catch {
-    message.textContent = 'Couldn’t confirm publishing. Check the Now page before trying again.';
+    message.textContent = 'Couldn’t confirm publishing. Check the homepage before trying again.';
   } finally {
     publish.disabled = false;
   }

@@ -9,7 +9,7 @@ export const commandPalette = `<dialog class="command-palette" aria-labelledby="
       </div>
       <label class="command-label" for="command-input">Type a command</label>
       <input id="command-input" type="text" placeholder="Type a command…" autocomplete="off" autocapitalize="none" spellcheck="false" autofocus>
-      <a class="command-result" href="/now/#edit" hidden>Edit Now <span aria-hidden="true">→</span></a>
+      <a class="command-result" href="/#edit" hidden>Edit Now <span aria-hidden="true">→</span></a>
       <p class="command-feedback" role="status"></p>
     </form>
   </dialog>`;

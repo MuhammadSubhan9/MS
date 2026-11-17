@@ -10,17 +10,19 @@ export function nowParagraphs(text) {
 
 export function renderNowContent({ date, text, revision = 0 }) {
   return `${nowStart}
-    <article class="now-page" data-now-revision="${revision}">
-      <header class="now-heading">
-        <h1>Now</h1>
-        <p class="meta">Last updated <time datetime="${escape(date)}">${escape(formatDate(date))}</time></p>
-      </header>
-      <div class="reading now-copy">${paragraphs(nowParagraphs(text))}</div>
-    </article>
+    <section class="home-section home-now" id="now" aria-labelledby="now-title" tabindex="-1" data-now-revision="${revision}">
+      <div class="container now-panel">
+        <header class="now-heading">
+          <h2 id="now-title">Now</h2>
+          <p class="meta">Last updated <time datetime="${escape(date)}">${escape(formatDate(date))}</time></p>
+        </header>
+        <div class="reading now-copy">${paragraphs(nowParagraphs(text))}</div>
+      </div>
+    </section>
     ${nowEnd}`;
 }
 
-export function nowPage(content) {
+export function nowSection(content) {
   const [date, ...lines] = content.trim().split(/\r?\n/);
   const text = lines.join('\n').trim();
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !text.length || text.length > nowLimit) {

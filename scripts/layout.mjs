@@ -36,7 +36,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   }).join('');
   const footerPages = navigation.filter(item => item.path !== '/' && item.path !== '/contact/');
   const footerContact = navigation.some(item => item.path === '/contact/');
-  const footerNow = data.now ? `<a class="footer-link" href="/now/"${page.path === '/now/' ? ' aria-current="page"' : ''}>Now</a>` : '';
+  const footerNow = data.now ? '<a class="footer-link" href="/#now">Now</a>' : '';
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -61,7 +61,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   ${home ? '<link rel="stylesheet" href="/intro.css">\n  <script src="/intro.js" defer blocking="render"></script>' : ''}
   ${contact ? '<link rel="stylesheet" href="/contact.css">\n  <script src="/contact.js" defer></script>' : ''}
   ${data.now ? commandAssets : ''}
-  ${page.path === '/now/' ? '<script src="/now-editor.js" defer></script>' : ''}
+  ${home && data.now ? '<script src="/now-editor.js" defer></script>' : ''}
   <script src="/site.js" defer></script>
 </head>
 <body${contact ? ' class="contact-document"' : ''}>

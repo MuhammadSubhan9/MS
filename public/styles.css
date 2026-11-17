@@ -801,31 +801,27 @@ details p { padding: .2rem 0; }
 .footer-nav { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem clamp(.65rem, 2vw, 1.5rem); }
 .footer-link { font-size: .95rem; border-block-end: 1px solid transparent; }
 .footer-link:hover { border-color: var(--emerald); }
-.footer-link[aria-current="page"] { border-color: var(--accent); color: var(--accent); }
 .footer-contact { border-color: var(--emerald); color: var(--ink); background: #f5ebdd; }
 .footer-contact:hover { background: #ddceb9; }
 
-.now-page {
-  max-width: 52rem;
-  margin-inline: auto;
-  padding: clamp(1.35rem, 5vw, 4rem);
-  border: 1px solid var(--rule);
-  border-block-start: 3px solid var(--emerald);
-  background: radial-gradient(ellipse at 100% 0, #e8dac4, transparent 58%), #f8f0e3;
+.home-now {
+  border-block: 1px solid var(--rule);
+  background: radial-gradient(ellipse at 100% 0, #e7dac6, transparent 66%), #f4ecdf;
 }
-.now-heading {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: .35rem 1.5rem;
-  padding-block-end: clamp(.8rem, 3vw, 1.45rem);
-  border-block-end: 1px solid var(--rule);
+.now-panel {
+  display: grid;
+  grid-template-columns: minmax(14rem, .6fr) minmax(0, 1.4fr);
+  gap: clamp(1.2rem, 5vw, 5rem);
 }
+.now-heading { padding-block-start: 1.05rem; border-block-start: 2px solid var(--emerald); }
+.now-heading .meta { margin-block-start: .75rem; }
 .now-copy {
   max-width: 62ch;
-  margin-block-start: clamp(1.15rem, 3.3vw, 2rem);
   font-size: clamp(1.12rem, 2.2vw, 1.35rem);
+}
+@media (max-width: 700px) {
+  .now-panel { grid-template-columns: minmax(0, 1fr); }
+  .now-copy { padding-block-start: 1.2rem; border-block-start: 1px solid var(--rule); }
 }
 
 @media (max-width: 700px) {

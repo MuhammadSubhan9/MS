@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { DatabaseSync } from 'node:sqlite';
 import { onRequestPut } from '../functions/api/now.js';
-import { onRequestGet } from '../functions/now/index.js';
+import { onRequestGet } from '../functions/index.js';
 import { renderNowContent } from '../scripts/now.mjs';
 
 const schema = await readFile(new URL('../scripts/now-schema.sql', import.meta.url), 'utf8');
@@ -47,7 +47,7 @@ test('Now requires the shared code and rejects stale writes without replacing ne
     assert.deepEqual((await saved.json()).paragraphs, ['Writing update.', '<treat this as text>']);
     assert.equal((await put({ revision: 1, text: 'Stale update.' })).status, 409);
 
-    const request = new Request(origin + '/now/', { headers: { 'If-None-Match': 'old-asset-tag' } });
+    const request = new Request(origin + '/', { headers: { 'If-None-Match': 'old-asset-tag' } });
     const html = renderNowContent({ date: '2026-11-17', text: 'Static fallback.' });
     const page = await onRequestGet({
       request,

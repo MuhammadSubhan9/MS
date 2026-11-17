@@ -4,7 +4,7 @@ import {
 } from './components.mjs';
 import { findNovel, novelContent, novelPath, oldNovelPath } from './novel.mjs';
 import { contactPage } from './contact.mjs';
-import { nowPage } from './now.mjs';
+import { nowSection } from './now.mjs';
 
 function homePage(data, { hasAbout, hasContact, selected }) {
   const { education, projects, portrait, writing, contact } = data;
@@ -64,7 +64,8 @@ function homePage(data, { hasAbout, hasContact, selected }) {
       })}
     </div>
   </section>` : '';
-  const nextSection = profile ? '#background' : work ? '#selected-work' : writingFeature ? '#writing' : '';
+  const now = data.now ? nowSection(data.now) : '';
+  const nextSection = profile ? '#background' : now ? '#now' : work ? '#selected-work' : writingFeature ? '#writing' : '';
   const contactFeature = hasContact ? `<section class="home-section home-contact container" aria-labelledby="home-contact-title">
     <div data-reveal>
       <h2 id="home-contact-title">Get in touch</h2>
@@ -95,7 +96,7 @@ function homePage(data, { hasAbout, hasContact, selected }) {
       ${portraitMarkup}
     </div>
     </section>
-    ${profile}${work}${writingFeature}${contactFeature}
+    ${profile}${now}${work}${writingFeature}${contactFeature}
   `;
 }
 
@@ -290,7 +291,7 @@ export function createPages(data) {
     add('/contact/', 'Contact', data.seo.contact || `Contact ${data.name}.`, contactPage(contact, data.name));
   }
   if (data.now) {
-    add('/now/', 'Now', `What ${data.name} is doing now.`, nowPage(data.now));
+    pages.push({ path: '/now/', label: 'Now', body: '', redirect: '/#now' });
   }
   return pages;
 }

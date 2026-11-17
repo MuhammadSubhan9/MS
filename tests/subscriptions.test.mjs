@@ -57,12 +57,16 @@ test('subscription validation, consent, bot field and case-insensitive deduplica
     assert.deepEqual(await first.json(), await second.json());
     const row = database.prepare('SELECT * FROM novel_subscribers').get();
     assert.equal(row.email, 'reader@example.com');
+    assert.equal(database.prepare("SELECT count FROM novel_signup_limits WHERE key LIKE 'daily:%'").get().count, 1);
     assert.equal(row.consent_version, 'novel-release-v1');
     assert.match(row.unsubscribe_token, /^[a-f0-9]{64}$/);
     assert.equal(database.prepare('SELECT COUNT(*) AS count FROM novel_subscribers').get().count, 1);
+    assert.equal(database.prepare('SELECT COUNT(*) AS count FROM novel_release_recipients').get().count, 0);
+    database.prepare("UPDATE novel_subscribers SET consent_version = 'novel-release-confirmed-v1' WHERE id = ?").run(row.id);
+    assert.equal(database.prepare('SELECT email FROM novel_release_recipients').get().email, row.email);
     const native = await signup({ email: 'native@example.com', consent: 'yes' }, { json: false });
     assert.equal(native.status, 200);
-    assert.ok((await native.text()).includes('You’re on the release list'));
+    assert.ok((await native.text()).includes('Release signup received'));
   } finally { database.close(); }
 });
 
@@ -95,6 +99,8 @@ test('unsubscribe link requires deliberate confirmation and removes the saved ad
     assert.equal(database.prepare('SELECT COUNT(*) AS count FROM novel_subscribers').get().count, 1);
     const ignored = await unsubscribe({ env, request: request('/api/novel/unsubscribe', { token }, { from: 'https://elsewhere.example' }) });
     assert.equal(ignored.status, 403);
+    const malformed = await unsubscribe({ env, request: request('/api/novel/unsubscribe', { token: [token] }) });
+    assert.equal(malformed.status, 400);
     const removed = await unsubscribe({ env, request: request('/api/novel/unsubscribe', { token }) });
     assert.equal(removed.status, 200);
     assert.equal(database.prepare('SELECT COUNT(*) AS count FROM novel_subscribers').get().count, 0);

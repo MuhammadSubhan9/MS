@@ -14,6 +14,7 @@ test('Now requires the shared code and rejects stale writes without replacing ne
   const database = new DatabaseSync(':memory:');
   try {
     database.exec(schema);
+    database.exec(await readFile(new URL('../scripts/novel-subscriptions.sql', import.meta.url), 'utf8'));
     const env = {
       NOW_EDITOR_CODE: editorCode,
       NOW_DB: {
@@ -21,7 +22,7 @@ test('Now requires the shared code and rejects stale writes without replacing ne
           const statement = database.prepare(sql);
           return {
             first: async () => statement.get(),
-            bind: (...args) => ({ run: async () => ({ meta: statement.run(...args) }) }),
+            bind: (...args) => ({ first: async () => statement.get(...args), run: async () => ({ meta: statement.run(...args) }) }),
           };
         },
       },

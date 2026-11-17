@@ -62,6 +62,8 @@ test('public build excludes fixture data and includes production SEO', async () 
     assert.equal(page.split(`data-clarity-project="${source.analytics.clarityProject}"`).length, 2);
     assert.equal(page.split(`data-ga4-id="${source.analytics.googleMeasurementId}"`).length, 2);
     assert.ok(page.includes(`data-analytics-origin="${source.seo.origin}"`));
+    assert.ok(page.includes('Website analytics'));
+    assert.ok(!page.includes('data-ga4-choice'));
   }
   assert.match(contact, /<form class="contact-form"[^>]*data-clarity-mask="true"/);
   assert.match(novel, /<h1[^>]*><span>The Eleventh<\/span> <em>Rehearsal<\/em><\/h1>/);
@@ -115,6 +117,10 @@ test('preview routes, local links, redirects and HTTP errors work', async () => 
       }
     }
     assert.equal((await fetch(origin+'/about',{redirect:'manual'})).status,308);
+    const queryRedirect = await fetch(origin+'/about?from=work', {redirect:'manual'});
+    assert.equal(queryRedirect.headers.get('Location'), '/about/?from=work');
+    const uncompressed = await fetch(origin+'/', {headers:{'Accept-Encoding':'gzip;q=0'}});
+    assert.equal(uncompressed.headers.get('Content-Encoding'), null);
     assert.equal((await fetch(origin+'/missing')).status,404);
     assert.equal((await fetch(origin+'/%zz')).status,400);
     assert.equal((await fetch(origin+'/',{method:'POST'})).status,405);

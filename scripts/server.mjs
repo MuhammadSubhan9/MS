@@ -2,8 +2,11 @@ import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { gzipSync } from 'node:zlib';
+import { gzip } from 'node:zlib';
+import { promisify } from 'node:util';
 import { build } from './build.mjs';
+
+const compress = promisify(gzip);
 
 const types = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
@@ -22,9 +25,12 @@ export function createSiteServer(output) {
       response.writeHead(405, { Allow: 'GET, HEAD' });
       return response.end();
     }
+    let url;
     let pathname;
     try {
-      pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+      url = new URL(request.url, 'http://localhost');
+      pathname = decodeURIComponent(url.pathname);
+      if (pathname.startsWith('//') || pathname.includes('\\')) throw new Error('Invalid path');
     } catch {
       response.writeHead(400);
       return response.end('Invalid address');
@@ -34,7 +40,7 @@ export function createSiteServer(output) {
       if (file !== output && !file.startsWith(output + sep)) throw new Error('Invalid path');
       if ((await stat(file)).isDirectory()) {
         if (!pathname.endsWith('/')) {
-          response.writeHead(308, { Location: encodeURI(pathname) + '/' });
+          response.writeHead(308, { Location: url.pathname + '/' + url.search });
           return response.end();
         }
         file = resolve(file, 'index.html');
@@ -45,8 +51,8 @@ export function createSiteServer(output) {
       response.setHeader('Cache-Control', extension === '.woff2' ? 'public, max-age=86400' : 'no-cache');
       if (['.html', '.css', '.js', '.svg', '.xml'].includes(extension)) {
         response.setHeader('Vary', 'Accept-Encoding');
-        if (/\bgzip\b/.test(request.headers['accept-encoding'] || '')) {
-          body = gzipSync(body);
+        if ((request.headers['accept-encoding'] || '').split(',').some(item => /^\s*gzip\s*(?:;\s*q=(?:1(?:\.0*)?|0\.\d*[1-9]\d*))?\s*$/i.test(item))) {
+          body = await compress(body);
           response.setHeader('Content-Encoding', 'gzip');
         }
       }

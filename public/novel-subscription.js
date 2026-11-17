@@ -9,6 +9,7 @@ if (releaseForm) {
     status.dataset.kind = kind;
   }
 
+  releaseForm.addEventListener('input', () => report('', ''));
   releaseForm.addEventListener('submit', async event => {
     event.preventDefault();
     if (button.disabled) return;
@@ -25,9 +26,14 @@ if (releaseForm) {
       });
       const result = await response.json().catch(() => null);
       if (response.ok && result?.ok === true) {
-        report(result.message, 'success');
+
         const current = Object.fromEntries(new FormData(releaseForm));
-        if (Object.keys(fields).every(key => fields[key] === current[key])) releaseForm.reset();
+        if (Object.keys({...fields, ...current}).every(key => fields[key] === current[key])) {
+          releaseForm.reset();
+          report(result.message, 'success');
+        } else {
+          report('Your earlier signup was saved. Submit again to save your changes.', 'success');
+        }
       } else {
         report(result?.error || 'Your signup could not be confirmed. Please try again.', 'error');
       }

@@ -5,15 +5,31 @@ const text = form.querySelector('#now-editor-text');
 const code = form.querySelector('#now-editor-code');
 const message = form.querySelector('[data-editor-status]');
 const publish = form.querySelector('[type="submit"]');
-const copy = snapshot.querySelector('.now-copy');
-const date = snapshot.querySelector('time');
+const copy = snapshot?.querySelector('.now-copy');
+const date = snapshot?.querySelector('time');
 
 function openEditor() {
+  if (!snapshot) return;
   if (location.hash !== '#edit' || editor.open || typeof editor.showModal !== 'function') return;
-  if (!text.value) text.value = [...copy.querySelectorAll('p')].map(p => p.textContent).join('\n\n');
+  if (!text.value) {
+    try { text.value = sessionStorage.getItem(draftKey()) || ''; } catch { /* Storage is optional. */ }
+    if (!text.value) text.value = [...copy.querySelectorAll('p')].map(p => p.textContent).join('\n\n');
+  }
   editor.showModal();
 }
 
+function guardDraft(event) {
+  if (copy && text.value && text.value.trim() !== [...copy.querySelectorAll('p')].map(p => p.textContent).join('\n\n')) {
+    event.preventDefault();
+    event.returnValue = '';
+  }
+}
+const draftKey = () => 'portfolio-now-draft-' + snapshot.dataset.nowRevision;
+function rememberDraft() {
+  try { sessionStorage.setItem(draftKey(), text.value); }
+  catch { window.addEventListener('beforeunload', guardDraft); }
+}
+text.addEventListener('input', rememberDraft);
 window.addEventListener('hashchange', openEditor);
 openEditor();
 editor.querySelector('[data-close-editor]').addEventListener('click', () => editor.close());
@@ -44,6 +60,8 @@ form.addEventListener('submit', async event => {
       message.textContent = result?.error || 'Publishing is unavailable. Your draft is still here.';
       return;
     }
+    try { sessionStorage.removeItem(draftKey()); } catch { /* Storage is optional. */ }
+    window.removeEventListener('beforeunload', guardDraft);
     snapshot.dataset.nowRevision = result.revision;
     date.dateTime = result.date;
     date.textContent = result.dateLabel;
@@ -53,6 +71,7 @@ form.addEventListener('submit', async event => {
       return paragraph;
     }));
     if (text.value === draft) text.value = result.paragraphs.join('\n\n');
+    if (text.value !== result.paragraphs.join('\n\n')) rememberDraft();
     code.value = '';
     message.textContent = 'Published. Visitors can see your update now.';
   } catch {

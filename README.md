@@ -1,6 +1,6 @@
 # Muhammad Subhan — personal portfolio
 
-Requires Node 22 or later. No package installation is needed.
+Requires Node 22.13 or later. No package installation is needed.
 
 Run `node scripts/build.mjs` to create the public static site in `dist`.
 Run `node scripts/server.mjs` to inspect it at http://127.0.0.1:4173.
@@ -17,9 +17,11 @@ Use `workIntroduction` and `writingIntroduction` for approved index introduction
 
 The contact form uses the verified SilentForms endpoint in `contact.formEndpoint`. The public email shown on the page uses `contact.email`. To replace the delivery service, use an activated HTTPS endpoint that accepts form data and returns a JSON acknowledgement after accepting the message. The form recognises `ok: true`, `status: "success"` or `success: true`.
 
-The optional `portrait` and project `image` fields accept `src`, descriptive `alt`, integer `width` and `height`, optional `caption`, and optional `sources` entries with `src` and `width` for responsive delivery. Supply compressed WebP or AVIF assets at appropriate sizes. The Home portrait is framed in a 4:5 crop and the featured Work image uses 16:10. The photos in `public/images` are responsive WebP copies from the [existing portfolio](https://muhammadsubhan.pages.dev/).
+The optional `portrait` and project `image` fields accept `src`, descriptive `alt`, integer `width` and `height`, optional `caption`, and optional `sources` entries with `src` and `width` for responsive delivery. Supply compressed WebP or AVIF assets at appropriate sizes. The Home portrait is framed in a 4:5.8 crop and the featured Work image uses 16:10. The image directory includes WebP, JPEG and PNG assets.
 
 The canonical domain is [muhammadsubhan.pages.dev](https://muhammadsubhan.pages.dev/). Add an approved absolute social image URL to `seo.image` if available. The local server binds to loopback only.
+
+Google Analytics starts automatically on the configured public origin. The footer explains the analytics services. The site has no analytics preference buttons and ignores older saved site preferences. Local previews, direct editing links and browser privacy signals continue to be excluded.
 
 ## Design decisions
 
@@ -33,4 +35,6 @@ To update the Now section on the homepage, press Ctrl+K (or Cmd+K on Mac), type 
 
 The production Pages project needs a D1 binding named `NOW_DB` provisioned with `scripts/now-schema.sql`, and an encrypted secret named `NOW_EDITOR_CODE`. Use a random code of 24 to 128 characters without whitespace. Keep it out of the repository. The build uses `content/now.txt` for the initial page. The deployed editor stores later updates in D1.
 
-The novel release form stores opt-ins in the same D1 database, using `scripts/novel-subscriptions.sql`. It requires an encrypted `NOVEL_SIGNUP_SECRET` for the signup limits. Signups do not send email. Send the single release announcement only when the author explicitly requests it, using active rows where `notified_at IS NULL`. Include each row’s unsubscribe link, `https://muhammadsubhan.pages.dev/api/novel/unsubscribe?token=...`, and mark that row notified only after its send succeeds. Subscriber addresses and tokens must stay out of public artifacts and Git.
+The novel release form stores opt-ins in the same D1 database, using `scripts/novel-subscriptions.sql`. It requires an encrypted `NOVEL_SIGNUP_SECRET` for the signup limits. Apply both SQL files before deploying any Functions changes, including upgrades of existing databases.
+
+Signup saves a pending request. Before release, the author sends each pending reader an individual confirmation request from the public contact address. Only an affirmative reply from that same address verifies ownership. Mark that specific row with a bound update setting `consent_version = 'novel-release-confirmed-v1'`. Existing unverified requests follow the same process. Send the announcement only on the author's instruction and only to rows in `novel_release_recipients`. Include the recipient's private unsubscribe URL (`/api/novel/unsubscribe?token=...`) and set that row's `notified_at` after successful delivery. Delete all subscriber rows within 30 days of release, including unconfirmed requests. Confirmation, dispatch and final deletion are operator tasks. Keep addresses and tokens out of public artifacts and Git.

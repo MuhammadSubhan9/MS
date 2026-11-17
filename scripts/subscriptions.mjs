@@ -15,14 +15,14 @@ export function subscriptionPage(title, copy, body = '') {
     </main></body></html>`;
 }
 
-export function subscriptionResponse(request, { message, status = 200, error = false }) {
+export function subscriptionResponse(request, { message, status = 200, error = false, retryAfter }) {
   const headers = { 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer' };
-  if (status === 429) headers['Retry-After'] = '3600';
+  if (status === 429) headers['Retry-After'] = String(retryAfter);
   if (request.headers.get('Accept')?.includes('application/json')) {
     return Response.json(error ? { error: message } : { ok: true, message }, { status, headers });
   }
   if (!error) {
-    return new Response(subscriptionPage('You’re on the release list', message), {
+    return new Response(subscriptionPage('Release signup received', message), {
       status: 200, headers: { ...headers, 'Content-Type': 'text/html; charset=utf-8' },
     });
   }
@@ -30,12 +30,12 @@ export function subscriptionResponse(request, { message, status = 200, error = f
   return new Response(subscriptionPage('Please try again', message), { status, headers });
 }
 
-export async function readSubscriptionBody(request) {
+export async function readSubscriptionBody(request, limit = maxBodyBytes) {
   const type = request.headers.get('Content-Type')?.split(';')[0].trim();
   if (!['application/json', 'application/x-www-form-urlencoded'].includes(type)) {
     return { error: 'Send the form using the email field.', status: 415 };
   }
-  if (Number(request.headers.get('Content-Length')) > maxBodyBytes) {
+  if (Number(request.headers.get('Content-Length')) > limit) {
     return { error: 'That signup is too large. Please try again.', status: 413 };
   }
   const reader = request.body?.getReader();
@@ -48,7 +48,7 @@ export async function readSubscriptionBody(request) {
       const { done, value } = await reader.read();
       if (done) break;
       bytes += value.byteLength;
-      if (bytes > maxBodyBytes) {
+      if (bytes > limit) {
         await reader.cancel();
         return { error: 'That signup is too large. Please try again.', status: 413 };
       }
@@ -78,15 +78,13 @@ export function normalizedEmail(value) {
   return email;
 }
 
-export async function allowSubscription(request, env) {
-  const now = Math.floor(Date.now() / 1000);
+export async function limitAction(request, env, action, limit, now = Math.floor(Date.now() / 1000)) {
   const hour = Math.floor(now / 3600);
-  const day = Math.floor(now / 86400);
-  const secret = await crypto.subtle.importKey('raw', new TextEncoder().encode(env.NOVEL_SIGNUP_SECRET), {
+  const secret = await crypto.subtle.importKey('raw', new TextEncoder().encode((env.NOVEL_SIGNUP_SECRET || env.NOW_EDITOR_CODE)), {
     name: 'HMAC', hash: 'SHA-256',
   }, false, ['sign']);
   const signature = await crypto.subtle.sign('HMAC', secret, new TextEncoder().encode(
-    `${hour}:${request.headers.get('CF-Connecting-IP') || 'local'}`,
+    `${action}:${hour}:${request.headers.get('CF-Connecting-IP') || 'local'}`,
   ));
   const ipKey = Array.from(new Uint8Array(signature), byte => byte.toString(16).padStart(2, '0')).join('');
   const increment = (key, expires, limit) => env.NOW_DB.prepare(`
@@ -94,10 +92,15 @@ export async function allowSubscription(request, env) {
     ON CONFLICT(key) DO UPDATE SET count = count + 1 WHERE count < ?
     RETURNING count
   `).bind(key, expires, limit).first();
-  const ipAllowed = await increment(ipKey, (hour + 1) * 3600, 5);
-  if (!ipAllowed) return false;
-  const globalAllowed = await increment(`daily:${day}`, (day + 1) * 86400, 200);
-  if (!globalAllowed) return false;
-  await env.NOW_DB.prepare('DELETE FROM novel_signup_limits WHERE expires_at < ?').bind(now).run();
-  return true;
+  await env.NOW_DB.prepare('DELETE FROM novel_signup_limits WHERE expires_at <= ?').bind(now).run();
+  const allowed = await increment(ipKey, (hour + 1) * 3600, limit);
+  return allowed ? 0 : (hour + 1) * 3600 - now;
+}
+
+export async function allowSubscription(request, env) {
+  const now = Math.floor(Date.now() / 1000);
+  const day = Math.floor(now / 86400);
+  const daily = await env.NOW_DB.prepare('SELECT count FROM novel_signup_limits WHERE key = ?').bind(`daily:${day}`).first();
+  if (daily?.count >= 200) return (day + 1) * 86400 - now;
+  return limitAction(request, env, 'subscribe', 5, now);
 }

@@ -14,7 +14,7 @@ export function findNovel(writing) {
 
 function excerptParagraphs(paragraphs) {
   return paragraphs.map(paragraph => {
-    if (typeof paragraph === 'string') return `<p>${escape(paragraph)}</p>`;
+    if (typeof paragraph === 'string') return `<p>${escape(paragraph).replace(/\*([^*]+)\*/g, '<em>$1</em>')}</p>`;
     const className = {
       subject: 'leaf-subject', email: 'leaf-email', record: 'leaf-record',
     }[paragraph.kind];
@@ -138,12 +138,12 @@ export function novelContent(book, author) {
             <input id="release-website" name="website" type="text" tabindex="-1" autocomplete="off">
           </div>
           <label class="release-consent"><input name="consent" type="checkbox" value="yes" required>
-            <span>Email me once when <cite>The Eleventh Rehearsal</cite> is released.</span>
+            <span>Email me to confirm my address and let me know when <cite>The Eleventh Rehearsal</cite> is released.</span>
           </label>
           <p class="release-status" role="status" aria-atomic="true"></p>
           <details class="release-privacy">
             <summary>About this signup</summary>
-            <p>Your email is stored on Cloudflare for this announcement. You can unsubscribe through the link in the release email, or <a href="mailto:ms@ahmadbaqa.com">contact me</a> to remove your address sooner.</p>
+            <p>Your email is stored on Cloudflare for this announcement. Only readers who confirm by email will receive it. The list will be deleted within 30 days after release. You can unsubscribe through the link in the release email, or <a href="mailto:ms@ahmadbaqa.com">contact me</a> to remove your address sooner.</p>
           </details>
         </form>
       </div>
@@ -175,6 +175,8 @@ export function renderNovelPage({ data, page, origin, ready }) {
   <meta property="og:title" content="${escape(title)}">
   <meta property="og:description" content="${escape(page.description)}">
   <meta property="og:type" content="book">
+  <meta name="twitter:card" content="summary_large_image">
+  ${origin ? `<meta property="og:url" content="${escape(origin + page.path)}">` : ''}
   ${origin ? `<link rel="canonical" href="${escape(origin + page.path)}"><meta property="og:image" content="${escape(origin)}${cover}">` : ''}
   <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
   <link rel="preload" href="/fonts/welcome-editorial.woff2" as="font" type="font/woff2" crossorigin>
@@ -199,7 +201,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
   </header>
   <main id="main" tabindex="-1" class="novel-main">${page.body}</main>
   <footer class="novel-footer novel-wrap">
-    <div><p>${escape(page.label)}</p><span>A novel in progress by ${escape(data.name)}</span>${google.controls}</div>
+    <div><p>${escape(page.label)}</p><span>A novel in progress by ${escape(data.name)}</span>${google.notice}</div>
     <a class="novel-text-link" href="/">Back to the portfolio <span aria-hidden="true">↗</span></a>
   </footer>
   ${data.now ? commandPalette : ''}

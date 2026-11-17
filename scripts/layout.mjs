@@ -83,7 +83,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
     <div class="footer-identity">
       <a class="footer-name" href="/">${escape(data.name)}</a>
       <small>© <span data-year>${new Date().getFullYear()}</span></small>
-      ${google.controls}
+      ${google.notice}
     </div>
     ${footerPages.length || footerContact || footerNow ? `<nav class="footer-nav" aria-label="Footer">
       ${footerPages.map(item => `<a class="footer-link" href="${item.path}">${item.path === '/writing/' ? 'Writing' : escape(item.label)}</a>`).join('')}

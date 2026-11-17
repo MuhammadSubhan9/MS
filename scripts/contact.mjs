@@ -14,7 +14,7 @@ function messageForm(endpoint, topics) {
   const destination = endpoint ? safeLink(endpoint) : '/contact/';
   return `<section class="contact-form-panel" aria-labelledby="contact-form-title">
     <h2 id="contact-form-title">Send a <em>message.</em></h2>
-    <p class="contact-form-intro">Fields marked with an asterisk (*) are required.</p>
+    <p class="contact-form-intro">SilentForms delivers your message by email. Fields marked with an asterisk (*) are required.</p>
     <form class="contact-form" action="${destination}" method="post" data-clarity-mask="true"${endpoint ? '' : ' data-delivery-unavailable'}>
       ${endpoint ? '<div class="visually-hidden" aria-hidden="true"><input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>' : ''}
       <div class="contact-form-row">

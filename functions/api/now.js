@@ -1,3 +1,5 @@
+import { logStorageFailure } from '../../scripts/storage-errors.mjs';
+import { limitAction, readSubscriptionBody } from '../../scripts/subscriptions.mjs';
 import { formatDate } from '../../scripts/components.mjs';
 import { nowLimit, nowParagraphs } from '../../scripts/now.mjs';
 
@@ -31,10 +33,21 @@ export async function onRequestPut({ request, env }) {
   if (!env.NOW_DB || !/^[!-~]{24,128}$/.test(env.NOW_EDITOR_CODE ?? '')) {
     return json({ error: 'Publishing has not been set up yet. Your draft is still here.' }, 503);
   }
+  try {
+    const retry = await limitAction(request, env, 'publish', 30);
+    if (retry) return Response.json({ error: 'Too many attempts. Try again later.' }, {
+      status: 429, headers: { 'Cache-Control': 'no-store', 'Retry-After': String(retry) },
+    });
+  } catch (error) {
+    logStorageFailure('Publishing attempt limiter unavailable', error, request);
+    return json({ error: 'Publishing is unavailable. Your draft is still here.' }, 503);
+  }
   if (!await validCode(request, env.NOW_EDITOR_CODE)) {
     return json({ error: 'That publishing code did not match.' }, 401);
   }
-  const payload = await request.json().catch(() => null);
+  const body = await readSubscriptionBody(request, 32 * 1024);
+  if (body.error) return json({ error: 'Send a valid update within the size limit.' }, body.status);
+  const payload = body.fields;
   const text = typeof payload?.text === 'string' ? payload.text.trim() : '';
   const revision = payload?.revision;
   if (!text || text.length > nowLimit || !Number.isSafeInteger(revision) || revision < 0 || revision >= Number.MAX_SAFE_INTEGER) {
@@ -49,7 +62,8 @@ export async function onRequestPut({ request, env }) {
       return json({ error: 'A newer update is live. Copy your draft, reload the page, then try again.' }, 409);
     }
     return json({ date, dateLabel: formatDate(date), paragraphs: nowParagraphs(text), revision: revision + 1 });
-  } catch {
+  } catch (error) {
+    logStorageFailure('Now database write failed', error, request);
     return json({ error: 'Publishing is unavailable. Your draft is still here.' }, 503);
   }
 }

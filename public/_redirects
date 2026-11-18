@@ -30,8 +30,10 @@
 /experience/graduation /work/graduation-volunteering/ 301
 /projects.html /work/ 301
 /projects /work/ 301
-/projects/portfolio.html /work/layout-study/ 301
-/projects/portfolio /work/layout-study/ 301
+/projects/portfolio.html /work/ 301
+/projects/portfolio /work/ 301
+/work/layout-study/ /work/ 301
+/work/layout-study /work/ 301
 /events.html /work/ 301
 /events /work/ 301
 /events/unesco.html /work/unesco-ai-forum/ 301

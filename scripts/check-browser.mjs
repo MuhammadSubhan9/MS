@@ -133,6 +133,11 @@ try {
   assert.equal(motion.logoAnimation, 'journey-mark-enter');
   await chrome.evaluate("document.querySelector('#milestone-unesco-ai-forum summary').click()");
   await waitFor(() => chrome.evaluate("!document.querySelector('#milestone-unesco-ai-forum details').open"), 'reversing the milestone animation');
+  await chrome.evaluate("document.querySelector('.journey-end').scrollIntoView({ block: 'center', behavior: 'instant' })");
+  await waitFor(() => chrome.evaluate("document.querySelector('.journey-end').hasAttribute('data-reached')"), 'timeline endpoint illuminated');
+  assert.equal(await chrome.evaluate("Math.abs(document.querySelector('.journey-rail').getBoundingClientRect().bottom - document.querySelector('.journey-end').getBoundingClientRect().top) < 1"), true);
+  await chrome.evaluate("document.querySelector('.journey-end-link').click()");
+  await waitFor(() => chrome.evaluate("location.hash === '#in-progress'"), 'endpoint links to current work');
   await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
 
   await chrome.evaluate("localStorage.setItem('portfolio-seen-update','older-release')");

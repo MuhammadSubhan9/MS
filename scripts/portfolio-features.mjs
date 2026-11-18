@@ -150,7 +150,7 @@ function journeyMilestone({ record, date, logo }, index) {
   </li>`;
 }
 
-function journeyTimeline(milestones) {
+function journeyTimeline(milestones, hasCurrentWork) {
   let previousYear;
   return `<div class="journey-timeline" data-journey-timeline>
     <div class="journey-rail" aria-hidden="true"><span></span></div>
@@ -160,6 +160,9 @@ function journeyTimeline(milestones) {
       previousYear = year;
       return divider + journeyMilestone(entry, index);
     }).join('')}</ol>
+    <div class="journey-end">
+      ${hasCurrentWork ? action('#in-progress', 'Present', 'journey-end-link', '– see what I’m working on') : '<span>Latest milestone</span>'}
+    </div>
   </div>`;
 }
 
@@ -189,7 +192,7 @@ export function journeyPage(data, records) {
     </header>
     ${milestones.length ? `<section class="journey-history" id="milestones" aria-labelledby="milestones-title" tabindex="-1" data-share-section>
       ${sharedHeading('milestones', 'Milestones')}
-      ${journeyTimeline(milestones)}
+      ${journeyTimeline(milestones, current.length > 0)}
     </section>` : ''}
     ${current.length ? `<section class="journey-current" id="in-progress" aria-labelledby="in-progress-title" tabindex="-1" data-share-section>
       ${sharedHeading('in-progress', 'In progress')}

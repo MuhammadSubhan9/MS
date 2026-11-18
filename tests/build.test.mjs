@@ -64,6 +64,11 @@ test('public build excludes fixture data and includes production SEO', async () 
   assert.match(journey, /href="\/about\/#igcses"/);
   assert.ok(journey.indexOf('id="milestone-course-crew-management"') < journey.indexOf('id="milestone-unesco-ai-forum"'));
   assert.doesNotMatch(journey, /Older milestone|Newer milestone/);
+  assert.match(journey, /class="journey-end-link" href="#in-progress"/);
+  await assert.rejects(readFile(`${output}/work/layout-study/index.html`), { code: 'ENOENT' });
+  const work = await readFile(`${output}/work/index.html`, 'utf8');
+  assert.match(work, /forum-delegates-800\.webp 800w, \/images\/forum-delegates\.jpg 1600w/);
+  assert.doesNotMatch(work + journey, /ChatGPT|Putting my portfolio together/);
   const about = await readFile(`${output}/about/index.html`, 'utf8');
   assert.doesNotMatch(about, /Web development/);
   for (const page of [html, contact, novel]) {

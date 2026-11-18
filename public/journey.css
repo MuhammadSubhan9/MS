@@ -23,6 +23,7 @@
   --timeline-gap: clamp(2.8rem, 7vw, 6rem);
   --branch: calc(var(--timeline-gap) / 2);
   --pin-top: 2.1rem;
+  --end-space: 3.15rem;
   --timeline-ink: #46362a;
   --timeline-copper: #986744;
   position: relative;
@@ -38,6 +39,7 @@
 }
 .journey-rail {
   inset-inline-start: var(--rail-axis);
+  inset-block-end: var(--end-space);
   translate: -50% 0;
   background: #d7c6b0;
 }
@@ -50,7 +52,7 @@
   display: grid;
   gap: clamp(1rem, 2.35vw, 1.85rem);
   margin: 0;
-  padding: .65rem 0 1.5rem;
+  padding: .65rem 0 clamp(2.25rem, 4vw, 3.25rem);
   list-style: none;
 }
 .journey-year {
@@ -220,6 +222,41 @@
 .journey-mark[data-event="unesco-ai-forum"] { border-color: #374850; background: #19272e; }
 .journey-mark img { width: 100%; max-height: 6rem; object-fit: contain; }
 
+.journey-end {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-items: start;
+  height: var(--end-space);
+  padding-top: .85rem;
+  color: #745139;
+  font: 650 .86rem/1.3 var(--sans);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.journey-end::before {
+  position: absolute;
+  top: 0;
+  left: var(--rail-axis);
+  width: .85rem;
+  height: .85rem;
+  translate: -50% -50%;
+  border: 1px solid #9b7655;
+  border-radius: 50%;
+  background: #a77b54;
+  box-shadow: 0 0 0 4px #e5d2b9, 0 0 0 7px var(--paper);
+  content: '';
+}
+.journey-end-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 2.1rem;
+  padding-inline: .55rem;
+  color: inherit;
+  text-underline-offset: .25em;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .journey-timeline[data-journey-motion] .journey-card {
     transition: opacity 390ms ease-out, transform 590ms cubic-bezier(.2,.72,.2,1);
@@ -238,6 +275,11 @@
   .journey-timeline[data-journey-motion] .journey-point { transition: background-color 340ms, box-shadow 480ms; }
   .journey-timeline[data-journey-motion] .journey-milestone:not([data-reached]) .journey-point { background: var(--paper); }
   .journey-timeline[data-journey-motion] .journey-milestone[data-reached] .journey-point { box-shadow: 0 0 0 4px #e5d2b9; }
+  .journey-end::before { transition: background-color 340ms, box-shadow 480ms; }
+  .journey-timeline[data-journey-motion] .journey-end:not([data-reached])::before {
+    background: var(--paper);
+    box-shadow: 0 0 0 4px var(--paper);
+  }
   .journey-card[data-journey-state="opening"] .journey-brief::before {
     animation: journey-rule-draw 430ms 40ms cubic-bezier(.23,.75,.2,1) both;
   }
@@ -263,7 +305,7 @@
   @keyframes journey-brief-exit { to { opacity: 0; transform: translateY(-.34rem); } }
 }
 
-.journey-current-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; }
+.journey-current-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: .7rem; }
 .journey-current-grid article {
   display: flex;
   flex-direction: column;
@@ -290,6 +332,7 @@
   .journey-milestone,
   .journey-milestone[data-side="right"] { --arrival-distance: -.55rem; }
   .journey-milestone::before { left: var(--rail-axis); transform-origin: left; }
+  .journey-end { justify-items: start; padding-inline-start: .75rem; }
   .journey-current-grid { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) {

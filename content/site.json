@@ -181,7 +181,7 @@
     }
   ],
   "journey": {
-    "current": ["education:international-a-levels", "work:layout-study", "writing:the-eleventh-rehearsal"],
+    "current": ["education:international-a-levels", "writing:the-eleventh-rehearsal"],
     "milestones": [
       { "record": "course:course-crew-management" },
       { "record": "course:course-aviation-management" },
@@ -220,9 +220,13 @@
       "image": {
         "src": "/images/forum-delegates.jpg",
         "alt": "Delegates gathered beneath a chandelier at the UNESCO Global Forum on the Ethics of AI in Riyadh.",
-        "width": 515,
-        "height": 388,
-        "caption": "Forum delegates in Riyadh. Photo by the Saudi Press Agency."
+        "width": 1600,
+        "height": 1200,
+        "caption": "Forum delegates in Riyadh. Photo by the Saudi Press Agency.",
+        "sources": [
+          { "src": "/images/forum-delegates-800.webp", "width": 800 },
+          { "src": "/images/forum-delegates.jpg", "width": 1600 }
+        ]
       },
       "homeImage": {
         "src": "/images/forum-panel.jpg",
@@ -305,21 +309,6 @@
       "sections": [
         { "title": "Before the ceremony", "paragraphs": ["I helped with setup before guests arrived. Once people began coming in, I guided attendees to their seats so they could get settled before the ceremony started."] },
         { "title": "Behind the scenes", "paragraphs": ["I also supported the backstage team as the ceremony got underway. Working between the guest area and backstage showed me how much a smooth event depends on people keeping each other informed and picking up small tasks as they come up."] }
-      ]
-    },
-    {
-      "slug": "layout-study",
-      "evidence": { "label": "Personal portfolio", "topics": ["technology"] },
-      "title": "Putting my portfolio together",
-      "category": "Independent project",
-      "description": "I used ChatGPT to make a site for my education, experiences and writing.",
-      "workSummary": "I chose what to include, gave feedback on how it should look, and used ChatGPT to build and revise the site.",
-      "body": [
-        "I used ChatGPT to make the portfolio. I decided what I wanted to share and gave feedback on the design and wording as it came together."
-      ],
-      "sections": [
-        { "title": "What I wanted the site to do", "paragraphs": ["I wanted visitors to be able to find my background, read about an event, or explore my writing, so I asked for separate sections for each."] },
-        { "title": "Reviewing the result", "paragraphs": ["I reviewed the pages as ChatGPT put them together and asked for changes when the layout, wording or transitions felt off."] }
       ]
     },
     {

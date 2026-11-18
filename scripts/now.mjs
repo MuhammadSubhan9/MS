@@ -1,4 +1,4 @@
-import { escape, formatDate, paragraphs } from './components.mjs';
+import { escape, formatDate, icon, paragraphs } from './components.mjs';
 
 export const nowLimit = 4000;
 export const nowStart = '<!-- now:content -->';
@@ -14,7 +14,7 @@ export function renderNowContent({ date, text, revision = 0 }) {
       <div class="container now-panel">
         <header class="now-heading">
           <h2 id="now-title">Now</h2>
-          <p class="meta">Last updated <time datetime="${escape(date)}">${escape(formatDate(date))}</time></p>
+          <p class="meta">${icon('clock')} Last updated <time datetime="${escape(date)}">${escape(formatDate(date))}</time></p>
         </header>
         <div class="reading now-copy">${paragraphs(nowParagraphs(text))}</div>
       </div>

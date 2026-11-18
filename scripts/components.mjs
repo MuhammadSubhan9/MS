@@ -18,7 +18,25 @@ export function safeLink(value) {
 
 export const paragraphs = (items = [], renderText = escape) => items.map(item => `<p>${renderText(item)}</p>`).join('');
 
-export const arrow = '<span class="arrow arrow-external" aria-hidden="true"></span>';
+export function icon(name, className = '') {
+  return `<svg class="site-icon${className ? ` ${escape(className)}` : ''}" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#${escape(name)}"></use></svg>`;
+}
+
+export function toggleIcon(closed, open, className = '') {
+  return `<span class="toggle-icon${className ? ` ${escape(className)}` : ''}" aria-hidden="true">${icon(closed, 'icon-closed')}${icon(open, 'icon-open')}</span>`;
+}
+
+export const pageIcons = {
+  '/': 'house-line', '/about/': 'user-circle', '/journey/': 'path',
+  '/work/': 'briefcase', '/writing/': 'pen-nib', '/contact/': 'envelope-simple',
+};
+
+export const sectionIcons = {
+  education: 'graduation-cap', experience: 'briefcase', languages: 'translate',
+  capabilities: 'list-checks', courses: 'notebook', achievements: 'trophy', interests: 'compass',
+  evidence: 'tree-structure', experiences: 'briefcase', events: 'calendar-blank', sources: 'books',
+  milestones: 'clock-counter-clockwise', 'in-progress': 'hourglass-simple', 'looking-ahead': 'signpost',
+};
 
 const definitions = {
   igcse: 'International General Certificate of Secondary Education. A secondary school qualification typically taken before A Levels.',
@@ -43,20 +61,24 @@ export function glossary(text) {
 
 export function copySectionButton(id, title) {
   return `<button class="section-copy" type="button" data-copy-section="${escape(id)}" aria-label="Copy link to ${escape(title)}" hidden>
-    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+    ${icon('link-simple')}<span data-section-copy-label>Copy link</span>
   </button>`;
 }
 
 export function sharedHeading(id, title, { level = 2, headingId = `${id}-title`, renderText = escape } = {}) {
-  return `<div class="share-heading"><h${level} id="${escape(headingId)}">${renderText(title)}</h${level}>${copySectionButton(id, title)}</div>`;
+  const symbol = sectionIcons[id];
+  const label = renderText(title);
+  return `<div class="share-heading"><h${level} id="${escape(headingId)}"${symbol ? ' class="icon-heading"' : ''}>${symbol ? `${icon(symbol)}<span>${label}</span>` : label}</h${level}>${copySectionButton(id, title)}</div>`;
 }
 
-export function action(href, label, className = 'action-link', context = '') {
+export function action(href, label, className = 'action-link', context = '', symbol = '') {
   const anchor = /^#[a-z][a-z0-9-]*$/.test(href);
   const destination = anchor ? href : safeLink(href);
-  const mark = href.startsWith('https:') ? arrow : `<span class="arrow${anchor ? ' arrow-down' : ''}" aria-hidden="true"></span>`;
+  const mark = symbol ? icon(symbol) : href.startsWith('https:') ? icon('arrow-up-right', 'arrow arrow-external')
+    : anchor ? icon('arrow-down', 'arrow arrow-down') : icon('arrow-right', 'arrow');
   const accessibleContext = context ? `<span class="visually-hidden"> ${escape(context)}</span>` : '';
-  return `<a class="${className}" href="${destination}"><span class="link-label">${escape(label)}${accessibleContext}</span>${mark}</a>`;
+  const text = `<span class="link-label">${escape(label)}${accessibleContext}</span>`;
+  return `<a class="${className}" href="${destination}">${symbol ? mark + text : text + mark}</a>`;
 }
 
 export function formatDate(value) {
@@ -103,7 +125,7 @@ export function chronology(items, { detailLabel, renderText = escape } = {}) {
       ${item.outcome ? `<p>${renderText(item.outcome)}</p>` : ''}
       ${item.details?.length ? `<details${detailLabel ? ' class="entry-details" data-open-for-section-link' : ''}><summary>${escape(detailLabel || 'Details')}<span class="visually-hidden"> for ${escape(item.title)}</span></summary><div class="entry-detail-copy">${paragraphs(item.details, renderText)}</div></details>` : ''}
       ${item.certificateUrl || item.id ? `<div class="entry-actions">
-        ${item.certificateUrl ? action(item.certificateUrl, 'View certificate', 'action-link entry-certificate', `for ${item.title}`) : ''}
+        ${item.certificateUrl ? action(item.certificateUrl, 'View certificate', 'action-link entry-certificate', `for ${item.title}`, 'certificate') : ''}
         ${item.id ? copySectionButton(item.id, item.title) : ''}
       </div>` : ''}
     </div>

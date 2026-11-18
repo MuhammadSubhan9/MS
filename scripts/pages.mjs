@@ -1,6 +1,6 @@
 import {
-  action, arrow, chronology, escape, glossary, hasDetail, image, paragraphs, projectEntry,
-  publicationDate, safeLink, section, sharedHeading,
+  action, chronology, escape, glossary, hasDetail, icon, image, paragraphs, projectEntry,
+  publicationDate, safeLink, section, sectionIcons, sharedHeading,
 } from './components.mjs';
 import { findNovel, novelContent, novelPath, oldNovelPath } from './novel.mjs';
 import { contactPage } from './contact.mjs';
@@ -23,13 +23,13 @@ function homePage(data, { hasAbout, hasContact, selected }) {
     </div>
     ${currentEducation || data.currentFocus || data.futureDirection ? `<dl class="home-facts" data-reveal>
       ${currentEducation ? `<div>
-        <dt>Education</dt>
+        <dt class="icon-label">${icon('graduation-cap')}Education</dt>
         <dd><p class="home-fact-title">${escape(currentEducation.title)}</p>
         ${currentEducation.institution ? `<p>${escape(currentEducation.institution)}</p>` : ''}
         ${currentEducation.description ? `<p>${escape(currentEducation.description)}</p>` : ''}
         ${currentEducation.date ? `<p class="meta">${escape(currentEducation.date)}</p>` : ''}</dd>
       </div>` : data.currentFocus ? `<div><dt>Currently</dt><dd>${escape(data.currentFocus)}</dd></div>` : ''}
-      ${data.futureDirection ? `<div><dt>Looking ahead</dt><dd>${escape(data.futureDirection)}</dd></div>` : ''}
+      ${data.futureDirection ? `<div><dt class="icon-label">${icon('signpost')}Looking ahead</dt><dd>${escape(data.futureDirection)}</dd></div>` : ''}
     </dl>` : ''}
   </section>` : '';
   const featuredWork = selected[0] || projects[0];
@@ -57,7 +57,7 @@ function homePage(data, { hasAbout, hasContact, selected }) {
         ${featuredNovel && data.writingPractice ? `<p class="home-writing-practice">${escape(data.writingPractice)}</p>` : ''}
         <p class="home-writing-hook">${escape(book.description)}</p>
         ${paragraphs(book.body?.slice(0, 1))}
-        ${action(bookRoute || '/writing/', featuredNovel ? 'Explore the novel' : 'Read the teaser', 'button-link')}
+        ${action(bookRoute || '/writing/', featuredNovel ? 'Explore the novel' : 'Read the teaser', 'button-link', '', 'book-open-text')}
       </div>
       ${image(book.image, {
         sizes: '(max-width: 700px) 210px, 280px',
@@ -73,7 +73,7 @@ function homePage(data, { hasAbout, hasContact, selected }) {
       ${contact.introduction ? `<p>${escape(contact.introduction)}</p>` : ''}
     </div>
     <div class="home-contact-links" data-reveal>
-      ${contact.email ? `<a class="button-link" href="mailto:${escape(contact.email)}">${escape(contact.email)}${arrow}</a>` : ''}
+      ${contact.email ? `<a class="button-link" href="mailto:${escape(contact.email)}">${icon('envelope-simple')}${escape(contact.email)}</a>` : ''}
       ${action('/contact/', 'Contact details')}
     </div>
   </section>` : '';
@@ -118,7 +118,7 @@ function aboutPage(data, background) {
       </header>
     </div>
     ${background.length ? `<div class="container"><nav class="about-jumps" aria-label="On this page"><ul>
-      ${background.map(([id, title]) => `<li>${action('#' + id, title)}</li>`).join('')}
+      ${background.map(([id, title]) => `<li>${action('#' + id, title, 'action-link', '', sectionIcons[id])}</li>`).join('')}
     </ul></nav>
     <div class="about-records">${background.map(([id, title, body]) => section(id, title, body)).join('')}</div></div>` : ''}
   </div>`;
@@ -131,7 +131,7 @@ function languageList(languages = [], scoresUpdated) {
     <dt>${escape(language.name)}</dt>
     <dd>${escape(language.description)}
       ${Number.isInteger(language.duolingoScore) ? `<span class="language-score">Duolingo score <strong>${language.duolingoScore}</strong></span>` : ''}
-      ${language.certificateUrl ? action(language.certificateUrl, 'View credential', 'action-link', `for ${language.name}`) : ''}
+      ${language.certificateUrl ? action(language.certificateUrl, 'View credential', 'action-link', `for ${language.name}`, 'certificate') : ''}
     </dd>
   </div>`).join('')}</dl>
   ${hasScores && scoresUpdated ? `<p class="meta language-score-source">Duolingo scores shared on LinkedIn, updated ${publicationDate(scoresUpdated)}.</p>` : ''}`;
@@ -152,7 +152,7 @@ function workEvent(item) {
         ${metadata ? `<p class="meta">${metadata}</p>` : ''}
         <h3 id="${titleId}">${escape(item.title)}</h3>
         <p class="work-event-description">${escape(item.description)}</p>
-        <span class="work-event-action">Read event summary<span class="arrow" aria-hidden="true"></span></span>
+        <span class="work-event-action">Read event summary${icon('arrow-right', 'arrow')}</span>
       </div>
       ${eventMark(item)}
     </a>
@@ -182,7 +182,7 @@ function workIndex(items, introduction, evidence) {
         ${introduction ? `<p class="lead">${escape(introduction)}</p>` : ''}
       </div>
       ${jumps.length ? `<nav class="work-jumps" aria-label="On this page">${jumps.map(([id, title]) =>
-        action('#' + id, title)).join('')}</nav>` : ''}
+        action('#' + id, title, 'action-link', '', sectionIcons[id])).join('')}</nav>` : ''}
     </header>
     <div class="work-lead"${feature.slug === 'unesco-ai-forum' ? ' id="event-unesco"' : ''}>
       ${projectEntry(feature, { featured: true, eagerImage: true, actionLabel: 'Read more' })}
@@ -224,7 +224,7 @@ function collectionPages(add, data, items, path, label, evidence = '') {
       [detailed[index + 1], 'Next article'],
     ].filter(([entry]) => entry) : [];
     add(`/${path}/${item.slug}/`, item.title, item.description, `
-      <p class="breadcrumb"><a href="/${path}/${isWorkEvent && !featuredReport ? '#events' : ''}"><span class="arrow arrow-left" aria-hidden="true"></span><span>${isWriting ? 'All writing' : isWorkEvent && !featuredReport ? 'All events' : 'All work'}</span></a></p>
+      <p class="breadcrumb"><a href="/${path}/${isWorkEvent && !featuredReport ? '#events' : ''}">${icon('arrow-left', 'arrow arrow-left')}<span>${isWriting ? 'All writing' : isWorkEvent && !featuredReport ? 'All events' : 'All work'}</span></a></p>
       <article class="detail${hasCover ? ' detail-with-cover' : ''}${isWriting ? '' : ' work-detail'}${featuredReport ? ' work-feature-report' : ''}" data-motion-route="/${path}/${item.slug}/">
         <header class="page-heading article-heading${mark ? ' work-event-heading' : ''}"${mark ? ` data-event="${escape(item.slug)}"` : ''}>
           <div>

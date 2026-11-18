@@ -157,7 +157,6 @@
   overflow-wrap: anywhere;
 }
 .journey-switch {
-  position: relative;
   grid-area: 1 / 2 / 3 / 3;
   align-self: center;
   width: 1.9rem;
@@ -165,30 +164,14 @@
   border: 1px solid #b29476;
   border-radius: 50%;
   color: #745239;
+  font-size: .89rem;
   transition: color 220ms, background-color 220ms, border-color 220ms, transform 420ms cubic-bezier(.22,.72,.2,1);
-}
-.journey-switch::before,
-.journey-switch::after {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  width: .6rem;
-  height: 1px;
-  background: currentColor;
-  content: '';
-  transform: translate(-50%, -50%);
-}
-.journey-switch::after {
-  transform: translate(-50%, -50%) rotate(90deg);
-  transition: transform 330ms cubic-bezier(.22,.72,.2,1);
 }
 .journey-card[open]:not([data-journey-state="closing"]) .journey-switch {
   border-color: #856348;
   background: #856348;
   color: #fff3e2;
   transform: rotate(180deg);
-}
-.journey-card[open]:not([data-journey-state="closing"]) .journey-switch::after {
-  transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
 }
 .journey-panel { position: relative; overflow: clip; }
 .journey-brief {

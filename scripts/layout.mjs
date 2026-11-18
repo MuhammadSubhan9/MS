@@ -1,4 +1,4 @@
-import { action, escape, safeLink } from './components.mjs';
+import { action, escape, icon, pageIcons, safeLink, toggleIcon } from './components.mjs';
 import { renderNovelPage } from './novel.mjs';
 import { commandAssets, commandPalette } from './commands.mjs';
 import { clarityTag, googleAnalytics } from './analytics.mjs';
@@ -37,11 +37,12 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
     const active = page.path === item.path || item.path !== '/' && page.path.startsWith(item.path);
     const isContact = item.path === '/contact/';
     const label = item.path === '/writing/' ? 'Writing' : item.label;
-    return `<a${isContact ? ' class="nav-contact"' : ''} href="${item.path}"${active ? ' aria-current="page"' : ''}>${escape(label)}${isContact ? '<span class="arrow" aria-hidden="true"></span>' : ''}</a>`;
+    const mark = pageIcons[item.path] ? icon(pageIcons[item.path]) : '';
+    return `<a${isContact ? ' class="nav-contact"' : ''} href="${item.path}"${active ? ' aria-current="page"' : ''}>${mark}${escape(label)}</a>`;
   }).join('');
   const footerPages = navigation.filter(item => item.path !== '/' && item.path !== '/contact/');
   const footerContact = navigation.some(item => item.path === '/contact/');
-  const footerNow = data.now ? '<a class="footer-link" href="/#now">Now</a>' : '';
+  const footerNow = data.now ? `<a class="footer-link icon-label" href="/#now">${icon('clock')}Now</a>` : '';
   const google = googleAnalytics(data, origin, ready);
   return `<!doctype html>
 <html lang="en">
@@ -62,6 +63,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
   <link rel="preload" href="/fonts/dm-serif-text.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/source-sans-3.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/icons.css">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
@@ -82,7 +84,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   <header class="site-header">
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>${escape(data.name)}</span></a>
-      ${navigation.length > 1 ? `<button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary">${links}</nav>` : ''}
+      ${navigation.length > 1 ? `<button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu${toggleIcon('list', 'x')}</button><nav class="nav" id="navigation" aria-label="Primary">${links}</nav>` : ''}
     </div>
   </header>
   <main class="${home ? 'home-page' : about ? 'about-main' : 'container'}" id="main" tabindex="-1">${page.body}</main>
@@ -93,10 +95,10 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
       ${google.notice}
     </div>
     ${footerPages.length || footerContact || footerNow || siteUpdates ? `<nav class="footer-nav" aria-label="Footer">
-      ${footerPages.map(item => `<a class="footer-link" href="${item.path}">${item.path === '/writing/' ? 'Writing' : escape(item.label)}</a>`).join('')}
+      ${footerPages.map(item => `<a class="footer-link icon-label" href="${item.path}">${pageIcons[item.path] ? icon(pageIcons[item.path]) : ''}${item.path === '/writing/' ? 'Writing' : escape(item.label)}</a>`).join('')}
       ${footerNow}
-      ${siteUpdates ? '<a class="footer-link" href="#site-updates">Site updates</a>' : ''}
-      ${footerContact ? action('/contact/', 'Get in touch', 'button-link footer-contact') : ''}
+      ${siteUpdates ? `<a class="footer-link icon-label" href="#site-updates">${icon('list-bullets')}Site updates</a>` : ''}
+      ${footerContact ? action('/contact/', 'Get in touch', 'button-link footer-contact', '', 'envelope-simple') : ''}
     </nav>` : ''}
   </div></footer>
   ${portfolioFeatures ? sectionLinkDialog : ''}

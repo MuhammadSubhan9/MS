@@ -1,7 +1,7 @@
 import { readFile, mkdir, writeFile, cp, rm, access } from 'node:fs/promises';
 import { resolve, dirname, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { escape } from './components.mjs';
+import { action, escape } from './components.mjs';
 import { createPages } from './pages.mjs';
 import { renderPage } from './layout.mjs';
 export { escape, createPages };
@@ -54,7 +54,7 @@ export async function build({ preview = false } = {}) {
   const ready = !preview && Boolean(origin && data.introduction.length);
   const missing = {
     path: '/404/', label: 'Page not found', description: 'The requested page could not be found.',
-    body: '<section class="error-page"><p class="eyebrow">404</p><h1>Page not found</h1><p class="lead">The address may have changed or the page may have been removed.</p><a class="button-link" href="/">Return home<span class="arrow" aria-hidden="true"></span></a></section>',
+    body: `<section class="error-page"><p class="eyebrow">404</p><h1>Page not found</h1><p class="lead">The address may have changed or the page may have been removed.</p>${action('/', 'Return home', 'button-link', '', 'house-line')}</section>`,
   };
   // Render and validate before replacing generated output.
   const rendered = [...pages, missing].map(page => ({

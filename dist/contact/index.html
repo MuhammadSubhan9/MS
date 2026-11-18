@@ -17,6 +17,7 @@
   <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
   <link rel="preload" href="/fonts/dm-serif-text.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/source-sans-3.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/icons.css">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
@@ -41,7 +42,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
-      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/">About</a><a href="/journey/">Journey</a><a href="/work/">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/" aria-current="page">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
+      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span class="toggle-icon" aria-hidden="true"><svg class="site-icon icon-closed" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#list"></use></svg><svg class="site-icon icon-open" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#x"></use></svg></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#house-line"></use></svg>Home</a><a href="/about/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#user-circle"></use></svg>About</a><a href="/journey/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#path"></use></svg>Journey</a><a href="/work/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#briefcase"></use></svg>Work</a><a href="/writing/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#pen-nib"></use></svg>Writing</a><a class="nav-contact" href="/contact/" aria-current="page"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg>Contact</a></nav>
     </div>
   </header>
   <main class="container" id="main" tabindex="-1"><div class="contact-layout">
@@ -49,22 +50,22 @@
         <p class="eyebrow">Contact</p>
         <h1>Let’s get in <em>touch.</em></h1>
         <p class="lead">If you have a project in mind, know of a student opportunity, or want to talk about a shared interest, I’d be glad to hear from you.</p>
-        <p class="contact-location"><strong>Muhammad Subhan</strong><span>Riyadh, Saudi Arabia</span></p>
+        <p class="contact-location"><strong>Muhammad Subhan</strong><span class="icon-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#map-pin"></use></svg>Riyadh, Saudi Arabia</span></p>
     </header>
     <div class="contact-channels" role="group" aria-label="Contact methods">
         <section class="contact-feature" aria-labelledby="contact-email-title">
-          <h2 class="eyebrow" id="contact-email-title">Email</h2>
+          <h2 class="eyebrow icon-label" id="contact-email-title"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg>Email</h2>
           <a class="contact-address" href="mailto:ms@ahmadbaqa.com">ms@ahmadbaqa.com</a>
           <div class="contact-actions">
-            <a class="contact-save" href="/muhammad-subhan.vcf" download>Save contact card <span class="contact-card-icon" aria-hidden="true"></span></a>
+            <a class="contact-save" href="/muhammad-subhan.vcf" download><svg class="site-icon contact-card-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#identification-card"></use></svg>Save contact card</a>
             <button class="contact-copy" type="button" aria-label="Copy address" data-copy-email="ms@ahmadbaqa.com" hidden>
-              <span class="contact-copy-icon" aria-hidden="true"><span class="contact-copy-sheets"></span><span class="contact-copy-check"></span></span>
+              <span class="contact-copy-icon" aria-hidden="true"><svg class="site-icon contact-copy-sheets" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#copy-simple"></use></svg><svg class="site-icon contact-copy-check" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#check"></use></svg></span>
               <span class="contact-copy-labels" aria-hidden="true"><span>Copy address</span><span>Copied!</span></span>
             </button>
           </div>
           <p class="contact-copy-status" role="status"><span class="visually-hidden" data-copy-feedback></span></p>
         </section>
-        <dl class="contact-list"><div><dt class="eyebrow">LinkedIn</dt><dd><a class="action-link" href="https://www.linkedin.com/in/ms910/"><span class="link-label">Connect on LinkedIn</span><span class="arrow arrow-external" aria-hidden="true"></span></a></dd></div></dl>
+        <dl class="contact-list"><div><dt class="eyebrow icon-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#linkedin-logo"></use></svg>LinkedIn</dt><dd><a class="action-link" href="https://www.linkedin.com/in/ms910/"><span class="link-label">Connect on LinkedIn</span><svg class="site-icon arrow arrow-external" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-up-right"></use></svg></a></dd></div></dl>
     </div>
     <section class="contact-form-panel" aria-labelledby="contact-form-title">
     <h2 id="contact-form-title">Send a <em>message.</em></h2>
@@ -102,7 +103,7 @@
     <div class="contact-field-error" aria-hidden="true"><p id="contact-message-error"></p></div>
   </div>
       <details class="contact-form-details">
-        <summary>Add occupation or company <span>(optional)</span></summary>
+        <summary><svg class="site-icon disclosure-caret" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#caret-down"></use></svg> Add occupation or company <span>(optional)</span></summary>
         <div class="contact-form-row">
           <div class="contact-field">
     <label for="contact-occupation">Occupation</label>
@@ -116,9 +117,9 @@
   </div>
         </div>
       </details>
-      <button class="button-link contact-send" type="submit"><span>Send message</span><span class="arrow arrow-external" aria-hidden="true"></span></button>
+      <button class="button-link contact-send" type="submit"><span>Send message</span><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#paper-plane-right"></use></svg></button>
       <p class="contact-form-status" role="status">
-        <span class="contact-confirm-mark" aria-hidden="true"></span>
+        <span class="contact-confirm-mark" aria-hidden="true"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#check"></use></svg></span>
         <span class="contact-status-text"></span>
       </p>
     </form>
@@ -128,15 +129,15 @@
     <form data-contact-card-form>
       <div class="contact-card-heading">
         <h2 id="contact-card-title">Save my contact.</h2>
-        <button type="button" data-close-contact-card aria-label="Close contact card dialog">Close</button>
+        <button class="icon-label" type="button" data-close-contact-card aria-label="Close contact card dialog"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#x"></use></svg>Close</button>
       </div>
       <p id="contact-card-description">Add a personal reminder to the contact card, or save it as it is.</p>
       <label for="contact-card-note">Your note <span>(optional)</span></label>
       <textarea id="contact-card-note" rows="4" placeholder="Where we met, or something to remember…" autofocus></textarea>
       <p class="contact-card-status" role="status"></p>
       <div class="contact-card-actions">
-        <button class="contact-send" type="submit" disabled>Save with note <span class="contact-card-icon" aria-hidden="true"></span></button>
-        <a class="contact-card-plain" href="/muhammad-subhan.vcf" download>Save without note <span class="contact-card-icon" aria-hidden="true"></span></a>
+        <button class="contact-send" type="submit" disabled>Save with note <svg class="site-icon contact-card-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#download-simple"></use></svg></button>
+        <a class="contact-card-plain" href="/muhammad-subhan.vcf" download>Save without note <svg class="site-icon contact-card-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#download-simple"></use></svg></a>
       </div>
     </form>
   </dialog></main>
@@ -152,10 +153,10 @@
     </details>
     </div>
     <nav class="footer-nav" aria-label="Footer">
-      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/journey/">Journey</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
-      <a class="footer-link" href="/#now">Now</a>
+      <a class="footer-link icon-label" href="/about/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#user-circle"></use></svg>About</a><a class="footer-link icon-label" href="/journey/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#path"></use></svg>Journey</a><a class="footer-link icon-label" href="/work/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#briefcase"></use></svg>Work</a><a class="footer-link icon-label" href="/writing/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#pen-nib"></use></svg>Writing</a>
+      <a class="footer-link icon-label" href="/#now"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#clock"></use></svg>Now</a>
 
-      <a class="button-link footer-contact" href="/contact/"><span class="link-label">Get in touch</span><span class="arrow" aria-hidden="true"></span></a>
+      <a class="button-link footer-contact" href="/contact/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg><span class="link-label">Get in touch</span></a>
     </nav>
   </div></footer>
 
@@ -167,7 +168,7 @@
       </div>
       <label class="command-label" for="command-input">Type a command</label>
       <input id="command-input" type="text" placeholder="Type a command…" autocomplete="off" autocapitalize="none" spellcheck="false" autofocus>
-      <a class="command-result" href="/#edit" hidden>Edit Now <span aria-hidden="true">→</span></a>
+      <a class="command-result" href="/#edit" hidden>Edit Now <svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a>
       <p class="command-feedback" role="status"></p>
     </form>
   </dialog>

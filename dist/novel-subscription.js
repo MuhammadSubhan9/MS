@@ -3,9 +3,10 @@ const releaseForm = document.querySelector('.novel-release-form');
 if (releaseForm) {
   const button = releaseForm.querySelector('button[type="submit"]');
   const status = releaseForm.querySelector('.release-status');
+  const message = status.querySelector('[data-release-message]') || status;
 
-  function report(message, kind) {
-    status.textContent = message;
+  function report(text, kind) {
+    message.textContent = text;
     status.dataset.kind = kind;
   }
 

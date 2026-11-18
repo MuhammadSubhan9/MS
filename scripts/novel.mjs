@@ -1,4 +1,4 @@
-import { copySectionButton, escape, image, paragraphs, safeLink } from './components.mjs';
+import { copySectionButton, escape, icon, image, paragraphs, safeLink } from './components.mjs';
 import { commandAssets, commandPalette } from './commands.mjs';
 import { clarityTag, googleAnalytics } from './analytics.mjs';
 import excerpt from '../content/eleventh-rehearsal.json' with { type: 'json' };
@@ -49,9 +49,9 @@ function reader(book, author) {
         </div>
       </div>
       <div class="reader-controls" role="group" aria-label="Excerpt pages" hidden>
-        <button type="button" data-page-step="-1"><span aria-hidden="true">←</span> Previous</button>
+        <button type="button" data-page-step="-1">${icon('arrow-left')} Previous</button>
         <p role="status" aria-atomic="true" data-page-status></p>
-        <button type="button" data-page-step="1">Next <span aria-hidden="true">→</span></button>
+        <button type="button" data-page-step="1">Next ${icon('arrow-right')}</button>
       </div>
     </div>`;
 }
@@ -65,8 +65,8 @@ export function novelContent(book, author) {
         <p class="novel-byline">By ${escape(author)}</p>
         <p class="novel-hook">${escape(book.description)}</p>
         <div class="novel-hero-actions">
-          <a class="novel-button" href="#excerpt" data-open-reader>Open the book <span aria-hidden="true">↗</span></a>
-          <a class="novel-text-link" href="#release-updates">Release updates <span aria-hidden="true">↓</span></a>
+          <a class="novel-button" href="#excerpt" data-open-reader>Open the book ${icon('book-open-text')}</a>
+          <a class="novel-text-link" href="#release-updates">Release updates ${icon('arrow-down')}</a>
         </div>
       </div>
       <div class="novel-shelf">
@@ -107,7 +107,7 @@ export function novelContent(book, author) {
             <canvas width="680" height="118" data-waveform></canvas>
           </div>
           <div class="novel-section-actions">
-            <a class="novel-text-link" href="#excerpt" data-open-reader>Start reading <span aria-hidden="true">↗</span></a>
+            <a class="novel-text-link" href="#excerpt" data-open-reader>Start reading ${icon('book-open-text')}</a>
             ${copySectionButton('synopsis', 'the synopsis')}
           </div>
         </div>
@@ -146,10 +146,10 @@ export function novelContent(book, author) {
           <label class="release-consent"><input name="consent" type="checkbox" value="yes" required>
             <span>Email me to confirm my address and let me know when <cite>The Eleventh Rehearsal</cite> is released.</span>
           </label>
-          <button class="novel-button" type="submit">Notify me <span aria-hidden="true">↗</span></button>
-          <p class="release-status" role="status" aria-atomic="true"></p>
+          <button class="novel-button" type="submit">Notify me ${icon('bell-simple')}</button>
+          <p class="release-status" role="status" aria-atomic="true">${icon('check')}<span data-release-message></span></p>
           <details class="release-privacy">
-            <summary>About this signup</summary>
+            <summary>${icon('caret-down', 'disclosure-caret')}About this signup</summary>
             <p>Your email is stored on Cloudflare for this announcement. Only readers who confirm by email will receive it. The list will be deleted within 30 days after release. You can unsubscribe through the link in the release email, or <a href="mailto:ms@ahmadbaqa.com">contact me</a> to remove your address sooner.</p>
           </details>
         </form>
@@ -158,7 +158,7 @@ export function novelContent(book, author) {
     <dialog class="novel-reader-dialog" aria-label="The Eleventh Rehearsal excerpt">
       <div class="reader-dialog-inner">
         <div class="reader-top">
-          <button type="button" data-close-reader><span aria-hidden="true">←</span> Back to the novel</button>
+          <button type="button" data-close-reader>${icon('arrow-left')} Back to the novel</button>
           <p>${escape(excerpt.chapter)}</p>
         </div>
         <div data-dialog-reader></div>
@@ -187,6 +187,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
   ${origin ? `<link rel="canonical" href="${escape(origin + page.path)}"><meta property="og:image" content="${escape(origin)}${cover}">` : ''}
   <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
   <link rel="preload" href="/fonts/welcome-editorial.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/icons.css">
   <link rel="stylesheet" href="/novel.css">
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
@@ -201,15 +202,15 @@ export function renderNovelPage({ data, page, origin, ready }) {
   <a class="novel-skip" href="#main">Skip to content</a>
   <header class="novel-header">
     <div class="novel-header-inner novel-wrap">
-      <a class="novel-back" href="/"><span class="novel-back-arrow" aria-hidden="true">←</span> Portfolio</a>
+      <a class="novel-back" href="/"><span class="novel-back-arrow" aria-hidden="true">${icon('arrow-left')}</span> Portfolio</a>
       <a class="novel-imprint" href="#main" aria-label="${escape(page.label)}, back to top">
         <span class="imprint-stamp" aria-hidden="true">XI</span>
         <span class="novel-imprint-name">${escape(page.label)}</span>
       </a>
       <nav class="novel-index" aria-label="Novel sections">
-        <a href="#synopsis">Synopsis</a>
-        <a href="#excerpt">Excerpt</a>
-        <a href="#release-updates">Release updates</a>
+        <a href="#synopsis">${icon('text-align-left')}Synopsis</a>
+        <a href="#excerpt">${icon('book-open-text')}Excerpt</a>
+        <a href="#release-updates">${icon('bell-simple')}Release updates</a>
       </nav>
     </div>
   </header>
@@ -224,8 +225,8 @@ export function renderNovelPage({ data, page, origin, ready }) {
       </div>
     </div>
     <div class="novel-footer-links">
-      <a class="novel-text-link" href="#main">Back to top <span aria-hidden="true">↑</span></a>
-      <a class="novel-text-link" href="/">Portfolio <span aria-hidden="true">↗</span></a>
+      <a class="novel-text-link" href="#main">Back to top ${icon('arrow-up')}</a>
+      <a class="novel-text-link" href="/">Portfolio ${icon('arrow-up-right')}</a>
     </div>
   </footer>
   ${sectionLinkDialog}

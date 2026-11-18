@@ -17,6 +17,7 @@
   <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
   <link rel="preload" href="/fonts/dm-serif-text.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/source-sans-3.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/icons.css">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
@@ -49,17 +50,17 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
-      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/" aria-current="page">Home</a><a href="/about/">About</a><a href="/journey/">Journey</a><a href="/work/">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
+      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span class="toggle-icon" aria-hidden="true"><svg class="site-icon icon-closed" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#list"></use></svg><svg class="site-icon icon-open" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#x"></use></svg></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/" aria-current="page"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#house-line"></use></svg>Home</a><a href="/about/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#user-circle"></use></svg>About</a><a href="/journey/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#path"></use></svg>Journey</a><a href="/work/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#briefcase"></use></svg>Work</a><a href="/writing/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#pen-nib"></use></svg>Writing</a><a class="nav-contact" href="/contact/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg>Contact</a></nav>
     </div>
   </header>
   <main class="home-page" id="main" tabindex="-1">
     <aside class="site-update container" id="site-updates" data-site-update="2026-11-18-journey-and-evidence" aria-label="Site updates">
     <div class="site-update-inner">
       <details>
-        <summary><span>Site updates</span><span class="site-update-unread" data-site-update-unread hidden>New since your last visit</span></summary>
+        <summary><span class="toggle-icon" aria-hidden="true"><svg class="site-icon icon-closed" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#plus"></use></svg><svg class="site-icon icon-open" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#minus"></use></svg></span><span>Site updates</span><span class="site-update-unread" data-site-update-unread hidden>New since your last visit</span></summary>
         <div class="site-update-content">
           <p class="meta"><time datetime="2026-11-18">18 November 2026</time></p>
-          <ul><li><a class="action-link" href="/work/#evidence"><span class="link-label">Evidence map</span><span class="arrow" aria-hidden="true"></span></a><p>Explore courses, events and projects by subject.</p></li><li><a class="action-link" href="/journey/"><span class="link-label">Journey</span><span class="arrow" aria-hidden="true"></span></a><p>Follow the milestones from independent courses to my current work.</p></li><li><a class="action-link" href="/about/#capabilities"><span class="link-label">Capabilities</span><span class="arrow" aria-hidden="true"></span></a><p>See what I’ve studied and where I’ve put it into practice.</p></li></ul>
+          <ul><li><a class="action-link" href="/work/#evidence"><span class="link-label">Evidence map</span><svg class="site-icon arrow" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a><p>Explore courses, events and projects by subject.</p></li><li><a class="action-link" href="/journey/"><span class="link-label">Journey</span><svg class="site-icon arrow" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a><p>Follow the milestones from independent courses to my current work.</p></li><li><a class="action-link" href="/about/#capabilities"><span class="link-label">Capabilities</span><svg class="site-icon arrow" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a><p>See what I’ve studied and where I’ve put it into practice.</p></li></ul>
         </div>
       </details>
       <button class="site-update-dismiss" type="button" data-dismiss-site-update hidden>Dismiss</button>
@@ -73,7 +74,7 @@
           <h1 id="home-title"><span class="name-line"><span>Muhammad</span></span> <span class="name-line"><span>Subhan</span></span></h1>
         </div>
         <div class="lead"><p>I’m an A Level student in Riyadh preparing to study law. Aviation got me interested in how teams make decisions, and that curiosity now runs through my work in technology, negotiation and writing.</p></div>
-        <nav class="text-actions" aria-label="Explore the portfolio"><a class="button-link" href="/about/"><span class="link-label">About me</span><span class="arrow" aria-hidden="true"></span></a><a class="button-link button-outline" href="#background"><span class="link-label">Explore the portfolio</span><span class="arrow arrow-down" aria-hidden="true"></span></a></nav>
+        <nav class="text-actions" aria-label="Explore the portfolio"><a class="button-link" href="/about/"><span class="link-label">About me</span><svg class="site-icon arrow" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a><a class="button-link button-outline" href="#background"><span class="link-label">Explore the portfolio</span><svg class="site-icon arrow arrow-down" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-down"></use></svg></a></nav>
       </div>
       <figure><div class="media-window"><img src="/images/portrait-768.webp" alt="Muhammad Subhan in a suit and tie."
     width="768" height="1365" loading="eager" decoding="async" fetchpriority="high"
@@ -86,24 +87,24 @@
       <p class="eyebrow">Background</p>
       <h2 id="profile-title">From aviation to commercial law.</h2>
       <div class="reading"><p>Aviation was one of my first interests. Independent courses in crew management and aircraft design gave me a closer look at how people coordinate, communicate and make decisions under pressure.</p><p>That led me towards business and commercial law. I’m particularly curious about what happens when companies buy, sell or invest in a business, and how they decide who takes on the risk.</p></div>
-      <a class="action-link" href="/about/"><span class="link-label">More about me</span><span class="arrow" aria-hidden="true"></span></a>
+      <a class="action-link" href="/about/"><span class="link-label">More about me</span><svg class="site-icon arrow" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a>
     </div>
     <dl class="home-facts" data-reveal>
       <div>
-        <dt>Education</dt>
+        <dt class="icon-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#graduation-cap"></use></svg>Education</dt>
         <dd><p class="home-fact-title">International A Levels</p>
         <p>Al-Rowad International Schools</p>
         <p>Mathematics, Physics and Computer Science.</p>
         <p class="meta">Expected 2028</p></dd>
       </div>
-      <div><dt>Looking ahead</dt><dd>I plan to study law and am especially interested in corporate transactions and private equity.</dd></div>
+      <div><dt class="icon-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#signpost"></use></svg>Looking ahead</dt><dd>I plan to study law and am especially interested in corporate transactions and private equity.</dd></div>
     </dl>
   </section><!-- now:content -->
     <section class="home-section home-now" id="now" aria-labelledby="now-title" tabindex="-1" data-now-revision="0">
       <div class="container now-panel">
         <header class="now-heading">
           <h2 id="now-title">Now</h2>
-          <p class="meta">Last updated <time datetime="2026-11-17">17 November 2026</time></p>
+          <p class="meta"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#clock"></use></svg> Last updated <time datetime="2026-11-17">17 November 2026</time></p>
         </header>
         <div class="reading now-copy"><p>I’m studying Mathematics, Physics and Computer Science at International A Level in Riyadh.</p><p>Outside school, I’m working on The Eleventh Rehearsal, a psychological thriller about memory and the stories people tell about the past.</p><p>I’m working on my German and learning Latin.</p></div>
       </div>
@@ -127,14 +128,14 @@
     <div class="container">
       <div class="home-section-heading" data-reveal>
         <h2 id="home-work-title">Selected work &amp; experience</h2>
-        <a class="action-link" href="/work/"><span class="link-label">See all work</span><span class="arrow" aria-hidden="true"></span></a>
+        <a class="action-link" href="/work/"><span class="link-label">See all work</span><svg class="site-icon arrow" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a>
       </div>
       <article class="project-entry featured-project featured-with-image" data-motion-route="/work/unesco-ai-forum/">
       <div class="feature-copy">
         <p class="meta">Event · September 2026</p>
         <h3>UNESCO Global Forum on the Ethics of AI</h3><p>At the fourth UNESCO forum in Riyadh, I listened to how countries and organisations were putting AI ethics into practice. I left thinking about who is accountable once AI starts shaping real decisions.</p>
 
-        <a class="button-link project-action" href="/work/unesco-ai-forum/"><span class="link-label">Read more<span class="visually-hidden"> about UNESCO Global Forum on the Ethics of AI</span></span><span class="arrow" aria-hidden="true"></span></a>
+        <a class="button-link project-action" href="/work/unesco-ai-forum/"><span class="link-label">Read more<span class="visually-hidden"> about UNESCO Global Forum on the Ethics of AI</span></span><svg class="site-icon arrow" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a>
       </div>
       <figure><a class="media-link" href="/work/unesco-ai-forum/" aria-label="Open UNESCO Global Forum on the Ethics of AI" tabindex="-1"><div class="media-window"><img src="/images/forum-panel.jpg" alt="A panel speaking in front of an audience at the UNESCO Global Forum on the Ethics of AI in Riyadh."
     width="547" height="365" loading="lazy" decoding="async"
@@ -147,14 +148,14 @@
     <div><h3>Lead &amp; Influence: Negotiation and Communication Workshop</h3><p>I completed the two-day Essentials Workshop, practising public speaking and negotiation through exercises and simulations.</p>
 
 
-      <a class="action-link project-action" href="/work/lead-influence-workshop/"><span class="link-label">Read more<span class="visually-hidden"> about Lead &amp; Influence: Negotiation and Communication Workshop</span></span><span class="arrow" aria-hidden="true"></span></a>
+      <a class="action-link project-action" href="/work/lead-influence-workshop/"><span class="link-label">Read more<span class="visually-hidden"> about Lead &amp; Influence: Negotiation and Communication Workshop</span></span><svg class="site-icon arrow" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a>
     </div>
   </article><article class="project-entry" data-motion-route="/work/graduation-volunteering/">
     <p class="meta">Volunteering · Al-Rowad International Schools · May 2025</p>
     <div><h3>Graduation ceremony volunteering</h3><p>I helped set up the ceremony, seat guests and support backstage logistics as a student volunteer.</p>
 
 
-      <a class="action-link project-action" href="/work/graduation-volunteering/"><span class="link-label">Read more<span class="visually-hidden"> about Graduation ceremony volunteering</span></span><span class="arrow" aria-hidden="true"></span></a>
+      <a class="action-link project-action" href="/work/graduation-volunteering/"><span class="link-label">Read more<span class="visually-hidden"> about Graduation ceremony volunteering</span></span><svg class="site-icon arrow" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a>
     </div>
   </article>
       </div>
@@ -168,7 +169,7 @@
         <p class="home-writing-practice">I’m an avid reader and I write fiction. This novel lets me explore how much of what we remember comes from stories we’ve heard over and over.</p>
         <p class="home-writing-hook">The voice on the tape is his. So why does the story sound rehearsed?</p>
         <p>Daniel Vane edits sound for a living. Seventeen years after his mother vanished, a file from Bellwether arrives with a recording in his own voice and an appointment he never agreed to.</p>
-        <a class="button-link" href="/writing/"><span class="link-label">Explore the novel</span><span class="arrow" aria-hidden="true"></span></a>
+        <a class="button-link" href="/writing/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#book-open-text"></use></svg><span class="link-label">Explore the novel</span></a>
       </div>
       <figure><a class="media-link" href="/writing/" aria-label="Open The Eleventh Rehearsal" tabindex="-1"><div class="media-window"><img src="/images/eleventh-rehearsal-768.webp" alt="Illustrated cover of The Eleventh Rehearsal by Muhammad Subhan."
     width="768" height="1089" loading="lazy" decoding="async"
@@ -181,8 +182,8 @@
       <p>If you have a project in mind, know of a student opportunity, or want to talk about a shared interest, I’d be glad to hear from you.</p>
     </div>
     <div class="home-contact-links" data-reveal>
-      <a class="button-link" href="mailto:ms@ahmadbaqa.com">ms@ahmadbaqa.com<span class="arrow arrow-external" aria-hidden="true"></span></a>
-      <a class="action-link" href="/contact/"><span class="link-label">Contact details</span><span class="arrow" aria-hidden="true"></span></a>
+      <a class="button-link" href="mailto:ms@ahmadbaqa.com"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg>ms@ahmadbaqa.com</a>
+      <a class="action-link" href="/contact/"><span class="link-label">Contact details</span><svg class="site-icon arrow" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a>
     </div>
   </section>
   </main>
@@ -198,10 +199,10 @@
     </details>
     </div>
     <nav class="footer-nav" aria-label="Footer">
-      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/journey/">Journey</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
-      <a class="footer-link" href="/#now">Now</a>
-      <a class="footer-link" href="#site-updates">Site updates</a>
-      <a class="button-link footer-contact" href="/contact/"><span class="link-label">Get in touch</span><span class="arrow" aria-hidden="true"></span></a>
+      <a class="footer-link icon-label" href="/about/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#user-circle"></use></svg>About</a><a class="footer-link icon-label" href="/journey/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#path"></use></svg>Journey</a><a class="footer-link icon-label" href="/work/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#briefcase"></use></svg>Work</a><a class="footer-link icon-label" href="/writing/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#pen-nib"></use></svg>Writing</a>
+      <a class="footer-link icon-label" href="/#now"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#clock"></use></svg>Now</a>
+      <a class="footer-link icon-label" href="#site-updates"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#list-bullets"></use></svg>Site updates</a>
+      <a class="button-link footer-contact" href="/contact/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg><span class="link-label">Get in touch</span></a>
     </nav>
   </div></footer>
   <dialog class="section-link-dialog" aria-labelledby="section-link-title">
@@ -220,7 +221,7 @@
       </div>
       <label class="command-label" for="command-input">Type a command</label>
       <input id="command-input" type="text" placeholder="Type a command…" autocomplete="off" autocapitalize="none" spellcheck="false" autofocus>
-      <a class="command-result" href="/#edit" hidden>Edit Now <span aria-hidden="true">→</span></a>
+      <a class="command-result" href="/#edit" hidden>Edit Now <svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a>
       <p class="command-feedback" role="status"></p>
     </form>
   </dialog>

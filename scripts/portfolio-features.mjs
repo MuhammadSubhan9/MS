@@ -1,13 +1,13 @@
 import {
-  action, copySectionButton, escape, glossary, hasDetail, image, paragraphs,
-  publicationDate, safeLink, sharedHeading,
+  action, copySectionButton, escape, glossary, hasDetail, icon, image, paragraphs,
+  publicationDate, safeLink, sectionIcons, sharedHeading, toggleIcon,
 } from './components.mjs';
 
 const topics = [
-  ['technology', 'Technology'],
-  ['business', 'Business'],
-  ['aviation', 'Aviation'],
-  ['communication', 'Communication'],
+  ['technology', 'Technology', 'cpu'],
+  ['business', 'Business', 'chart-line-up'],
+  ['aviation', 'Aviation', 'airplane-tilt'],
+  ['communication', 'Communication', 'chats-circle'],
 ];
 
 export const portfolioAssets = `<link rel="stylesheet" href="/portfolio-features.css">
@@ -65,7 +65,7 @@ function evidenceSummary(record, primaryTopic) {
     ${record.workSummary || record.description ? `<p class="evidence-summary">${escape(record.workSummary || record.description)}</p>` : ''}
     <div class="evidence-record-links">
       ${recordLink(record)}
-      ${record.certificateUrl ? action(record.certificateUrl, 'View certificate', 'action-link', `for ${record.title}`) : ''}
+      ${record.certificateUrl ? action(record.certificateUrl, 'View certificate', 'action-link', `for ${record.title}`, 'certificate') : ''}
     </div>`;
 }
 
@@ -78,11 +78,11 @@ export function evidenceMap(records) {
   }
   const first = items[0];
   const available = topics.filter(([topic]) => items.some(item => item.evidence.topics.includes(topic)));
-  const button = ([topic, label]) => `<button type="button" data-evidence-filter="${topic}" aria-pressed="${topic === 'all'}">${label}</button>`;
+  const button = ([topic, label, symbol]) => `<button class="icon-label" type="button" data-evidence-filter="${topic}" aria-pressed="${topic === 'all'}">${icon(symbol)}${label}</button>`;
   return `<section class="evidence-section" id="evidence" aria-labelledby="evidence-title" tabindex="-1" data-share-section>
     ${sharedHeading('evidence', 'Evidence map')}
     <div class="evidence-filters" data-evidence-filters role="group" aria-label="Filter by subject" hidden>
-      ${[['all', 'All subjects'], ...available].map(button).join('')}
+      ${[['all', 'All subjects', 'squares-four'], ...available].map(button).join('')}
     </div>
     <div class="evidence-board">
       <div class="evidence-map" role="group" aria-label="Courses, events and projects by subject">
@@ -107,7 +107,7 @@ export function capabilitiesMatrix(capabilities = [], records) {
     const evidence = capability.records.map(key => records.get(key)).filter(Boolean);
     if (!evidence.length) return '';
     return `<details class="capability"${index === 0 ? ' open' : ''}>
-      <summary>${escape(capability.title)}</summary>
+      <summary>${escape(capability.title)}${toggleIcon('plus', 'minus')}</summary>
       <dl class="capability-matrix">
         <div><dt>What I studied</dt><dd>${glossary(capability.learning)}</dd></div>
         <div><dt>Where I used it</dt><dd>${glossary(capability.application)}</dd></div>
@@ -133,7 +133,7 @@ function journeyMilestone({ record, date, logo }, index) {
           <span class="journey-kind">${escape(category)}</span>
         </span>
         <span class="journey-title">${escape(record.title)}</span>
-        <span class="journey-switch" aria-hidden="true"></span>
+        ${toggleIcon('plus', 'minus', 'journey-switch')}
       </summary>
       <div class="journey-panel">
         <div class="journey-brief">
@@ -188,7 +188,7 @@ export function journeyPage(data, records) {
         <h1>Journey</h1>
         <p class="lead">What I’ve worked on, what I’m studying and where I hope to go next.</p>
       </div>
-      <nav class="journey-jumps" aria-label="On this page">${sections.map(([id, title]) => action('#' + id, title)).join('')}</nav>
+      <nav class="journey-jumps" aria-label="On this page">${sections.map(([id, title]) => action('#' + id, title, 'action-link', '', sectionIcons[id])).join('')}</nav>
     </header>
     ${milestones.length ? `<section class="journey-history" id="milestones" aria-labelledby="milestones-title" tabindex="-1" data-share-section>
       ${sharedHeading('milestones', 'Milestones')}
@@ -216,7 +216,7 @@ export function siteUpdateBrief(update) {
   return `<aside class="site-update container" id="site-updates" data-site-update="${escape(update.id)}" aria-label="Site updates">
     <div class="site-update-inner">
       <details>
-        <summary><span>Site updates</span><span class="site-update-unread" data-site-update-unread hidden>New since your last visit</span></summary>
+        <summary>${toggleIcon('plus', 'minus')}<span>Site updates</span><span class="site-update-unread" data-site-update-unread hidden>New since your last visit</span></summary>
         <div class="site-update-content">
           <p class="meta">${publicationDate(update.date)}</p>
           <ul>${update.items.map(item => `<li>${action(item.href, item.label)}<p>${escape(item.description)}</p></li>`).join('')}</ul>

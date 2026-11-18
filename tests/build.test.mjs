@@ -41,7 +41,7 @@ test('public build excludes fixture data and includes production SEO', async () 
   assert.ok(html.includes('href="/about/"'));
   assert.ok(html.includes('href="/work/"'));
   assert.ok(html.includes('href="/journey/"'));
-  assert.match(html, /class="footer-link" href="\/#now">Now<\/a>/);
+  assert.match(html, /class="footer-link icon-label" href="\/#now">[^\n]+>Now<\/a>/);
   const legacyNow = await readFile(`${output}/now/index.html`, 'utf8');
   assert.match(legacyNow, /http-equiv="refresh" content="0;url=\/#now"/);
   const sourceNow = await readFile(new URL('../content/now.txt', import.meta.url), 'utf8');
@@ -71,6 +71,13 @@ test('public build excludes fixture data and includes production SEO', async () 
   assert.doesNotMatch(work + journey, /ChatGPT|Putting my portfolio together/);
   const about = await readFile(`${output}/about/index.html`, 'utf8');
   assert.doesNotMatch(about, /Web development/);
+  const iconSprite = await readFile(`${output}/icons/phosphor-regular.svg`, 'utf8');
+  const symbols = new Set(Array.from(iconSprite.matchAll(/<symbol id="([^"]+)"/g), match => match[1]));
+  for (const [name, page] of Object.entries({ home: html, about, work, journey, writing: novel, contact })) {
+    const references = [...page.matchAll(/<use href="\/icons\/phosphor-regular\.svg#([^"]+)"/g)];
+    assert.ok(references.length > 0, `${name} includes site icons`);
+    for (const [, symbol] of references) assert.ok(symbols.has(symbol), `${name} icon ${symbol} exists`);
+  }
   for (const page of [html, contact, novel]) {
     assert.equal(page.split(`data-clarity-project="${source.analytics.clarityProject}"`).length, 2);
     assert.equal(page.split(`data-ga4-id="${source.analytics.googleMeasurementId}"`).length, 2);

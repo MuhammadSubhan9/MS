@@ -1,4 +1,4 @@
-import { action, arrow, escape, safeLink } from './components.mjs';
+import { action, escape, icon, safeLink } from './components.mjs';
 
 function field(name, label, { type = 'text', autocomplete, limit, error } = {}) {
   const id = `contact-${name}`;
@@ -32,15 +32,15 @@ function messageForm(endpoint, topics) {
       </div>
       ${field('message', 'Message', { type: 'textarea', limit: 2000, error: 'Write a message.' })}
       <details class="contact-form-details">
-        <summary>Add occupation or company <span>(optional)</span></summary>
+        <summary>${icon('caret-down', 'disclosure-caret')} Add occupation or company <span>(optional)</span></summary>
         <div class="contact-form-row">
           ${field('occupation', 'Occupation', { autocomplete: 'organization-title', limit: 120 })}
           ${field('company', 'Company', { autocomplete: 'organization', limit: 120 })}
         </div>
       </details>
-      <button class="button-link contact-send" type="submit"><span>Send message</span>${arrow}</button>
+      <button class="button-link contact-send" type="submit"><span>Send message</span>${icon('paper-plane-right')}</button>
       <p class="contact-form-status" role="status">
-        <span class="contact-confirm-mark" aria-hidden="true"></span>
+        <span class="contact-confirm-mark" aria-hidden="true">${icon('check')}</span>
         <span class="contact-status-text"></span>
       </p>
     </form>
@@ -56,9 +56,9 @@ export function contactPage(contact, name) {
   if (vcard && (!vcard.startsWith('/') || !/\.vcf$/i.test(vcard))) throw new Error('vCard requires a local VCF path');
   const mail = email ? `mailto:${escape(email)}` : '';
   const methods = [
-    phone ? ['Telephone', `<a href="tel:${telephone}">${escape(phone)}</a>`] : null,
-    ...links.map(link => [link.label, action(link.url, link.display || link.label)]),
-    cv ? ['Curriculum vitae', `<a href="${safeLink(cv)}" download>Download CV (PDF)</a>`] : null,
+    phone ? ['Telephone', 'phone', `<a href="tel:${telephone}">${escape(phone)}</a>`] : null,
+    ...links.map(link => [link.label, link.label === 'LinkedIn' ? 'linkedin-logo' : 'link-simple', action(link.url, link.display || link.label)]),
+    cv ? ['Curriculum vitae', 'notebook', `<a href="${safeLink(cv)}" download>Download CV (PDF)${icon('download-simple')}</a>`] : null,
   ].filter(Boolean);
   const form = email || formEndpoint ? messageForm(formEndpoint, topics) : '';
   return `<div class="contact-layout${form ? '' : ' contact-without-form'}">
@@ -66,23 +66,23 @@ export function contactPage(contact, name) {
         <p class="eyebrow">Contact</p>
         <h1>Let’s get in <em>touch.</em></h1>
         ${contact.introduction ? `<p class="lead">${escape(contact.introduction)}</p>` : ''}
-        ${contact.location ? `<p class="contact-location"><strong>${escape(name)}</strong><span>${escape(contact.location)}</span></p>` : ''}
+        ${contact.location ? `<p class="contact-location"><strong>${escape(name)}</strong><span class="icon-label">${icon('map-pin')}${escape(contact.location)}</span></p>` : ''}
     </header>
     <div class="contact-channels" role="group" aria-label="Contact methods">
         ${email ? `<section class="contact-feature" aria-labelledby="contact-email-title">
-          <h2 class="eyebrow" id="contact-email-title">Email</h2>
+          <h2 class="eyebrow icon-label" id="contact-email-title">${icon('envelope-simple')}Email</h2>
           <a class="contact-address" href="${mail}">${escape(email)}</a>
           <div class="contact-actions">
-            ${vcard ? `<a class="contact-save" href="${safeLink(vcard)}" download>Save contact card <span class="contact-card-icon" aria-hidden="true"></span></a>` : ''}
+            ${vcard ? `<a class="contact-save" href="${safeLink(vcard)}" download>${icon('identification-card', 'contact-card-icon')}Save contact card</a>` : ''}
             <button class="contact-copy" type="button" aria-label="Copy address" data-copy-email="${escape(email)}" hidden>
-              <span class="contact-copy-icon" aria-hidden="true"><span class="contact-copy-sheets"></span><span class="contact-copy-check"></span></span>
+              <span class="contact-copy-icon" aria-hidden="true">${icon('copy-simple', 'contact-copy-sheets')}${icon('check', 'contact-copy-check')}</span>
               <span class="contact-copy-labels" aria-hidden="true"><span>Copy address</span><span>Copied!</span></span>
             </button>
           </div>
           <p class="contact-copy-status" role="status"><span class="visually-hidden" data-copy-feedback></span></p>
         </section>` : ''}
-        ${methods.length ? `<dl class="contact-list">${methods.map(([label, link]) =>
-          `<div><dt class="eyebrow">${escape(label)}</dt><dd>${link}</dd></div>`).join('')}</dl>` : ''}
+        ${methods.length ? `<dl class="contact-list">${methods.map(([label, symbol, link]) =>
+          `<div><dt class="eyebrow icon-label">${icon(symbol)}${escape(label)}</dt><dd>${link}</dd></div>`).join('')}</dl>` : ''}
     </div>
     ${form}
   </div>${vcard ? `
@@ -90,15 +90,15 @@ export function contactPage(contact, name) {
     <form data-contact-card-form>
       <div class="contact-card-heading">
         <h2 id="contact-card-title">Save my contact.</h2>
-        <button type="button" data-close-contact-card aria-label="Close contact card dialog">Close</button>
+        <button class="icon-label" type="button" data-close-contact-card aria-label="Close contact card dialog">${icon('x')}Close</button>
       </div>
       <p id="contact-card-description">Add a personal reminder to the contact card, or save it as it is.</p>
       <label for="contact-card-note">Your note <span>(optional)</span></label>
       <textarea id="contact-card-note" rows="4" placeholder="Where we met, or something to remember…" autofocus></textarea>
       <p class="contact-card-status" role="status"></p>
       <div class="contact-card-actions">
-        <button class="contact-send" type="submit" disabled>Save with note <span class="contact-card-icon" aria-hidden="true"></span></button>
-        <a class="contact-card-plain" href="${safeLink(vcard)}" download>Save without note <span class="contact-card-icon" aria-hidden="true"></span></a>
+        <button class="contact-send" type="submit" disabled>Save with note ${icon('download-simple', 'contact-card-icon')}</button>
+        <a class="contact-card-plain" href="${safeLink(vcard)}" download>Save without note ${icon('download-simple', 'contact-card-icon')}</a>
       </div>
     </form>
   </dialog>` : ''}`;

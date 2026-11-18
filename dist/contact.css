@@ -133,6 +133,9 @@
 .contact-field:has([aria-invalid="true"]) .contact-field-error p { padding-top: .2rem; }
 .contact-form-details { border: 1px solid #9b8c73; border-radius: .55rem; }
 .contact-form-details summary { padding: .62rem .75rem; cursor: pointer; font-size: .94rem; }
+.contact-form-details summary::marker { content: ''; }
+.contact-form-details summary::-webkit-details-marker { display: none; }
+.contact-form-details summary > .site-icon { margin-inline-end: .35em; color: var(--contact-brass); }
 .contact-form-details > .contact-form-row { padding: .25rem .75rem .8rem; }
 .contact-send { min-height: 48px; border-color: var(--contact-brass); border-radius: .55rem; background: var(--contact-brass); color: var(--contact-ink); font: 700 1rem var(--sans); cursor: pointer; }
 .contact-send:hover { border-color: #ebd1a4; background: #ebd1a4; }
@@ -160,7 +163,8 @@
 }
 .contact-form-status[data-state="sent"] .contact-confirm-mark {
   position: relative;
-  display: block;
+  display: grid;
+  place-items: center;
   width: clamp(3.35rem, 8vw, 4.25rem);
   aspect-ratio: 1;
   border: 1px solid var(--contact-brass);
@@ -169,20 +173,21 @@
   box-shadow: inset 0 0 0 3px #302c2626;
   animation: contact-confirm-mark-in 540ms cubic-bezier(.2, .7, .34, 1) both;
 }
-.contact-confirm-mark::before, .contact-confirm-mark::after { position: absolute; content: ''; }
-.contact-confirm-mark::before {
-  inset: 17%;
-  background: var(--contact-ink);
-  clip-path: polygon(13% 53%, 22% 44%, 40% 62%, 77% 25%, 86% 34%, 40% 80%);
+.contact-confirm-mark > .site-icon {
+  width: 72%;
+  height: 72%;
+  color: var(--contact-ink);
   mask: linear-gradient(#000, #000) left / 100% 100% no-repeat;
   animation: contact-confirm-draw 310ms 190ms cubic-bezier(.35, 0, .2, 1) both;
 }
 .contact-confirm-mark::after {
+  position: absolute;
   inset: -1px;
   border: 1px solid var(--contact-brass);
   border-radius: inherit;
   opacity: 0;
   animation: contact-confirm-ring 620ms 130ms ease-out both;
+  content: '';
 }
 @keyframes contact-confirm-in {
   from { opacity: 0; translate: 0 .55rem; }
@@ -204,7 +209,7 @@
 @media (prefers-reduced-motion: reduce) {
   .contact-form-status[data-state="sent"],
   .contact-form-status[data-state="sent"] .contact-confirm-mark,
-  .contact-confirm-mark::before,
+  .contact-confirm-mark > .site-icon,
   .contact-confirm-mark::after { animation: none; }
 }
 @keyframes contact-notice-in {
@@ -309,32 +314,23 @@
 .contact-copy-labels > span + span { opacity: 0; transform: translateY(.3rem); }
 .contact-copy[data-copy-state="copied"] .contact-copy-labels > :first-child { opacity: 0; transform: translateY(-.3rem); }
 .contact-copy[data-copy-state="copied"] .contact-copy-labels > :last-child { opacity: 1; transform: none; }
-.contact-copy-icon { position: relative; width: 1rem; height: 1rem; flex: none; }
-.contact-copy-sheets, .contact-copy-check { position: absolute; transition: opacity 160ms, transform 220ms; }
-.contact-copy-sheets { inset: 0; }
-.contact-copy-sheets::before, .contact-copy-sheets::after {
+.contact-copy-icon { position: relative; width: 1.07rem; height: 1.07rem; flex: none; }
+.contact-copy-icon > .site-icon {
   position: absolute;
-  inset: .1rem .25rem .25rem .1rem;
-  border: 1px solid;
-  border-radius: 2px;
-  background: var(--contact-copy-bg);
-  content: '';
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 160ms, transform 220ms;
 }
-.contact-copy-sheets::after { transform: translate(.2rem, .2rem); }
-.contact-copy:hover .contact-copy-sheets::after { background: var(--contact-copy-hover); }
-.contact-copy-check {
-  inset: .25rem .1rem auto .1rem;
-  height: .45rem;
-  border: solid currentColor;
-  border-width: 0 0 2px 2px;
+.contact-copy-check { opacity: 0; transform: scale(.75); }
+.contact-copy[data-copy-state="copied"] .contact-copy-sheets {
   opacity: 0;
-  transform: rotate(-45deg) scale(.7);
+  animation: contact-sheets-settle 240ms ease-out both;
 }
-.contact-copy[data-copy-state="copied"] .contact-copy-sheets { opacity: 0; transform: scale(.75); }
 .contact-copy[data-copy-state="copied"] .contact-copy-check {
   opacity: 1;
-  transform: rotate(-45deg);
-  animation: contact-check-in 300ms 40ms both;
+  transform: none;
+  animation: contact-check-in 300ms 150ms both;
 }
 .contact-copy-status:has(.visually-hidden) { margin: 0; }
 .contact-copy-status { margin-top: .35rem; color: #eadcc3; font-size: .88rem; }
@@ -342,41 +338,20 @@
   from { clip-path: inset(0 100% 0 0); }
   to { clip-path: inset(0); }
 }
-.contact-copy[data-copy-state="copied"] .contact-copy-sheets {
-  animation: contact-sheets-settle 240ms ease-out both;
-}
-.contact-copy[data-copy-state="copied"] .contact-copy-sheets::after {
-  transform: none;
-  background: var(--contact-brass);
-}
-.contact-copy[data-copy-state="copied"] .contact-copy-check { animation-delay: 150ms; }
 @keyframes contact-sheets-settle {
   0%, 60% { opacity: 1; transform: none; }
-  to { opacity: 0; transform: none; }
+  to { opacity: 0; transform: scale(.75); }
 }
 .contact-card-actions > * { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; }
-.contact-card-icon { position: relative; display: inline-block; width: 1rem; height: 1.2rem; flex: none; }
-.contact-card-icon::before {
-  position: absolute;
-  inset: .05rem .12rem .2rem;
-  border: 1px solid currentColor;
-  border-radius: 2px;
-  background: repeating-linear-gradient(transparent 0 .28rem, currentColor .28rem .32rem, transparent .32rem .4rem) center / 60% 60% no-repeat;
-  content: '';
+[data-card-state="saved"] .contact-card-icon { animation: contact-card-file-away 320ms cubic-bezier(.2,.7,.2,1) both; }
+@container (max-width: 325px) {
+  .contact-actions :is(.contact-save, .contact-copy) { gap: .42rem; padding-inline: .6rem; font-size: .94rem; }
 }
-.contact-card-icon::after {
-  position: absolute;
-  inset: auto .16rem .02rem;
-  height: .3rem;
-  border: solid currentColor;
-  border-width: 0 1px 1px;
-  content: '';
-}
-[data-card-state="saved"] .contact-card-icon::before { animation: contact-card-file-away 320ms cubic-bezier(.2,.7,.2,1) both; }
 @keyframes contact-card-file-away {
   35% { transform: translateY(-.15rem) scale(.85); }
   to { transform: translateY(.6rem) scale(.45); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .contact-copy[data-copy-state="copied"] .contact-copy-sheets { opacity: 0; }
+  .contact-copy[data-copy-state="copied"] .site-icon,
+  [data-card-state="saved"] .contact-card-icon { animation: none; }
 }

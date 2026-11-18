@@ -17,6 +17,7 @@
   <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
   <link rel="preload" href="/fonts/dm-serif-text.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/source-sans-3.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/icons.css">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
@@ -40,11 +41,11 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
-      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/">About</a><a href="/journey/">Journey</a><a href="/work/" aria-current="page">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
+      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span class="toggle-icon" aria-hidden="true"><svg class="site-icon icon-closed" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#list"></use></svg><svg class="site-icon icon-open" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#x"></use></svg></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#house-line"></use></svg>Home</a><a href="/about/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#user-circle"></use></svg>About</a><a href="/journey/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#path"></use></svg>Journey</a><a href="/work/" aria-current="page"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#briefcase"></use></svg>Work</a><a href="/writing/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#pen-nib"></use></svg>Writing</a><a class="nav-contact" href="/contact/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg>Contact</a></nav>
     </div>
   </header>
   <main class="container" id="main" tabindex="-1">
-      <p class="breadcrumb"><a href="/work/"><span class="arrow arrow-left" aria-hidden="true"></span><span>All work</span></a></p>
+      <p class="breadcrumb"><a href="/work/"><svg class="site-icon arrow arrow-left" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-left"></use></svg><span>All work</span></a></p>
       <article class="detail work-detail" data-motion-route="/work/lead-influence-workshop/">
         <header class="page-heading article-heading">
           <div>
@@ -59,8 +60,8 @@
     <figcaption>Nicholas Coburn-Palo speaking about strategic listening at Harvard Business School’s Lectures that Last event. Photo from his public LinkedIn post.</figcaption></figure>
         <div class="reading article-body"><p>I took NY Empire Academy’s two-day Essentials Workshop with Nicholas Coburn-Palo, a preceptor in public speaking at Harvard University, and Kate Clark. The format gave me time to practise both delivering a clear message and listening carefully to the person across the table.</p>
           <div class="work-detail-parts"><section class="article-section"><h2>Public speaking</h2><p>The speaking exercises gave me a chance to organise my points before delivering them. I practised making the main point clear and giving the listener enough context to follow it.</p></section><section class="article-section"><h2>Negotiation</h2><p>In the simulations I practised explaining my position and listening for the other side’s priorities. Hearing what mattered to them helped me think about which parts of a proposal had room to move.</p></section></div>
-          <section class="article-section" id="sources" data-share-section tabindex="-1" aria-labelledby="sources-title"><div class="share-heading"><h2 id="sources-title">Sources</h2><button class="section-copy" type="button" data-copy-section="sources" aria-label="Copy link to Sources" hidden>
-    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+          <section class="article-section" id="sources" data-share-section tabindex="-1" aria-labelledby="sources-title"><div class="share-heading"><h2 id="sources-title" class="icon-heading"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#books"></use></svg><span>Sources</span></h2><button class="section-copy" type="button" data-copy-section="sources" aria-label="Copy link to Sources" hidden>
+    <svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#link-simple"></use></svg><span data-section-copy-label>Copy link</span>
   </button></div><ul><li><a href="https://nyempireacademy.com/workshop-booking/leadership-negotiation-communication">NY Empire Academy workshop</a></li><li><a href="https://extension.harvard.edu/faculty/nicholas-coburn-palo/">Nicholas Coburn-Palo’s Harvard faculty profile</a></li><li><a href="https://www.linkedin.com/posts/nick-coburn-palo-2a19978_i-had-the-opportunity-to-deliver-a-talk-at-activity-7318683152632217602-RAjK">Event photo and talk details</a></li></ul></section>
         </div>
 
@@ -77,10 +78,10 @@
     </details>
     </div>
     <nav class="footer-nav" aria-label="Footer">
-      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/journey/">Journey</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
-      <a class="footer-link" href="/#now">Now</a>
+      <a class="footer-link icon-label" href="/about/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#user-circle"></use></svg>About</a><a class="footer-link icon-label" href="/journey/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#path"></use></svg>Journey</a><a class="footer-link icon-label" href="/work/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#briefcase"></use></svg>Work</a><a class="footer-link icon-label" href="/writing/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#pen-nib"></use></svg>Writing</a>
+      <a class="footer-link icon-label" href="/#now"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#clock"></use></svg>Now</a>
 
-      <a class="button-link footer-contact" href="/contact/"><span class="link-label">Get in touch</span><span class="arrow" aria-hidden="true"></span></a>
+      <a class="button-link footer-contact" href="/contact/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg><span class="link-label">Get in touch</span></a>
     </nav>
   </div></footer>
   <dialog class="section-link-dialog" aria-labelledby="section-link-title">
@@ -99,7 +100,7 @@
       </div>
       <label class="command-label" for="command-input">Type a command</label>
       <input id="command-input" type="text" placeholder="Type a command…" autocomplete="off" autocapitalize="none" spellcheck="false" autofocus>
-      <a class="command-result" href="/#edit" hidden>Edit Now <span aria-hidden="true">→</span></a>
+      <a class="command-result" href="/#edit" hidden>Edit Now <svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a>
       <p class="command-feedback" role="status"></p>
     </form>
   </dialog>

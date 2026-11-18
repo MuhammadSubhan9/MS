@@ -8,6 +8,9 @@ if (opener && typeof dialog?.showModal === 'function') {
   const note = dialog.querySelector('textarea');
   const save = form.querySelector('[type="submit"]');
   const status = dialog.querySelector('[role="status"]');
+  const plain = dialog.querySelector('.contact-card-plain');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  let closeTimer;
   let saving = false;
   let request;
   opener.setAttribute('aria-haspopup', 'dialog');
@@ -16,14 +19,28 @@ if (opener && typeof dialog?.showModal === 'function') {
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     status.textContent = '';
+    delete opener.dataset.cardState;
+    delete save.dataset.cardState;
+    delete plain.dataset.cardState;
+    save.disabled = saving || !note.value.trim();
     dialog.showModal();
   });
   dialog.querySelector('[data-close-contact-card]').addEventListener('click', () => dialog.close());
   dialog.addEventListener('close', () => {
+    clearTimeout(closeTimer);
     request?.abort('dialog-closed');
     opener.focus({ preventScroll: true });
   });
-  dialog.querySelector('.contact-card-plain').addEventListener('click', () => dialog.close());
+  plain.addEventListener('click', event => {
+    if (saving || plain.dataset.cardState === 'saved') {
+      event.preventDefault();
+      return;
+    }
+    plain.dataset.cardState = 'saved';
+    save.disabled = true;
+    opener.dataset.cardState = 'saved';
+    closeTimer = setTimeout(() => dialog.close(), reduce.matches ? 0 : 240);
+  });
   note.addEventListener('input', () => {
     save.disabled = saving || !note.value.trim();
     status.textContent = '';
@@ -31,7 +48,7 @@ if (opener && typeof dialog?.showModal === 'function') {
 
   form.addEventListener('submit', async event => {
     event.preventDefault();
-    if (saving || !note.value.trim()) return;
+    if (saving || plain.dataset.cardState === 'saved' || !note.value.trim()) return;
     const savedNote = note.value;
     saving = true;
     save.disabled = true;
@@ -50,6 +67,9 @@ if (opener && typeof dialog?.showModal === 'function') {
       download.click();
       download.remove();
       setTimeout(() => URL.revokeObjectURL(url), 60000);
+      save.dataset.cardState = 'saved';
+      opener.dataset.cardState = 'saved';
+      await new Promise(resolve => setTimeout(resolve, reduce.matches ? 0 : 240));
       if (dialog.open) dialog.close();
     } catch {
       if (dialog.open && request.signal.reason !== 'dialog-closed') {

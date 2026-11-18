@@ -136,6 +136,7 @@
 .contact-send { min-height: 48px; border-color: var(--contact-brass); border-radius: .55rem; background: var(--contact-brass); color: var(--contact-ink); font: 700 1rem var(--sans); cursor: pointer; }
 .contact-send:hover { border-color: #ebd1a4; background: #ebd1a4; }
 .contact-send:disabled { opacity: .7; cursor: progress; }
+.contact-form .contact-send[hidden] { display: none; }
 .contact-form-status { padding: .45rem .75rem; border-inline-start: 2px solid var(--contact-brass); background: #1c191570; font-size: .95rem; animation: contact-notice-in 200ms ease-out both; }
 .contact-form-status:not([data-state]) { block-size: 0; margin-top: -.85rem; padding: 0; border: 0; background: none; animation: none; }
 .contact-form-status:is([data-state="validation"], [data-state="failure"]) { border-color: #ffd0bb; color: #ffded2; }
@@ -339,4 +340,42 @@
 @keyframes contact-check-in {
   from { clip-path: inset(0 100% 0 0); }
   to { clip-path: inset(0); }
+}
+.contact-copy[data-copy-state="copied"] .contact-copy-sheets {
+  animation: contact-sheets-settle 240ms ease-out both;
+}
+.contact-copy[data-copy-state="copied"] .contact-copy-sheets::after {
+  transform: none;
+  background: var(--contact-brass);
+}
+.contact-copy[data-copy-state="copied"] .contact-copy-check { animation-delay: 150ms; }
+@keyframes contact-sheets-settle {
+  0%, 60% { opacity: 1; transform: none; }
+  to { opacity: 0; transform: none; }
+}
+.contact-card-actions > * { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; }
+.contact-card-icon { position: relative; display: inline-block; width: 1rem; height: 1.2rem; flex: none; }
+.contact-card-icon::before {
+  position: absolute;
+  inset: .05rem .12rem .2rem;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  background: repeating-linear-gradient(transparent 0 .28rem, currentColor .28rem .32rem, transparent .32rem .4rem) center / 60% 60% no-repeat;
+  content: '';
+}
+.contact-card-icon::after {
+  position: absolute;
+  inset: auto .16rem .02rem;
+  height: .3rem;
+  border: solid currentColor;
+  border-width: 0 1px 1px;
+  content: '';
+}
+[data-card-state="saved"] .contact-card-icon::before { animation: contact-card-file-away 320ms cubic-bezier(.2,.7,.2,1) both; }
+@keyframes contact-card-file-away {
+  35% { transform: translateY(-.15rem) scale(.85); }
+  to { transform: translateY(.6rem) scale(.45); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-copy[data-copy-state="copied"] .contact-copy-sheets { opacity: 0; }
 }

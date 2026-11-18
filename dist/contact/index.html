@@ -18,6 +18,7 @@
   <link rel="preload" href="/fonts/dm-serif-text.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/source-sans-3.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
 
   <link rel="stylesheet" href="/contact.css">
@@ -53,7 +54,7 @@
           <h2 class="eyebrow" id="contact-email-title">Email</h2>
           <a class="contact-address" href="mailto:ms@ahmadbaqa.com">ms@ahmadbaqa.com</a>
           <div class="contact-actions">
-            <a class="contact-save" href="/muhammad-subhan.vcf" download>Save contact card <span aria-hidden="true">↓</span></a>
+            <a class="contact-save" href="/muhammad-subhan.vcf" download>Save contact card <span class="contact-card-icon" aria-hidden="true"></span></a>
             <button class="contact-copy" type="button" aria-label="Copy address" data-copy-email="ms@ahmadbaqa.com" hidden>
               <span class="contact-copy-icon" aria-hidden="true"><span class="contact-copy-sheets"></span><span class="contact-copy-check"></span></span>
               <span class="contact-copy-labels" aria-hidden="true"><span>Copy address</span><span>Copied!</span></span>
@@ -132,8 +133,8 @@
       <textarea id="contact-card-note" rows="4" placeholder="Where we met, or something to remember…" autofocus></textarea>
       <p class="contact-card-status" role="status"></p>
       <div class="contact-card-actions">
-        <button class="contact-send" type="submit" disabled>Save with note</button>
-        <a class="contact-card-plain" href="/muhammad-subhan.vcf" download>Save without note</a>
+        <button class="contact-send" type="submit" disabled>Save with note <span class="contact-card-icon" aria-hidden="true"></span></button>
+        <a class="contact-card-plain" href="/muhammad-subhan.vcf" download>Save without note <span class="contact-card-icon" aria-hidden="true"></span></a>
       </div>
     </form>
   </dialog></main>

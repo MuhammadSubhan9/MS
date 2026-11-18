@@ -1,0 +1,49 @@
+@view-transition { navigation: auto; }
+.route-line {
+  position: fixed;
+  z-index: 10000;
+  inset: 0 0 auto;
+  height: 2px;
+  background: #285547;
+  pointer-events: none;
+}
+.novel-page .route-line { background: #c4a078; }
+.route-line-pending {
+  top: var(--line-y);
+  left: var(--line-x);
+  width: var(--line-width);
+  animation: route-line-begin 160ms cubic-bezier(.2,.7,.2,1) both;
+}
+@keyframes route-line-begin { to { left: 0; width: 100%; } }
+@keyframes route-reveal { from { clip-path: inset(0 0 calc(100% - var(--route-start, 0px))); } to { clip-path: inset(0); } }
+@keyframes route-line-sweep { from { translate: 0 0; } to { translate: 0 calc(100vh - var(--route-start, 0px)); } }
+@keyframes route-release { to { opacity: 0; } }
+@keyframes route-resolve { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: no-preference) {
+  :root { view-transition-name: root; --route-ease: cubic-bezier(.22,.68,.2,1); }
+  main { view-transition-name: none; }
+  .route-shared-settled, .route-shared-settled .media-window { animation: none !important; }
+  .site-header, .novel-header { view-transition-name: route-header; }
+  ::view-transition { pointer-events: none; }
+  ::view-transition-group(*) { animation-duration: 320ms; animation-timing-function: var(--route-ease); }
+  ::view-transition-old(root) { animation: none; mix-blend-mode: normal; }
+  ::view-transition-new(root) { animation: route-reveal 280ms var(--route-ease) both; mix-blend-mode: normal; }
+  ::view-transition-group(route-header) { z-index: 2; }
+  ::view-transition-group(route-line) { z-index: 10; animation: route-line-sweep 280ms var(--route-ease) both; }
+  ::view-transition-old(route-line) { animation: none; opacity: 0; }
+  ::view-transition-new(route-line) { animation: none; }
+  ::view-transition-group(route-author), ::view-transition-group(route-event) { z-index: 4; animation-duration: 380ms; }
+  ::view-transition-old(route-author), ::view-transition-old(route-event) { opacity: 0; animation: none; }
+  ::view-transition-new(route-author), ::view-transition-new(route-event) { animation: none; mix-blend-mode: normal; }
+  ::view-transition-group(route-book) { z-index: 5; animation-duration: 540ms; }
+  ::view-transition-image-pair(route-book) { overflow: clip; box-shadow: 0 12px 40px #130c0740; }
+  ::view-transition-group(route-contact) { z-index: 4; animation-duration: 390ms; background: #3b382f; border-radius: 1rem; }
+  ::view-transition-old(route-contact) { animation: route-release 100ms ease-out both; }
+  ::view-transition-new(route-contact) { animation: route-resolve 160ms 170ms ease-out both; }
+  html[data-route-motion="book"] ::view-transition-new(root) { animation-duration: 420ms; }
+  html.page-transitioning .novel-hero[data-entrance] * { animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .route-line { display: none; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}

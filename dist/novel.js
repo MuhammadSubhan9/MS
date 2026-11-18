@@ -3,6 +3,7 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const narrow = matchMedia('(max-width: 780px)');
 
 function playEntrance() {
+  if (document.documentElement.classList.contains('page-transitioning')) return;
   if (reduceMotion.matches || location.hash || performance.getEntriesByType('navigation')[0]?.type === 'back_forward') return;
   try {
     if (sessionStorage.getItem('rehearsal-library-entrance')) return;
@@ -66,7 +67,7 @@ const inlineSlot = document.querySelector('[data-inline-reader]');
 const dialogSlot = document.querySelector('[data-dialog-reader]');
 const closeButton = dialog.querySelector('[data-close-reader]');
 const shelfCover = hero.querySelector('.shelf-book img');
-const turnDuration = 550;
+const turnDuration = 380;
 const ease = 'cubic-bezier(.38, .05, .22, 1)';
 const animations = new Set();
 let page = 1;
@@ -185,7 +186,7 @@ async function turnPage(step) {
   await animate(layer, [
     { transform: 'rotateY(0deg)' },
     { transform: 'rotateY(' + angle + 'deg)' },
-  ], { duration: narrowView ? 360 : turnDuration, easing: ease, fill: 'forwards' });
+  ], { duration: narrowView ? 290 : turnDuration, easing: ease, fill: 'forwards' });
   layer.remove();
 }
 
@@ -216,7 +217,7 @@ async function moveCover(source, target, returning = false) {
     { transform: to, filter: 'brightness(1) saturate(1) sepia(0)' },
   ];
   const completed = await animate(cover, returning ? frames.reverse() : frames,
-    { duration: returning ? 530 : 660, easing: ease, fill: 'forwards' });
+    { duration: returning ? 340 : 420, easing: ease, fill: 'forwards' });
   cover.remove();
   return completed;
 }
@@ -229,6 +230,7 @@ async function openReader(event) {
 
   opener = event.currentTarget;
   returnScroll = scrollY;
+  delete hero.dataset.entrance;
   const source = shelfCover.getBoundingClientRect();
   const travel = !hero.hasAttribute('data-library-loading') &&
     source.top > 0 && source.bottom <= innerHeight && source.width > 0;
@@ -262,7 +264,7 @@ async function openReader(event) {
   await animate(layer, [
     { transform: 'rotateY(0deg)' },
     { transform: narrow.matches ? 'rotateY(-96deg)' : 'rotateY(-180deg)' },
-  ], { duration: 720, easing: ease, fill: 'forwards' });
+  ], { duration: 400, easing: ease, fill: 'forwards' });
   layer.remove();
   if (currentRevision === revision) reader.classList.remove('reader-opening');
 }
@@ -285,7 +287,7 @@ async function closeReader() {
   const closed = await animate(layer, [
     { transform: 'rotateY(-180deg)' },
     { transform: 'rotateY(0deg)' },
-  ], { duration: 420, easing: ease, fill: 'forwards' });
+  ], { duration: 300, easing: ease, fill: 'forwards' });
   if (!closed || currentRevision !== revision || !dialog.open) return;
 
   const shelf = shelfCover.getBoundingClientRect();

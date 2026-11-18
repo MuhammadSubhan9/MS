@@ -936,15 +936,6 @@ details p { padding: .2rem 0; }
   to { clip-path: inset(0); }
 }
 
-@keyframes page-depart {
-  to { opacity: 0; transform: translate(var(--page-exit-offset, 0px), -7px); }
-}
-
-@keyframes page-arrive {
-  from { opacity: 0; transform: translate(var(--page-enter-offset, 0px), 12px); }
-  to { opacity: 1; transform: translate(0); }
-}
-
 @keyframes reading-progress {
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
@@ -955,31 +946,13 @@ details p { padding: .2rem 0; }
   to { transform: scale(1.065) translateY(2.5%); }
 }
 
-@view-transition { navigation: auto; }
 
 @media (prefers-reduced-motion: no-preference) {
   :root {
     --motion-ease: cubic-bezier(.2, .65, .3, 1);
     --motion-cut: cubic-bezier(.23, 1, .32, 1);
   }
-  html { scroll-behavior: smooth; view-transition-name: none; }
-  main { view-transition-name: portfolio-page; }
-
-  :root[data-page-motion="forward"] { --page-enter-offset: 26px; --page-exit-offset: -14px; }
-  :root[data-page-motion="back"] { --page-enter-offset: -26px; --page-exit-offset: 14px; }
-  ::view-transition-group(portfolio-page) { animation-duration: 470ms; }
-  ::view-transition-old(portfolio-page) { animation: 220ms ease-in both page-depart; }
-  ::view-transition-new(portfolio-page) { animation: 470ms var(--motion-cut) both page-arrive; }
-  ::view-transition-group(portfolio-media) {
-    z-index: 1;
-    animation-duration: 680ms;
-    animation-timing-function: var(--motion-cut);
-  }
-  ::view-transition-group(portfolio-title) {
-    z-index: 2;
-    animation-duration: 580ms;
-    animation-timing-function: var(--motion-cut);
-  }
+  html { scroll-behavior: smooth; }
 
   html:not(.page-transitioning) .home-title .eyebrow {
     animation: 520ms var(--motion-ease) both rise-in;

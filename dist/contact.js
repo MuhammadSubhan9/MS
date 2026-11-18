@@ -57,6 +57,7 @@ if (contactForm) {
     if (state) status.dataset.state = state;
     else delete status.dataset.state;
     statusText.textContent = message;
+    submitButton.hidden = state === 'sent';
   }
 
   contactForm.addEventListener('input', event => {
@@ -103,8 +104,15 @@ if (contactForm) {
       if (response.ok && accepted) {
         const unchanged = [...new FormData(contactForm)].every(([name, value]) => value.trim() === data.get(name));
         if (unchanged) contactForm.reset();
-        report('Message sent.', 'sent');
         const button = submitButton.getBoundingClientRect();
+        report('Message sent.', 'sent');
+        if (!reducedMotion.matches && button.width && button.bottom > 0 && button.top < innerHeight) {
+          const destination = status.getBoundingClientRect();
+          status.animate([
+            { transform: 'translate(' + (button.left - destination.left) + 'px,' + (button.top - destination.top) + 'px) scale(' + (button.width / destination.width) + ',' + (button.height / destination.height) + ')', transformOrigin: 'top left', borderRadius: '.55rem' },
+            { transform: 'none', transformOrigin: 'top left' },
+          ], { duration: 380, easing: 'cubic-bezier(.2,.7,.2,1)' });
+        }
         const focus = document.activeElement;
         if (button.bottom > 0 && button.top < innerHeight
           && (focus === document.body || focus === submitButton)

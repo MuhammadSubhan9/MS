@@ -73,7 +73,7 @@ export function contactPage(contact, name) {
           <h2 class="eyebrow" id="contact-email-title">Email</h2>
           <a class="contact-address" href="${mail}">${escape(email)}</a>
           <div class="contact-actions">
-            ${vcard ? `<a class="contact-save" href="${safeLink(vcard)}" download>Save contact card <span aria-hidden="true">↓</span></a>` : ''}
+            ${vcard ? `<a class="contact-save" href="${safeLink(vcard)}" download>Save contact card <span class="contact-card-icon" aria-hidden="true"></span></a>` : ''}
             <button class="contact-copy" type="button" aria-label="Copy address" data-copy-email="${escape(email)}" hidden>
               <span class="contact-copy-icon" aria-hidden="true"><span class="contact-copy-sheets"></span><span class="contact-copy-check"></span></span>
               <span class="contact-copy-labels" aria-hidden="true"><span>Copy address</span><span>Copied!</span></span>
@@ -97,8 +97,8 @@ export function contactPage(contact, name) {
       <textarea id="contact-card-note" rows="4" placeholder="Where we met, or something to remember…" autofocus></textarea>
       <p class="contact-card-status" role="status"></p>
       <div class="contact-card-actions">
-        <button class="contact-send" type="submit" disabled>Save with note</button>
-        <a class="contact-card-plain" href="${safeLink(vcard)}" download>Save without note</a>
+        <button class="contact-send" type="submit" disabled>Save with note <span class="contact-card-icon" aria-hidden="true"></span></button>
+        <a class="contact-card-plain" href="${safeLink(vcard)}" download>Save without note <span class="contact-card-icon" aria-hidden="true"></span></a>
       </div>
     </form>
   </dialog>` : ''}`;

@@ -181,6 +181,8 @@ export function renderNovelPage({ data, page, origin, ready }) {
   <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
   <link rel="preload" href="/fonts/welcome-editorial.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/novel.css">
+  <link rel="stylesheet" href="/navigation-motion.css">
+  <script src="/navigation-motion.js" blocking="render"></script>
   <script src="/novel.js" defer blocking="render"></script>
   <script src="/novel-subscription.js" defer></script>
   ${data.now ? commandAssets : ''}

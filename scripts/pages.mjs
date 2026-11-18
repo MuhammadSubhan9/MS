@@ -136,7 +136,7 @@ function languageList(languages = [], scoresUpdated) {
 }
 
 function eventMark(item) {
-  return item.eventLogo ? `<div class="work-event-mark" aria-hidden="true">${image(item.eventLogo)}</div>` : '';
+  return item.eventLogo ? `<div class="work-event-mark" aria-hidden="true">${image(item.eventLogo, { eager: true })}</div>` : '';
 }
 
 function workEvent(item) {

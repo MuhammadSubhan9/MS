@@ -142,8 +142,15 @@ try {
   await waitFor(() => chrome.evaluate("!document.documentElement.dataset.routeMotion && !document.querySelector('.route-line')"), 'rapid navigation cleanup');
 
   // Turning off the source opt-in exercises the ordinary-navigation fallback.
-  await chrome.evaluate("const s=document.createElement('style');s.textContent='@view-transition {navigation:none;}';document.head.append(s);document.querySelector('.footer-contact').click()");
-  await waitFor(() => chrome.evaluate("location.pathname==='/contact/' && document.readyState==='complete'"), 'fallback navigation');
+  await chrome.evaluate(`
+    const style = document.createElement('style');
+    style.textContent = '@view-transition { navigation: none; }';
+    document.head.append(style);
+    new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  `);
+  await chrome.evaluate("document.querySelector('.footer-contact').click()");
+  await waitFor(() => chrome.evaluate("location.pathname==='/contact/' && window.motionResult"), 'fallback navigation');
+  assert.equal(await chrome.evaluate('window.motionResult.native'), false, 'source opted out of the view transition');
   assert.equal(await chrome.evaluate("document.body.inert || !!document.querySelector('.route-line')"), false);
 
   await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });

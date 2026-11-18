@@ -87,7 +87,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
       ${navigation.length > 1 ? `<button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu${toggleIcon('list', 'x')}</button><nav class="nav" id="navigation" aria-label="Primary">${links}</nav>` : ''}
     </div>
   </header>
-  <main class="${home ? 'home-page' : about ? 'about-main' : 'container'}" id="main" tabindex="-1">${page.body}</main>
+  <main class="${home ? 'home-page' : about ? 'about-main' : journey ? 'journey-main' : 'container'}" id="main" tabindex="-1">${page.body}</main>
   <footer class="site-footer"><div class="container footer-inner">
     <div class="footer-identity">
       <a class="footer-name" href="/">${escape(data.name)}</a>

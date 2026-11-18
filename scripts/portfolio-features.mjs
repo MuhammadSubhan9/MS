@@ -184,30 +184,40 @@ export function journeyPage(data, records) {
   ].filter(([, , show]) => show);
   return `<div class="journey-page">
     <header class="journey-hero">
-      <div>
-        <h1>Journey</h1>
-        <p class="lead">What I’ve worked on, what I’m studying and where I hope to go next.</p>
+      <div class="container journey-hero-inner">
+        <div>
+          <h1>Journey</h1>
+          <p class="lead">What I’ve worked on, what I’m studying and where I hope to go next.</p>
+        </div>
+        <nav class="journey-jumps" aria-label="On this page">
+          ${sections.map(([id, title]) => `<a href="#${id}">
+            <span class="journey-jump-icon">${icon(sectionIcons[id])}</span>
+            <span class="journey-jump-label">${escape(title)}</span>
+            ${icon('arrow-down', 'journey-jump-arrow')}
+          </a>`).join('')}
+        </nav>
       </div>
-      <nav class="journey-jumps" aria-label="On this page">${sections.map(([id, title]) => action('#' + id, title, 'action-link', '', sectionIcons[id])).join('')}</nav>
     </header>
-    ${milestones.length ? `<section class="journey-history" id="milestones" aria-labelledby="milestones-title" tabindex="-1" data-share-section>
-      ${sharedHeading('milestones', 'Milestones')}
-      ${journeyTimeline(milestones, current.length > 0)}
-    </section>` : ''}
-    ${current.length ? `<section class="journey-current" id="in-progress" aria-labelledby="in-progress-title" tabindex="-1" data-share-section>
-      ${sharedHeading('in-progress', 'In progress')}
-      <div class="journey-current-grid">${current.map(record => `<article>
-        <h3>${glossary(record.title)}</h3>
-        ${record.date ? `<p class="meta">${publicationDate(record.date)}</p>` : ''}
-        ${record.description ? paragraphs([record.description], glossary) : ''}
-        ${recordLink(record)}
-      </article>`).join('')}</div>
-    </section>` : ''}
-    ${data.futureDirection ? `<section class="journey-future" id="looking-ahead" aria-labelledby="looking-ahead-title" tabindex="-1" data-share-section>
-      ${sharedHeading('looking-ahead', 'Looking ahead')}
-      ${data.journey.lookingAheadTitle ? `<h3>${escape(data.journey.lookingAheadTitle)}</h3>` : ''}
-      <p>${glossary(data.futureDirection)}</p>
-    </section>` : ''}
+    <div class="container journey-content">
+      ${milestones.length ? `<section class="journey-history" id="milestones" aria-labelledby="milestones-title" tabindex="-1" data-share-section>
+        ${sharedHeading('milestones', 'Milestones')}
+        ${journeyTimeline(milestones, current.length > 0)}
+      </section>` : ''}
+      ${current.length ? `<section class="journey-current" id="in-progress" aria-labelledby="in-progress-title" tabindex="-1" data-share-section>
+        ${sharedHeading('in-progress', 'In progress')}
+        <div class="journey-current-grid">${current.map(record => `<article>
+          <h3>${glossary(record.title)}</h3>
+          ${record.date ? `<p class="meta">${publicationDate(record.date)}</p>` : ''}
+          ${record.description ? paragraphs([record.description], glossary) : ''}
+          ${recordLink(record)}
+        </article>`).join('')}</div>
+      </section>` : ''}
+      ${data.futureDirection ? `<section class="journey-future" id="looking-ahead" aria-labelledby="looking-ahead-title" tabindex="-1" data-share-section>
+        ${sharedHeading('looking-ahead', 'Looking ahead')}
+        ${data.journey.lookingAheadTitle ? `<h3>${escape(data.journey.lookingAheadTitle)}</h3>` : ''}
+        <p>${glossary(data.futureDirection)}</p>
+      </section>` : ''}
+    </div>
   </div>`;
 }
 

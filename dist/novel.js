@@ -2,6 +2,42 @@ const hero = document.querySelector('.novel-hero');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const narrow = matchMedia('(max-width: 780px)');
 
+function followNovelIndex() {
+  const header = document.querySelector('.novel-header');
+  const sections = [...header.querySelectorAll('.novel-index a')].map(link => ({
+    link,
+    section: document.getElementById(link.hash.slice(1)),
+  }));
+  let activeLink = null;
+  let frame = 0;
+
+  function update() {
+    frame = 0;
+    if (document.body.classList.contains('novel-scroll-locked')) return;
+    const readingLine = header.offsetHeight + Math.min(96, innerHeight * .12);
+    const atBottom = scrollY > 0 && scrollY + innerHeight >= document.documentElement.scrollHeight - 2;
+    let current = null;
+    for (const { link, section } of sections) {
+      if (section.getBoundingClientRect().top > readingLine) break;
+      current = link;
+    }
+    if (atBottom) current = sections.at(-1).link;
+    if (current === activeLink) return;
+    activeLink?.removeAttribute('aria-current');
+    current?.setAttribute('aria-current', 'location');
+    activeLink = current;
+  }
+
+  function schedule() {
+    if (!frame) frame = requestAnimationFrame(update);
+  }
+
+  addEventListener('scroll', schedule, { passive: true });
+  addEventListener('resize', schedule);
+  addEventListener('pageshow', schedule);
+  update();
+}
+
 function playEntrance() {
   if (document.documentElement.classList.contains('page-transitioning')) return;
   if (reduceMotion.matches || location.hash || performance.getEntriesByType('navigation')[0]?.type === 'back_forward') return;
@@ -53,6 +89,7 @@ if (libraryPhoto.complete && libraryPhoto.naturalWidth) {
   }).finally(() => { delete hero.dataset.libraryLoading; });
 }
 drawWaveform();
+followNovelIndex();
 
 const reader = document.querySelector('[data-reader]');
 const spread = reader.querySelector('[data-spread]');

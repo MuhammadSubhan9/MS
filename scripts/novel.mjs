@@ -37,7 +37,7 @@ function reader(book, author) {
     <div class="book-reader" data-reader>
       <div class="reader-spread" data-spread>
         <div class="reader-leaf title-leaf" data-leaf="0" aria-hidden="true">
-          <span class="title-leaf-rule"></span>
+          <span class="imprint-stamp" aria-hidden="true">XI</span>
           <p>${escape(book.title)}</p>
           <span>${escape(author)}</span>
         </div>
@@ -117,10 +117,14 @@ export function novelContent(book, author) {
     <section class="novel-excerpt" id="excerpt" aria-labelledby="excerpt-title" tabindex="-1" data-share-section>
       <div class="novel-wrap excerpt-wrap">
         <header class="excerpt-heading">
-          <p class="novel-label">An excerpt</p>
-          <h2 id="excerpt-title">The opening pages</h2>
-          <p class="excerpt-chapter">Chapter one <span aria-hidden="true">/</span> ${escape(excerpt.chapter)}</p>
-          ${copySectionButton('excerpt', 'the opening pages')}
+          <div>
+            <p class="novel-label">Excerpt</p>
+            <h2 id="excerpt-title">The opening pages</h2>
+          </div>
+          <div class="excerpt-details">
+            <p class="excerpt-chapter">Chapter one <span aria-hidden="true">/</span> <em>${escape(excerpt.chapter)}</em></p>
+            ${copySectionButton('excerpt', 'the opening pages')}
+          </div>
         </header>
         <div data-inline-reader>${reader(book, author)}</div>
       </div>
@@ -134,10 +138,7 @@ export function novelContent(book, author) {
         </div>
         <form class="novel-release-form" action="/api/novel/subscribe" method="post" data-clarity-mask="true">
           <label for="release-email">Email address</label>
-          <div class="release-input-row">
-            <input id="release-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required>
-            <button class="novel-button" type="submit">Notify me <span aria-hidden="true">↗</span></button>
-          </div>
+          <input id="release-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required>
           <div class="release-honey" aria-hidden="true">
             <label for="release-website">Website</label>
             <input id="release-website" name="website" type="text" tabindex="-1" autocomplete="off">
@@ -145,6 +146,7 @@ export function novelContent(book, author) {
           <label class="release-consent"><input name="consent" type="checkbox" value="yes" required>
             <span>Email me to confirm my address and let me know when <cite>The Eleventh Rehearsal</cite> is released.</span>
           </label>
+          <button class="novel-button" type="submit">Notify me <span aria-hidden="true">↗</span></button>
           <p class="release-status" role="status" aria-atomic="true"></p>
           <details class="release-privacy">
             <summary>About this signup</summary>
@@ -198,19 +200,33 @@ export function renderNovelPage({ data, page, origin, ready }) {
 <body class="novel-page">
   <a class="novel-skip" href="#main">Skip to content</a>
   <header class="novel-header">
-    <div class="novel-header-inner">
-      <a class="novel-back" href="/"><span aria-hidden="true">←</span> Portfolio</a>
-      <span class="novel-imprint" aria-hidden="true">XI</span>
-      <nav aria-label="The novel">
+    <div class="novel-header-inner novel-wrap">
+      <a class="novel-back" href="/"><span class="novel-back-arrow" aria-hidden="true">←</span> Portfolio</a>
+      <a class="novel-imprint" href="#main" aria-label="${escape(page.label)}, back to top">
+        <span class="imprint-stamp" aria-hidden="true">XI</span>
+        <span class="novel-imprint-name">${escape(page.label)}</span>
+      </a>
+      <nav class="novel-index" aria-label="Novel sections">
         <a href="#synopsis">Synopsis</a>
         <a href="#excerpt">Excerpt</a>
+        <a href="#release-updates">Release updates</a>
       </nav>
     </div>
   </header>
   <main id="main" tabindex="-1" class="novel-main">${page.body}</main>
   <footer class="novel-footer novel-wrap">
-    <div><p>${escape(page.label)}</p><span>A novel in progress by ${escape(data.name)}</span>${google.notice}</div>
-    <a class="novel-text-link" href="/">Back to the portfolio <span aria-hidden="true">↗</span></a>
+    <div class="novel-colophon">
+      <span class="imprint-stamp" aria-hidden="true">XI</span>
+      <div>
+        <p>${escape(page.label)}</p>
+        <span>A novel in progress by ${escape(data.name)}</span>
+        ${google.notice}
+      </div>
+    </div>
+    <div class="novel-footer-links">
+      <a class="novel-text-link" href="#main">Back to top <span aria-hidden="true">↑</span></a>
+      <a class="novel-text-link" href="/">Portfolio <span aria-hidden="true">↗</span></a>
+    </div>
   </footer>
   ${sectionLinkDialog}
   ${data.now ? commandPalette : ''}

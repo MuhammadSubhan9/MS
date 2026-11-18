@@ -61,7 +61,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   <link rel="stylesheet" href="/styles.css">
   <script src="/navigation-motion.js" blocking="render"></script>
   ${home ? '<link rel="stylesheet" href="/intro.css">\n  <script src="/intro.js" defer blocking="render"></script>' : ''}
-  ${contact ? '<link rel="stylesheet" href="/contact.css">\n  <script src="/contact.js" defer></script>' : ''}
+  ${contact ? '<link rel="stylesheet" href="/contact.css">\n  <script src="/contact.js" defer></script>\n  <script src="/contact-card.js" type="module"></script>' : ''}
   ${data.now ? commandAssets : ''}
   ${home && data.now ? '<script src="/now-editor.js" defer></script>' : ''}
   <script src="/site.js" defer></script>

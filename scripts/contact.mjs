@@ -85,5 +85,21 @@ export function contactPage(contact, name) {
           `<div><dt class="eyebrow">${escape(label)}</dt><dd>${link}</dd></div>`).join('')}</dl>` : ''}
     </div>
     ${form}
-  </div>`;
+  </div>${vcard ? `
+  <dialog class="contact-card-dialog" aria-labelledby="contact-card-title" aria-describedby="contact-card-description" data-clarity-mask="true">
+    <form data-contact-card-form>
+      <div class="contact-card-heading">
+        <h2 id="contact-card-title">Save my contact.</h2>
+        <button type="button" data-close-contact-card aria-label="Close contact card dialog">Close</button>
+      </div>
+      <p id="contact-card-description">Add a personal reminder to the contact card, or save it as it is.</p>
+      <label for="contact-card-note">Your note <span>(optional)</span></label>
+      <textarea id="contact-card-note" rows="4" placeholder="Where we met, or something to remember…" autofocus></textarea>
+      <p class="contact-card-status" role="status"></p>
+      <div class="contact-card-actions">
+        <button class="contact-send" type="submit" disabled>Save with note</button>
+        <a class="contact-card-plain" href="${safeLink(vcard)}" download>Save without note</a>
+      </div>
+    </form>
+  </dialog>` : ''}`;
 }

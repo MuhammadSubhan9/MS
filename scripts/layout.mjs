@@ -75,7 +75,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   ${preview ? '<aside class="preview-notice" aria-label="Development preview">Private design preview · Sample content for layout review</aside>' : ''}
   <header class="site-header">
     <div class="container header-inner">
-      <a class="wordmark" href="/"><span><small>Muhammad</small> Subhan</span></a>
+      <a class="wordmark" href="/"><span>${escape(data.name)}</span></a>
       ${navigation.length > 1 ? `<button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary">${links}</nav>` : ''}
     </div>
   </header>

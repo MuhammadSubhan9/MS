@@ -82,9 +82,8 @@ figcaption { margin-top: var(--space-1); color: var(--muted); font-size: .875rem
 }
 .site-header { position: sticky; inset-block-start: 0; z-index: 5; border-bottom: 1px solid #afa38f; background: #eae0cf; }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: 77px; }
-.wordmark { display: inline-flex; align-items: center; gap: .65rem; font: 400 clamp(1.1rem, 2vw, 1.5rem)/1.2 var(--serif); letter-spacing: -.03em; color: var(--ink); text-decoration: none; }
-.wordmark img { width: clamp(1.85rem, 4vw, 2.35rem); flex: none; }
-.wordmark:hover { color: var(--accent); }
+.wordmark { display: inline-flex; align-items: center; flex: none; font: 400 clamp(1.16rem, 2.1vw, 1.6rem)/1.2 var(--serif); letter-spacing: -.025em; white-space: nowrap; color: #302e2d; text-decoration: none; }
+.wordmark:hover { color: #605449; }
 .nav { display: flex; align-items: center; gap: .25rem; padding: .26rem; border: 1px solid #b7aa93; border-radius: .9rem; background: #f3e8d7; }
 .nav a { display: flex; align-items: center; gap: .55em; min-height: 44px; padding-inline: clamp(.65rem, 1.35vw, 1.15rem); border-radius: .65rem; color: #4b443c; font-size: 1rem; text-decoration: none; }
 .nav a:is(:hover, :focus-visible) { background: #e3d8c4; color: var(--ink); }
@@ -1040,16 +1039,3 @@ details p { padding: .2rem 0; }
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
 
-.wordmark > span {
-  display: inline-flex;
-  align-items: baseline;
-  gap: .38em;
-  color: #302e2d;
-  font-size: clamp(1.5rem, 2.7vw, 2rem);
-  letter-spacing: -.05em;
-}
-.wordmark small {
-  font: 600 .44em/1 var(--sans, sans-serif);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}

@@ -1,8 +1,11 @@
 @view-transition { navigation: auto; }
+.route-fallback-waiting main, .route-fallback-waiting footer { visibility: hidden; }
 .route-line {
   position: fixed;
   z-index: 10000;
-  inset: 0 0 auto;
+  top: 0;
+  left: var(--line-target-x);
+  width: var(--line-target-width);
   height: 2px;
   background: #285547;
   pointer-events: none;
@@ -14,33 +17,36 @@
   width: var(--line-width);
   animation: route-line-begin 160ms cubic-bezier(.2,.7,.2,1) both;
 }
-@keyframes route-line-begin { to { left: 0; width: 100%; } }
-@keyframes route-reveal { from { clip-path: inset(0 0 calc(100% - var(--route-start, 0px))); } to { clip-path: inset(0); } }
+@keyframes route-line-begin { to { left: var(--line-target-x); width: var(--line-target-width); } }
 @keyframes route-line-sweep { from { translate: 0 0; } to { translate: 0 calc(100vh - var(--route-start, 0px)); } }
+@keyframes route-destination { from { opacity: 0; } to { opacity: 1; } }
 @keyframes route-release { to { opacity: 0; } }
-@keyframes route-resolve { from { opacity: 0; } to { opacity: 1; } }
+@keyframes route-book-appear { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: no-preference) {
-  :root { view-transition-name: root; --route-ease: cubic-bezier(.22,.68,.2,1); }
+  :root { view-transition-name: root; --route-ease: cubic-bezier(.22,.68,.2,1); --route-duration: 280ms; }
+  html[data-route-motion="author"], html[data-route-motion="event"] { --route-duration: 380ms; }
+  html[data-route-motion="contact"], html[data-route-motion="contact-card"] { --route-duration: 420ms; }
+  html[data-route-motion="book"] { --route-duration: 540ms; }
   main { view-transition-name: none; }
   .route-shared-settled, .route-shared-settled .media-window { animation: none !important; }
   .site-header, .novel-header { view-transition-name: route-header; }
-  ::view-transition { pointer-events: none; }
-  ::view-transition-group(*) { animation-duration: 320ms; animation-timing-function: var(--route-ease); }
+  ::view-transition { pointer-events: auto; }
+  ::view-transition-group(*) { animation-duration: var(--route-duration); animation-timing-function: var(--route-ease); }
   ::view-transition-old(root) { animation: none; mix-blend-mode: normal; }
-  ::view-transition-new(root) { animation: route-reveal 280ms var(--route-ease) both; mix-blend-mode: normal; }
+  ::view-transition-new(root) { animation: route-destination 90ms var(--route-duration) ease-out both; mix-blend-mode: normal; }
   ::view-transition-group(route-header) { z-index: 2; }
-  ::view-transition-group(route-line) { z-index: 10; animation: route-line-sweep 280ms var(--route-ease) both; }
+  ::view-transition-group(route-line) { z-index: 10; animation: route-line-sweep var(--route-duration) var(--route-ease) both; }
   ::view-transition-old(route-line) { animation: none; opacity: 0; }
   ::view-transition-new(route-line) { animation: none; }
-  ::view-transition-group(route-author), ::view-transition-group(route-event) { z-index: 4; animation-duration: 380ms; }
+  ::view-transition-group(route-author), ::view-transition-group(route-event) { z-index: 4; }
   ::view-transition-old(route-author), ::view-transition-old(route-event) { opacity: 0; animation: none; }
   ::view-transition-new(route-author), ::view-transition-new(route-event) { animation: none; mix-blend-mode: normal; }
-  ::view-transition-group(route-book) { z-index: 5; animation-duration: 540ms; }
+  ::view-transition-group(route-book) { z-index: 5; }
+  ::view-transition-new(route-book):only-child { animation: route-book-appear 420ms var(--route-ease) both; }
   ::view-transition-image-pair(route-book) { overflow: clip; box-shadow: 0 12px 40px #130c0740; }
-  ::view-transition-group(route-contact) { z-index: 4; animation-duration: 390ms; background: #3b382f; border-radius: 1rem; }
-  ::view-transition-old(route-contact) { animation: route-release 100ms ease-out both; }
-  ::view-transition-new(route-contact) { animation: route-resolve 160ms 170ms ease-out both; }
-  html[data-route-motion="book"] ::view-transition-new(root) { animation-duration: 420ms; }
+  ::view-transition-group(route-contact), ::view-transition-group(route-card) { z-index: 4; background: #3b382f; border-radius: 1rem; }
+  ::view-transition-old(route-contact), ::view-transition-old(route-card) { animation: route-release 100ms ease-out both; }
+  ::view-transition-new(route-contact), ::view-transition-new(route-card) { animation: route-destination 90ms var(--route-duration) ease-out both; }
   html.page-transitioning .novel-hero[data-entrance] * { animation: none; }
 }
 @media (prefers-reduced-motion: reduce) {

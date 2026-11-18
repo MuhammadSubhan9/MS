@@ -109,6 +109,8 @@ function cancelEffects() {
   delete reader.dataset.travelling;
   delete dialog.dataset.sceneShift;
   reader.classList.remove('reader-opening', 'reader-closing');
+  reader.removeAttribute('aria-busy');
+  renderSpread();
 }
 
 async function animate(element, keyframes, timing) {
@@ -171,23 +173,40 @@ async function turnPage(step) {
 
   const narrowView = narrow.matches;
   const current = starts[before] + (step > 0 && !narrowView ? 1 : 0);
-  const facing = target + (step < 0 ? 1 : 0);
   const direction = step > 0 ? 'next' : 'previous';
   const shouldTurn = !reduceMotion.matches && typeof Element.prototype.animate === 'function';
-  const front = shouldTurn ? copyLeaf(leaves[current]) : null;
-  const back = shouldTurn && !narrowView ? copyLeaf(leaves[facing]) : null;
-
-  page = Math.max(1, target);
-  renderSpread();
-  scrollToCurrentPage();
-  if (!shouldTurn) return;
+  if (!shouldTurn) {
+    page = Math.max(1, target);
+    renderSpread();
+    scrollToCurrentPage();
+    return;
+  }
+  const currentRevision = revision;
+  const front = copyLeaf(leaves[current]);
+  const underlay = document.createElement('div');
+  underlay.className = 'reader-leaf reader-turn-underlay ' + direction;
+  underlay.dataset.movingCopy = '';
+  underlay.setAttribute('aria-hidden', 'true');
+  underlay.inert = true;
+  spread.append(underlay);
+  const back = narrowView ? null : underlay.cloneNode(false);
+  if (back) back.className = 'reader-leaf';
+  reader.setAttribute('aria-busy', 'true');
+  previous.setAttribute('aria-disabled', 'true');
+  next.setAttribute('aria-disabled', 'true');
   const layer = sheet(front, back, direction);
   const angle = (narrowView ? 96 : 180) * -step;
-  await animate(layer, [
+  const completed = await animate(layer, [
     { transform: 'rotateY(0deg)' },
     { transform: 'rotateY(' + angle + 'deg)' },
   ], { duration: narrowView ? 290 : turnDuration, easing: ease, fill: 'forwards' });
+  if (currentRevision !== revision) return;
+  if (completed) page = Math.max(1, target);
+  renderSpread();
   layer.remove();
+  underlay.remove();
+  reader.removeAttribute('aria-busy');
+  if (completed) scrollToCurrentPage();
 }
 
 async function moveCover(source, target, returning = false) {

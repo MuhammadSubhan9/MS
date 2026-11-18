@@ -6,6 +6,8 @@
   let selected = null;
   let line = null;
   let active = false;
+  let interactionHeld = false;
+  let fallbackAnimation;
   let sequence = 0;
   const assigned = new Set();
 
@@ -15,7 +17,10 @@
       return value && value.to === location.href && Date.now() - value.at < 15000 ? value : null;
     } catch { return null; }
   }
-  if (readPending() && !reduce.matches) root.classList.add('page-transitioning');
+  if (readPending() && !reduce.matches) {
+    root.classList.add('page-transitioning');
+    if (!('onpagereveal' in window)) root.classList.add('route-fallback-waiting');
+  }
 
   function routeLink(event) {
     const link = event.target.closest?.('a[href]');
@@ -42,6 +47,7 @@
 
   function sharedElement(type, from, to, incoming) {
     if (type === 'book') return document.querySelector('.shelf-book img, .home-writing-novel figure img');
+    if (type === 'contact-card') return incoming ? document.querySelector('.contact-feature') : selected;
     if (type === 'contact') {
       if (incoming) return document.querySelector('.contact-form-panel');
       return selected?.matches('.button-link') ? selected : null;
@@ -59,15 +65,26 @@
   }
 
   function removeLine() { line?.remove(); line = null; }
+  function makeLine() {
+    const frame = document.querySelector('.header-inner, .novel-header-inner');
+    const viewport = document.documentElement.clientWidth;
+    const width = Math.min(frame?.getBoundingClientRect().width || viewport - 40, viewport - 32);
+    const element = document.createElement('div');
+    element.className = 'route-line';
+    element.setAttribute('aria-hidden', 'true');
+    element.style.setProperty('--line-target-x', (viewport - width) / 2 + 'px');
+    element.style.setProperty('--line-target-width', width + 'px');
+    return element;
+  }
   function beginLine(link) {
     removeLine();
     const box = link.getBoundingClientRect();
-    line = document.createElement('div');
+    const width = Math.max(20, box.width - 20);
+    line = makeLine();
     line.className = 'route-line route-line-pending';
-    line.setAttribute('aria-hidden', 'true');
-    line.style.setProperty('--line-x', box.left + 'px');
-    line.style.setProperty('--line-y', Math.min(box.bottom, innerHeight - 2) + 'px');
-    line.style.setProperty('--line-width', Math.max(box.width, 20) + 'px');
+    line.style.setProperty('--line-x', box.left + (box.width - width) / 2 + 'px');
+    line.style.setProperty('--line-y', Math.min(box.bottom - 2, innerHeight - 2) + 'px');
+    line.style.setProperty('--line-width', width + 'px');
     document.body.append(line);
   }
 
@@ -98,14 +115,15 @@
     const revision = ++sequence;
     for (const previous of assigned) previous.style.removeProperty('view-transition-name');
     assigned.clear();
-    const type = pending?.kind || kind(from, to);
+    let type = pending?.kind || kind(from, to);
+    if (!incoming && type === 'contact' && selected?.matches('.nav-contact')) type = 'contact-card';
     root.dataset.routeMotion = type;
     const headerBottom = document.querySelector('.site-header, .novel-header')?.getBoundingClientRect().bottom || 0;
     root.style.setProperty('--route-start', Math.max(0, headerBottom) + 'px');
     root.classList.add('page-transitioning');
     const element = sharedElement(type, from, to, incoming);
     // A travelling cover must arrive in the visible shelf, including on phones.
-    if (incoming && type === 'book' && pending?.shared && element && !to.hash) {
+    if (incoming && type === 'book' && element && !to.hash) {
       const box = element.getBoundingClientRect();
       scrollTo({ top: Math.max(0, scrollY + box.top - (innerHeight - box.height) / 2), behavior: 'instant' });
     }
@@ -118,26 +136,22 @@
       reveal.classList.remove('reveal-pending');
       reveal.classList.add('route-shared-settled');
     }
-    const shared = visible(element) && (!incoming || pending?.shared);
-    const name = { book: 'route-book', author: 'route-author', contact: 'route-contact', event: 'route-event' }[type];
+    const shared = visible(element) && (!incoming || pending?.shared || type === 'book');
+    const name = { book: 'route-book', author: 'route-author', contact: 'route-contact', 'contact-card': 'route-card', event: 'route-event' }[type];
     if (shared && name) {
       element.style.viewTransitionName = name;
       assigned.add(element);
     }
-    if (line) {
-      line.getAnimations().forEach(animation => animation.cancel());
-      line.className = 'route-line';
-      line.style.viewTransitionName = 'route-line';
-      line.style.top = Math.max(0, headerBottom) + 'px';
-    }
-    if (incoming) {
-      removeLine();
-      line = document.createElement('div');
-      line.className = 'route-line';
-      line.setAttribute('aria-hidden', 'true');
+    removeLine();
+    if (type === 'line') {
+      line = makeLine();
       line.style.viewTransitionName = 'route-line';
       line.style.top = Math.max(0, headerBottom) + 'px';
       document.body.append(line);
+    }
+    if (incoming) {
+      document.body.inert = true;
+      interactionHeld = true;
     }
     function clean() {
       if (revision !== sequence) return;
@@ -145,6 +159,8 @@
       assigned.clear();
       removeLine();
       delete root.dataset.routeMotion;
+      if (interactionHeld) document.body.inert = false;
+      interactionHeld = false;
       active = false;
     }
     active = true;
@@ -171,13 +187,21 @@
   function fallback() {
     if (reduce.matches || !readPending()) return;
     root.classList.add('page-transitioning');
+    root.classList.add('route-fallback-waiting');
+    document.body.inert = true;
+    interactionHeld = true;
     removeLine();
-    line = document.createElement('div');
-    line.className = 'route-line';
-    line.setAttribute('aria-hidden', 'true');
+    line = makeLine();
     document.body.append(line);
-    const sweep = line.animate([{ translate: '0 0' }, { translate: '0 ' + innerHeight + 'px' }], { duration: 240, easing: 'ease-out' });
-    sweep.finished.then(removeLine, removeLine);
+    fallbackAnimation = line.animate([{ translate: '0 0' }, { translate: '0 ' + innerHeight + 'px' }], { duration: 240, easing: 'ease-out' });
+    function finishFallback() {
+      removeLine();
+      root.classList.remove('route-fallback-waiting');
+      document.body.inert = false;
+      interactionHeld = false;
+      fallbackAnimation = null;
+    }
+    fallbackAnimation.finished.then(finishFallback, finishFallback);
   }
   addEventListener('pagereveal', event => {
     const pending = readPending();
@@ -192,9 +216,17 @@
     try { sessionStorage.removeItem(key); } catch { /* Storage is optional. */ }
   });
   addEventListener('pageshow', () => {
-    if (!('onpagereveal' in window)) fallback();
+    if (!('onpagereveal' in window)) {
+      fallback();
+      try { sessionStorage.removeItem(key); } catch { /* Storage is optional. */ }
+    }
     if (!active && line?.classList.contains('route-line-pending')) removeLine();
     selected = null;
   });
-  reduce.addEventListener('change', () => { if (reduce.matches) removeLine(); });
+  reduce.addEventListener('change', () => {
+    if (reduce.matches) {
+      fallbackAnimation?.finish();
+      removeLine();
+    }
+  });
 })();

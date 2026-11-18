@@ -29,12 +29,27 @@ try {
           ready: true,
           kind: document.documentElement.dataset.routeMotion,
           names: [...document.querySelectorAll('[style]')].map(node => node.style.viewTransitionName).filter(Boolean),
+          destinationOpacity: getComputedStyle(document.documentElement, '::view-transition-new(root)').opacity,
+          destinationDelay: getComputedStyle(document.documentElement, '::view-transition-new(root)').animationDelay,
+          handoverDuration: Math.max(...['route-line', 'route-author', 'route-event', 'route-book', 'route-contact', 'route-card'].map(name => {
+            return parseFloat(getComputedStyle(document.documentElement, '::view-transition-group(' + name + ')').animationDuration) || 0;
+          })),
+          inert: document.body.inert,
+          line: (() => {
+            const line = document.querySelector('.route-line');
+            if (!line) return null;
+            const box = line.getBoundingClientRect();
+            return { left: box.left, rightMargin: document.documentElement.clientWidth - box.right };
+          })(),
         });
       }).catch(error => { window.motionResult.error = String(error); });
     });
   ` });
 
   async function clickRoute(selector, path, type, shared, width) {
+    if (selector.startsWith('.nav ')) {
+      await chrome.evaluate("const menu=document.querySelector('.menu');if(menu?.getBoundingClientRect().width && menu.getAttribute('aria-expanded')!=='true') menu.click()");
+    }
     await chrome.evaluate(`document.querySelector(${JSON.stringify(selector)}).scrollIntoView({block:'center',behavior:'instant'})`);
     await pause(100);
     await chrome.evaluate(`document.querySelector(${JSON.stringify(selector)}).click()`);
@@ -42,12 +57,21 @@ try {
     const result = await chrome.evaluate('window.motionResult');
     assert.equal(result.kind, type, path);
     if (shared) assert.ok(result.names.includes(shared), path + ' shared element');
+    assert.equal(result.destinationOpacity, '0', path + ' destination waits for handover');
+    assert.ok(parseFloat(result.destinationDelay) >= .28, path + ' coordinated delay');
+    assert.ok(parseFloat(result.destinationDelay) >= result.handoverDuration, path + ' destination follows completed handover');
+    assert.equal(result.inert, true, path + ' hidden destination is not interactive');
+    if (type === 'line') {
+      assert.ok(result.line, 'navigation line exists');
+      assert.ok(Math.abs(result.line.left - result.line.rightMargin) <= 1, 'line has equal margins');
+    } else assert.equal(result.line, null, 'shared-element routes have their own handover');
     if (capture && shared) {
       await mkdir(capture, { recursive: true });
       const shot = await chrome.call('Page.captureScreenshot', { format: 'png' });
       await writeFile(resolve(capture, type + '-' + width + '.png'), Buffer.from(shot.data, 'base64'));
     }
     await waitFor(() => chrome.evaluate("!document.documentElement.dataset.routeMotion && !document.querySelector('.route-line')"), 'transition cleanup');
+    assert.equal(await chrome.evaluate('document.body.inert'), false, 'interaction resumes');
     assert.equal(await chrome.evaluate('document.documentElement.scrollWidth <= innerWidth'), true, path);
     if (type === 'contact' && shared && width === 390) {
       assert.equal(await chrome.evaluate("document.querySelector('.contact-form-panel').getBoundingClientRect().top < innerHeight * .3"), true);
@@ -61,6 +85,8 @@ try {
     await pause(550);
     await clickRoute('.nav a[href="/"]', '/', 'author', 'route-author', width);
     await clickRoute('.text-actions a[href="/about/"]', '/about/', 'author', 'route-author', width);
+    await clickRoute('.nav a[href="/contact/"]', '/contact/', 'contact-card', 'route-card', width);
+    await clickRoute('.nav a[href="/about/"]', '/about/', 'line', null, width);
     await clickRoute('.footer-contact', '/contact/', 'contact', 'route-contact', width);
     await clickRoute('.footer-link[href="/work/"]', '/work/', 'line', null, width);
     await clickRoute('.work-event-link[href="/work/money2020-middle-east/"]', '/work/money2020-middle-east/', 'event', 'route-event', width);
@@ -69,6 +95,11 @@ try {
     await clickRoute('.wordmark', '/', 'line', null, width);
     await clickRoute('.home-writing-layout .button-link', '/writing/', 'book', 'route-book', width);
     await clickRoute('.novel-back', '/', 'book', 'route-book', width);
+  }
+
+  for (const width of [320, 2144]) {
+    await chrome.navigate(origin + '/about/', width);
+    await clickRoute('.footer-link[href="/work/"]', '/work/', 'line', null, width);
   }
 
   await chrome.navigate(origin + '/contact/', 390);
@@ -90,9 +121,16 @@ try {
     await chrome.navigate(origin + '/writing/', width);
     await chrome.evaluate("document.querySelector('.shelf-book').scrollIntoView({block:'center',behavior:'instant'});document.querySelector('.shelf-book').click()");
     await waitFor(() => chrome.evaluate("document.querySelector('.novel-reader-dialog').open && !document.querySelector('[data-reader]').classList.contains('reader-opening')"), 'cover opening');
+    const originalStatus = await chrome.evaluate("document.querySelector('[data-page-status]').textContent");
+    const originalPages = await chrome.evaluate("[...document.querySelectorAll('[data-spread] > [data-leaf]')].filter(n=>!n.hidden).map(n=>n.dataset.leaf)");
     await chrome.key('ArrowRight', 'ArrowRight', 39);
     await waitFor(() => chrome.evaluate("!!document.querySelector('.reader-turn.next')"), 'forward page turn');
+    assert.equal(await chrome.evaluate("document.querySelector('[data-page-status]').textContent"), originalStatus, 'page number waits for the turn');
+    assert.deepEqual(await chrome.evaluate("[...document.querySelectorAll('[data-spread] > [data-leaf]')].filter(n=>!n.hidden).map(n=>n.dataset.leaf)"), originalPages, 'destination text stays hidden during the turn');
+    assert.equal(await chrome.evaluate("document.querySelector('[data-reader]').getAttribute('aria-busy')"), 'true');
+    assert.equal(await chrome.evaluate("document.querySelector('.novel-reader-dialog').scrollWidth > innerWidth"), false, 'turning sheet stays inside the viewport');
     await waitFor(() => chrome.evaluate("!document.querySelector('.reader-turn')"), 'forward turn completion');
+    assert.notEqual(await chrome.evaluate("document.querySelector('[data-page-status]').textContent"), originalStatus);
     await chrome.key('ArrowLeft', 'ArrowLeft', 37);
     await waitFor(() => chrome.evaluate("!!document.querySelector('.reader-turn.previous')"), 'reverse page turn');
     await chrome.key('Escape', 'Escape', 27);
@@ -110,6 +148,7 @@ try {
   await chrome.evaluate("const s=document.createElement('style');s.textContent='@view-transition {navigation:none;}';document.head.append(s);document.querySelector('.footer-contact').click()");
   await waitFor(() => chrome.evaluate("location.pathname==='/contact/' && document.readyState==='complete'"), 'fallback navigation');
   await waitFor(() => chrome.evaluate("!document.querySelector('.route-line')"), 'fallback cleanup');
+  assert.equal(await chrome.evaluate("document.body.inert || document.documentElement.classList.contains('route-fallback-waiting')"), false);
 
   await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   await chrome.navigate(origin + '/about/', 390);

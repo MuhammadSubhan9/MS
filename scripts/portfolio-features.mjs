@@ -1,5 +1,5 @@
 import {
-  action, copySectionButton, escape, glossary, hasDetail, paragraphs,
+  action, copySectionButton, escape, glossary, hasDetail, image, paragraphs,
   publicationDate, safeLink, sharedHeading,
 } from './components.mjs';
 
@@ -12,6 +12,9 @@ const topics = [
 
 export const portfolioAssets = `<link rel="stylesheet" href="/portfolio-features.css">
   <script src="/portfolio-features.js" defer></script>`;
+
+export const journeyAssets = `<link rel="stylesheet" href="/journey.css">
+  <script src="/journey.js" defer></script>`;
 
 export const sectionLinkDialog = `<dialog class="section-link-dialog" aria-labelledby="section-link-title">
     <form method="dialog">
@@ -116,37 +119,64 @@ export function capabilitiesMatrix(capabilities = [], records) {
   }).join('');
 }
 
-function journeyMilestone({ record, date }, older, newer) {
+function journeyMilestone({ record, date, logo }, index) {
   const id = `milestone-${record.id}`;
-  return `<li class="journey-milestone" id="${id}" data-share-section tabindex="-1">
-    <p class="meta journey-date">${publicationDate(date || record.date)}</p>
-    <details name="journey-milestones" data-open-for-section-link>
-      <summary><span>${escape(record.title)}</span></summary>
-      <div class="journey-brief">
-        ${record.context ? `<p class="meta">${escape(record.context)}</p>` : ''}
-        ${record.description ? paragraphs([record.description], glossary) : ''}
-        ${record.subjects?.length ? `<p>Subjects included ${escape(new Intl.ListFormat('en-GB').format(record.subjects))}.</p>` : ''}
-        <div class="journey-record-links">${recordLink(record)}${copySectionButton(id, record.title)}</div>
-        ${older || newer ? `<nav class="journey-step" aria-label="Other milestones">
-          ${newer ? `<a href="#milestone-${newer.record.id}"><span aria-hidden="true">↑</span> Newer milestone<span class="visually-hidden">: ${escape(newer.record.title)}</span></a>` : ''}
-          ${older ? `<a href="#milestone-${older.record.id}"><span aria-hidden="true">↓</span> Older milestone<span class="visually-hidden">: ${escape(older.record.title)}</span></a>` : ''}
-        </nav>` : ''}
+  const mark = logo || record.eventLogo;
+  const category = { education: 'Education', course: 'Course' }[record.type]
+    || (record.kind === 'event' ? 'Event' : record.category?.split(' · ')[0] || 'Experience');
+  return `<li class="journey-milestone" id="${id}" data-side="${index % 2 ? 'right' : 'left'}" data-share-section tabindex="-1">
+    <span class="journey-point" aria-hidden="true"></span>
+    <details class="journey-card" data-open-for-section-link>
+      <summary>
+        <span class="journey-label">
+          <span class="journey-date">${publicationDate(date)}</span>
+          <span class="journey-kind">${escape(category)}</span>
+        </span>
+        <span class="journey-title">${escape(record.title)}</span>
+        <span class="journey-switch" aria-hidden="true"></span>
+      </summary>
+      <div class="journey-panel">
+        <div class="journey-brief">
+          <div class="journey-brief-text">
+            ${mark ? `<div class="journey-mark" data-event="${record.id}">${image(mark)}</div>` : ''}
+            ${record.context && record.context !== category ? `<p class="meta">${escape(record.context)}</p>` : ''}
+            ${record.description ? paragraphs([record.description], glossary) : ''}
+            ${record.subjects?.length ? `<p>Subjects included ${escape(new Intl.ListFormat('en-GB').format(record.subjects))}.</p>` : ''}
+            <div class="journey-record-links">${recordLink(record)}${copySectionButton(id, record.title)}</div>
+          </div>
+        </div>
       </div>
     </details>
   </li>`;
+}
+
+function journeyTimeline(milestones) {
+  let previousYear;
+  return `<div class="journey-timeline" data-journey-timeline>
+    <div class="journey-rail" aria-hidden="true"><span></span></div>
+    <ol class="journey-list">${milestones.map((entry, index) => {
+      const year = entry.date.match(/\b\d{4}\b/g)?.at(-1);
+      const divider = year && year !== previousYear ? `<li class="journey-year" aria-hidden="true"><span>${year}</span></li>` : '';
+      previousYear = year;
+      return divider + journeyMilestone(entry, index);
+    }).join('')}</ol>
+  </div>`;
 }
 
 export function journeyPage(data, records) {
   if (!data.journey) return '';
   const current = data.journey.current.map(key => records.get(key)).filter(Boolean);
   const milestones = data.journey.milestones
-    .map(({ record, date }) => ({ record: records.get(record), date }))
-    .filter(({ record }) => record);
+    .filter(entry => records.has(entry.record))
+    .map(({ record: key, date, logo }) => {
+      const record = records.get(key);
+      return { record, date: date || record.date || '', logo };
+    });
   if (!current.length && !milestones.length) return '';
 
   const sections = [
-    ['in-progress', 'In progress', current.length],
     ['milestones', 'Milestones', milestones.length],
+    ['in-progress', 'In progress', current.length],
     ['looking-ahead', 'Looking ahead', data.futureDirection],
   ].filter(([, , show]) => show);
   return `<div class="journey-page">
@@ -157,6 +187,10 @@ export function journeyPage(data, records) {
       </div>
       <nav class="journey-jumps" aria-label="On this page">${sections.map(([id, title]) => action('#' + id, title)).join('')}</nav>
     </header>
+    ${milestones.length ? `<section class="journey-history" id="milestones" aria-labelledby="milestones-title" tabindex="-1" data-share-section>
+      ${sharedHeading('milestones', 'Milestones')}
+      ${journeyTimeline(milestones)}
+    </section>` : ''}
     ${current.length ? `<section class="journey-current" id="in-progress" aria-labelledby="in-progress-title" tabindex="-1" data-share-section>
       ${sharedHeading('in-progress', 'In progress')}
       <div class="journey-current-grid">${current.map(record => `<article>
@@ -165,10 +199,6 @@ export function journeyPage(data, records) {
         ${record.description ? paragraphs([record.description], glossary) : ''}
         ${recordLink(record)}
       </article>`).join('')}</div>
-    </section>` : ''}
-    ${milestones.length ? `<section class="journey-history" id="milestones" aria-labelledby="milestones-title" tabindex="-1" data-share-section>
-      ${sharedHeading('milestones', 'Milestones')}
-      <ol class="journey-list">${milestones.map((entry, index) => journeyMilestone(entry, milestones[index + 1], milestones[index - 1])).join('')}</ol>
     </section>` : ''}
     ${data.futureDirection ? `<section class="journey-future" id="looking-ahead" aria-labelledby="looking-ahead-title" tabindex="-1" data-share-section>
       ${sharedHeading('looking-ahead', 'Looking ahead')}

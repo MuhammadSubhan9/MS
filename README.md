@@ -17,7 +17,7 @@ Use `workIntroduction` and `writingIntroduction` for approved index introduction
 
 The contact form uses the verified SilentForms endpoint in `contact.formEndpoint`. The public email shown on the page uses `contact.email`. To replace the delivery service, use an activated HTTPS endpoint that accepts form data and returns a JSON acknowledgement after accepting the message. The form recognises `ok: true`, `status: "success"` or `success: true`.
 
-The evidence map uses the subject tags on projects and courses. The capabilities and Journey sections refer to the same records by keys such as `work:layout-study` and `education:igcses`. Keep IDs stable so shared links keep working. Enter Journey milestones newest first and use date labels that match the source records.
+The evidence map uses the subject tags on projects and courses. The capabilities and Journey sections refer to the same records by keys such as `work:layout-study` and `education:igcses`. Keep IDs stable so shared links keep working. Enter Journey milestones oldest first and use date labels that match the source records. Event briefs use the record's logo or an optional milestone-specific logo.
 
 For a major site update, replace `siteUpdate` in `content/site.json` with a new ID, date and a few links to the changes. Returning visitors using the same browser can see the notice after the ID changes, and the homepage footer always links to the latest briefing.
 

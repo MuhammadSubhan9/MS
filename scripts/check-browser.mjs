@@ -89,6 +89,7 @@ try {
   await chrome.key('Escape', 'Escape', 27);
 
   await chrome.navigate(origin + '/about/#capabilities', 390);
+  assert.doesNotMatch(await chrome.evaluate("document.querySelector('#capabilities').textContent"), /web development/i);
   await chrome.evaluate("document.querySelectorAll('.capability > summary')[1].click()");
   assert.equal(await chrome.evaluate("document.querySelectorAll('.capability[open] .capability-matrix > div').length >= 3"), true);
   await chrome.navigate(origin + '/about/#igcses', 390);
@@ -100,11 +101,39 @@ try {
   await chrome.navigate(origin + '/journey/#milestone-igcses', 390);
   assert.equal(await chrome.evaluate("document.querySelector('#milestone-igcses details').open"), true);
   assert.equal(await chrome.evaluate("!!document.querySelector('#looking-ahead')"), true);
-  await chrome.evaluate("document.querySelector('#milestone-igcses a[href=\"#milestone-black-hat-mea\"]').click()");
-  await waitFor(() => chrome.evaluate("location.hash === '#milestone-black-hat-mea' && document.querySelector('#milestone-black-hat-mea details').open"), 'older milestone');
-  assert.equal(await chrome.evaluate("document.querySelector('#milestone-igcses details').open"), false);
-  await chrome.evaluate("document.querySelector('#milestone-igcses summary').click(); document.querySelector('#milestone-igcses a[href=\"#milestone-black-hat-mea\"]').click()");
-  assert.equal(await chrome.evaluate("document.querySelector('#milestone-black-hat-mea details').open"), true);
+  assert.equal(await chrome.evaluate("document.querySelector('.journey-milestone').id"), 'milestone-course-crew-management');
+  assert.equal(await chrome.evaluate("document.querySelector('.journey-milestone:last-child').id"), 'milestone-unesco-ai-forum');
+  assert.equal(await chrome.evaluate("document.querySelector('#milestone-unesco-ai-forum .journey-mark img').getAttribute('src')"), '/images/event-unesco-ai-forum.webp');
+
+  await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
+  await chrome.navigate(origin + '/journey/', 390);
+  await waitFor(() => chrome.evaluate("document.querySelector('[data-journey-timeline]').style.getPropertyValue('--journey-progress') !== ''"), 'timeline rail');
+  assert.equal(await chrome.evaluate("document.querySelector('#milestone-unesco-ai-forum').hasAttribute('data-reached')"), false);
+  await chrome.evaluate("document.querySelector('#milestone-unesco-ai-forum').scrollIntoView({ block: 'center', behavior: 'instant' })");
+  await waitFor(() => chrome.evaluate("document.querySelector('#milestone-unesco-ai-forum').hasAttribute('data-reached')"), 'newer milestone revealed by scrolling');
+  assert.ok(await chrome.evaluate("Number(document.querySelector('[data-journey-timeline]').style.getPropertyValue('--journey-progress')) > .75"));
+  assert.equal(await chrome.evaluate("getComputedStyle(document.querySelector('.site-header'), '::after').animationName"), 'none');
+  const motion = await chrome.evaluate(`
+    (() => {
+      const card = document.querySelector('#milestone-unesco-ai-forum details');
+      card.querySelector('summary').click();
+      const panel = card.querySelector('.journey-panel');
+      const [sizing] = panel.getAnimations();
+      sizing.pause();
+      sizing.currentTime = 190;
+      return {
+        state: card.dataset.journeyState,
+        height: panel.getBoundingClientRect().height,
+        logoAnimation: getComputedStyle(card.querySelector('.journey-mark')).animationName,
+      };
+    })()
+  `);
+  assert.equal(motion.state, 'opening');
+  assert.ok(motion.height > 0);
+  assert.equal(motion.logoAnimation, 'journey-mark-enter');
+  await chrome.evaluate("document.querySelector('#milestone-unesco-ai-forum summary').click()");
+  await waitFor(() => chrome.evaluate("!document.querySelector('#milestone-unesco-ai-forum details').open"), 'reversing the milestone animation');
+  await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
 
   await chrome.evaluate("localStorage.setItem('portfolio-seen-update','older-release')");
   await chrome.navigate(origin + '/', 390);

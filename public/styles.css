@@ -939,11 +939,6 @@ details p { padding: .2rem 0; }
   to { clip-path: inset(0); }
 }
 
-@keyframes reading-progress {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-
 @keyframes feature-drift {
   from { transform: scale(1.065) translateY(-2.5%); }
   to { transform: scale(1.065) translateY(2.5%); }
@@ -1016,18 +1011,6 @@ details p { padding: .2rem 0; }
   }
 
   @supports (animation-timeline: scroll(root block)) {
-    .site-header::after {
-      position: absolute;
-      inset: auto 0 -1px;
-      height: 2px;
-      background: var(--accent);
-      content: '';
-      pointer-events: none;
-      transform: scaleX(0);
-      transform-origin: left;
-      animation: reading-progress linear both;
-      animation-timeline: scroll(root block);
-    }
     .featured-with-image .media-window {
       view-timeline: --feature-photo block;
     }

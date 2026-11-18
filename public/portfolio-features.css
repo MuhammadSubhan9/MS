@@ -134,8 +134,7 @@
 .about-records #courses .entry-actions .entry-certificate { margin-top: 0; padding-top: 0; }
 .capability { border-top: 1px solid #c7ae9a; background: #f8efe3; }
 .capability:last-child { border-bottom: 1px solid #c7ae9a; }
-.capability > summary,
-.journey-milestone summary {
+.capability > summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -147,16 +146,13 @@
   font: 400 clamp(1.18rem, 2.55vw, 1.58rem)/1.22 var(--serif);
   cursor: pointer;
 }
-.capability > summary::-webkit-details-marker,
-.journey-milestone summary::-webkit-details-marker { display: none; }
-.capability > summary::after,
-.journey-milestone summary::after {
+.capability > summary::-webkit-details-marker { display: none; }
+.capability > summary::after {
   content: '+';
   color: #785541;
   font: 400 1.35rem/1 var(--sans);
 }
-.capability[open] > summary::after,
-.journey-milestone details[open] > summary::after { content: '−'; }
+.capability[open] > summary::after { content: '−'; }
 .capability > summary:hover { background: #efe0d1; }
 .capability[open] > summary { color: #682e42; }
 .capability-matrix {
@@ -179,8 +175,7 @@
 .capability-evidence a { color: #6d3f46; font-size: .94rem; }
 
 .evidence-section { margin-top: clamp(2.65rem, 5.7vw, 5.3rem); }
-.evidence-section > .share-heading h2,
-.journey-page .share-heading h2 { font-size: clamp(1.9rem, 3.4vw, 3rem); }
+.evidence-section > .share-heading h2 { font-size: clamp(1.9rem, 3.4vw, 3rem); }
 .evidence-filters {
   display: flex;
   flex-wrap: wrap;
@@ -272,86 +267,6 @@
 .evidence-record-links { display: flex; flex-wrap: wrap; gap: 0 1.05rem; margin-top: .65rem; }
 .evidence-record-links a { color: var(--accent); }
 
-.journey-hero {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1.1rem 2rem;
-  padding: clamp(1.35rem, 4vw, 3rem);
-  border-top: 3px solid #a6815e;
-  background: radial-gradient(ellipse at 100% 0, #6b4335, transparent 74%), #382820;
-  color: #faefdf;
-}
-.journey-hero h1 { font-size: clamp(3.2rem, 9vw, 6rem); }
-.journey-hero .lead { margin-top: .45rem; color: #ecd8c1; }
-.journey-jumps { display: flex; flex-wrap: wrap; gap: 0 .95rem; }
-.journey-jumps a { color: #f6dfc1; }
-.journey-hero a:focus-visible { outline-color: #e8bc8b; }
-.journey-current, .journey-history, .journey-future { margin-top: clamp(2rem, 5vw, 3.8rem); }
-.journey-page .share-heading { margin-bottom: .8rem; }
-.journey-current-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; }
-.journey-current-grid article {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: .45rem;
-  padding: clamp(.9rem, 2.2vw, 1.4rem);
-  border: 1px solid #cbb49a;
-  border-top: 2px solid #285547;
-  background: #f7eee0;
-}
-.journey-current-grid a { margin-top: auto; color: var(--accent); }
-.journey-list { margin: 0; padding: 0; list-style: none; border-bottom: 1px solid #bea791; }
-.journey-milestone {
-  display: grid;
-  grid-template-columns: minmax(7.2rem, .23fr) minmax(0, 1fr);
-  border-top: 1px solid #bea791;
-}
-.journey-milestone:has(details[open]) { background: #f7eee1; }
-.journey-date {
-  position: relative;
-  margin-inline-start: .25rem;
-  padding: 1.02rem 1rem 0;
-  border-inline-start: 1px solid #b59e87;
-  color: #765341;
-  font-weight: 650;
-}
-.journey-date::before {
-  position: absolute;
-  top: 1.43rem;
-  left: -.24rem;
-  width: .44rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: #82664f;
-  content: '';
-}
-.journey-milestone summary { min-height: 3.45rem; }
-.journey-milestone summary:hover { background: #e9dcca; }
-.journey-brief { padding: 0 clamp(.85rem, 2.4vw, 1.65rem) 1rem; }
-.journey-brief p + p { margin-top: .45rem; }
-.journey-record-links { margin-top: .5rem; }
-.journey-record-links .action-link { color: var(--accent); }
-.journey-step {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .35rem 1.15rem;
-  margin-top: .45rem;
-  padding-top: .65rem;
-  border-top: 1px solid #cdb7a2;
-  font-size: .92rem;
-}
-.journey-step a { color: #654637; }
-.journey-step span[aria-hidden] { padding-inline-end: .24rem; }
-.journey-future {
-  padding: clamp(1rem, 3vw, 1.8rem);
-  border: 1px solid #c7ab98;
-  border-top: 2px solid #764959;
-  background: #eee0d6;
-}
-.journey-future h3 + p { margin-top: .35rem; }
-
 .site-update { display: none; margin-block: .85rem; }
 .site-update:is(:target, [data-new-release]) { display: block; }
 .site-update-inner {
@@ -398,13 +313,9 @@
 .site-update-dismiss:hover { border-color: #b8a994; }
 
 @media (max-width: 760px) {
-  .evidence-board, .journey-current-grid, .capability-matrix { grid-template-columns: minmax(0, 1fr); }
+  .evidence-board, .capability-matrix { grid-template-columns: minmax(0, 1fr); }
   .evidence-map { min-height: auto; }
   .evidence-branch a { min-height: 40px; }
-  .journey-milestone { grid-template-columns: minmax(0, 1fr); }
-  .journey-date { padding: .6rem 0 0 .85rem; }
-  .journey-date::before { top: 1rem; }
-  .journey-milestone summary { padding-top: .26rem; min-height: 2.8rem; }
 }
 @media (max-width: 365px) {
   .evidence-map { grid-template-columns: minmax(0, 1fr); }

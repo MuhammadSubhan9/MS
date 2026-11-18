@@ -159,13 +159,6 @@
   "achievements": [],
   "capabilities": [
     {
-      "title": "Web development",
-      "learning": "Studying Computer Science at International A Level and learning how a static site, browser JavaScript and small server functions work together.",
-      "application": "I designed and built this portfolio with AI-assisted development, then reviewed how the layouts and interactions worked on phones, tablets and desktops.",
-      "next": "Build smaller projects where I can work through the code and test the behaviour myself.",
-      "records": ["work:layout-study", "education:international-a-levels"]
-    },
-    {
       "title": "Negotiation and communication",
       "learning": "Practised structuring a spoken argument, listening for the other side’s priorities and finding room to negotiate.",
       "application": "I used those skills in workshop simulations. I also helped with guest seating and backstage coordination during a school graduation.",
@@ -190,18 +183,27 @@
   "journey": {
     "current": ["education:international-a-levels", "work:layout-study", "writing:the-eleventh-rehearsal"],
     "milestones": [
-      { "record": "work:unesco-ai-forum" },
-      { "record": "work:money2020-middle-east" },
-      { "record": "course:course-sales-fundamentals" },
-      { "record": "education:igcses", "date": "May–June 2026" },
-      { "record": "work:black-hat-mea" },
-      { "record": "work:global-airports-forum" },
-      { "record": "course:course-business-finance" },
-      { "record": "work:graduation-volunteering" },
-      { "record": "course:course-aircraft-design" },
-      { "record": "course:course-business-administration" },
+      { "record": "course:course-crew-management" },
       { "record": "course:course-aviation-management" },
-      { "record": "course:course-crew-management" }
+      { "record": "course:course-business-administration" },
+      { "record": "course:course-aircraft-design" },
+      { "record": "work:graduation-volunteering" },
+      { "record": "course:course-business-finance" },
+      { "record": "work:black-hat-mea", "date": "2–4 December 2025" },
+      { "record": "work:global-airports-forum", "date": "16–17 December 2025" },
+      { "record": "education:igcses", "date": "May–June 2026" },
+      { "record": "course:course-sales-fundamentals" },
+      { "record": "work:money2020-middle-east", "date": "14–16 September 2026" },
+      {
+        "record": "work:unesco-ai-forum",
+        "date": "14–17 September 2026",
+        "logo": {
+          "src": "/images/event-unesco-ai-forum.webp",
+          "alt": "Fourth UNESCO Global Forum on the Ethics of AI event logo",
+          "width": 480,
+          "height": 236
+        }
+      }
     ],
     "lookingAheadTitle": "Studying law"
   },
@@ -307,17 +309,17 @@
     },
     {
       "slug": "layout-study",
-      "evidence": { "label": "Portfolio design", "topics": ["technology"] },
-      "title": "Designing a personal portfolio",
+      "evidence": { "label": "Personal portfolio", "topics": ["technology"] },
+      "title": "Putting my portfolio together",
       "category": "Independent project",
-      "description": "I built this site to bring my education, projects and interests together in one place.",
-      "workSummary": "I organised the material into dedicated pages, revised the writing and checked how the layouts read on phones, tablets and desktops. The project made me more deliberate about what someone needs to see first and what deserves its own page.",
+      "description": "I used ChatGPT to make a site for my education, experiences and writing.",
+      "workSummary": "I chose what to include, gave feedback on how it should look, and used ChatGPT to build and revise the site.",
       "body": [
-        "I shaped the content and design with AI-assisted development. I wanted someone new to the site to be able to find my educational background, explore a project or read my writing without sorting through everything at once."
+        "I used ChatGPT to make the portfolio. I decided what I wanted to share and gave feedback on the design and wording as it came together."
       ],
       "sections": [
-        { "title": "Structuring the site", "paragraphs": ["I gave education, work and writing dedicated spaces. The overview pages offer enough context to decide what to read next, and the detail pages give a project or event room for a proper explanation."] },
-        { "title": "Design and review", "paragraphs": ["I revised the typography, images and page layouts across phone, tablet and desktop widths. Reviewing the pages at different sizes helped me spot awkward line breaks and gaps that were easy to miss on a single screen."] }
+        { "title": "What I wanted the site to do", "paragraphs": ["I wanted visitors to be able to find my background, read about an event, or explore my writing, so I asked for separate sections for each."] },
+        { "title": "Reviewing the result", "paragraphs": ["I reviewed the pages as ChatGPT put them together and asked for changes when the layout, wording or transitions felt off."] }
       ]
     },
     {

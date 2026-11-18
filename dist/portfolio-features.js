@@ -97,7 +97,6 @@
     const disclosure = target.querySelector('[data-open-for-section-link]');
     if (disclosure && !disclosure.open) {
       disclosure.open = true;
-      // A different brief may have closed above this anchor.
       target.scrollIntoView({ block: 'start', behavior: 'instant' });
     }
     clearTimeout(clearHighlight);
@@ -109,13 +108,6 @@
   if (copyButtons.length) {
     addEventListener('hashchange', showSharedSection);
     showSharedSection();
-  }
-  for (const link of document.querySelectorAll('.journey-step a')) {
-    link.addEventListener('click', event => {
-      if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && link.hash === location.hash) {
-        showSharedSection();
-      }
-    });
   }
 
   const terms = document.querySelectorAll('abbr[data-glossary]');

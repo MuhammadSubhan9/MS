@@ -2,7 +2,7 @@ import { action, escape, safeLink } from './components.mjs';
 import { renderNovelPage } from './novel.mjs';
 import { commandAssets, commandPalette } from './commands.mjs';
 import { clarityTag, googleAnalytics } from './analytics.mjs';
-import { portfolioAssets, sectionLinkDialog } from './portfolio-features.mjs';
+import { journeyAssets, portfolioAssets, sectionLinkDialog } from './portfolio-features.mjs';
 
 const welcome = `<dialog class="opening" aria-label="Welcome to Muhammad Subhan’s portfolio">
     <div class="opening-top"><span><img src="/favicon.svg?v=5" width="32" height="32" alt="">A developing perspective</span><button type="button" autofocus>Skip intro</button></div>
@@ -29,9 +29,10 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   const missing = page.path === '/404/';
   const home = page.path === '/';
   const about = page.path === '/about/';
+  const journey = page.path === '/journey/';
   const contact = page.path === '/contact/';
   const siteUpdates = home && data.siteUpdate?.items?.length;
-  const portfolioFeatures = siteUpdates || about || page.path === '/journey/' || /^(?:\/work\/|\/writing\/.+)/.test(page.path);
+  const portfolioFeatures = siteUpdates || about || journey || /^(?:\/work\/|\/writing\/.+)/.test(page.path);
   const links = navigation.map(item => {
     const active = page.path === item.path || item.path !== '/' && page.path.startsWith(item.path);
     const isContact = item.path === '/contact/';
@@ -65,6 +66,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
   ${portfolioFeatures ? portfolioAssets : ''}
+  ${journey ? journeyAssets : ''}
   ${home ? '<link rel="stylesheet" href="/intro.css">\n  <script src="/intro.js" defer blocking="render"></script>' : ''}
   ${contact ? '<link rel="stylesheet" href="/contact.css">\n  <script src="/contact.js" defer></script>\n  <script src="/contact-card.js" type="module"></script>' : ''}
   ${data.now ? commandAssets : ''}

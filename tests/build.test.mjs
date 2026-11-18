@@ -62,6 +62,10 @@ test('public build excludes fixture data and includes production SEO', async () 
   const journey = await readFile(`${output}/journey/index.html`, 'utf8');
   assert.match(journey, /id="milestone-igcses"/);
   assert.match(journey, /href="\/about\/#igcses"/);
+  assert.ok(journey.indexOf('id="milestone-course-crew-management"') < journey.indexOf('id="milestone-unesco-ai-forum"'));
+  assert.doesNotMatch(journey, /Older milestone|Newer milestone/);
+  const about = await readFile(`${output}/about/index.html`, 'utf8');
+  assert.doesNotMatch(about, /Web development/);
   for (const page of [html, contact, novel]) {
     assert.equal(page.split(`data-clarity-project="${source.analytics.clarityProject}"`).length, 2);
     assert.equal(page.split(`data-ga4-id="${source.analytics.googleMeasurementId}"`).length, 2);

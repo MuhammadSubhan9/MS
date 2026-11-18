@@ -653,8 +653,8 @@ details p { padding: .2rem 0; }
 
 .work-experiences .project-entry > div { display: flex; flex-direction: column; align-items: start; }
 .work-experiences .project-summary { margin-top: .65rem; }
+.work-experiences .project-entry:is(.featured-with-image, :last-child) { grid-column: 1 / -1; }
 .work-experiences .project-entry.featured-with-image {
-  grid-column: 1 / -1;
   grid-template-columns: minmax(0, 1fr) minmax(0, .8fr);
   grid-template-rows: auto;
   align-items: center;

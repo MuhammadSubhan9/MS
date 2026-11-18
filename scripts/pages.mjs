@@ -1,10 +1,11 @@
 import {
-  action, arrow, chronology, escape, hasDetail, image, paragraphs, projectEntry,
-  publicationDate, safeLink, section,
+  action, arrow, chronology, escape, glossary, hasDetail, image, paragraphs, projectEntry,
+  publicationDate, safeLink, section, sharedHeading,
 } from './components.mjs';
 import { findNovel, novelContent, novelPath, oldNovelPath } from './novel.mjs';
 import { contactPage } from './contact.mjs';
 import { nowSection } from './now.mjs';
+import { capabilitiesMatrix, evidenceMap, journeyPage, portfolioRecords, siteUpdateBrief } from './portfolio-features.mjs';
 
 function homePage(data, { hasAbout, hasContact, selected }) {
   const { education, projects, portrait, writing, contact } = data;
@@ -83,6 +84,7 @@ function homePage(data, { hasAbout, hasContact, selected }) {
   ].join('');
   const nameLines = data.name.trim().split(/\s+(?=\S+$)/);
   return `
+    ${siteUpdateBrief(data.siteUpdate)}
     <section class="home-opening" aria-labelledby="home-title">
     <div class="container home-masthead${portraitMarkup ? ' home-masthead-portrait' : ''}">
       <div class="home-intro">
@@ -110,7 +112,7 @@ function aboutPage(data, background) {
             <p class="eyebrow">About</p>
             <h1>${escape(data.name)}</h1>
           </div>
-          ${data.biography.length ? `<div class="about-biography">${paragraphs(data.biography)}</div>` : ''}
+          ${data.biography.length ? `<div class="about-biography">${paragraphs(data.biography, glossary)}</div>` : ''}
         </div>
         ${portrait}
       </header>
@@ -157,7 +159,7 @@ function workEvent(item) {
   </article>`;
 }
 
-function workIndex(items, introduction) {
+function workIndex(items, introduction, evidence) {
   const feature = items.find(item => item.selected && item.image)
     || items.find(item => item.selected)
     || items[0];
@@ -168,6 +170,10 @@ function workIndex(items, introduction) {
     ['experiences', 'Selected experiences', experiences],
     ['events', 'Events & conferences', events],
   ].filter(([, , entries]) => entries.length);
+  const jumps = [
+    ...(evidence ? [['evidence', 'Evidence map']] : []),
+    ...sections,
+  ];
 
   return `<div class="work-page">
     <header class="work-heading">
@@ -175,14 +181,15 @@ function workIndex(items, introduction) {
         <h1>Work &amp; experience</h1>
         ${introduction ? `<p class="lead">${escape(introduction)}</p>` : ''}
       </div>
-      ${sections.length ? `<nav class="work-jumps" aria-label="On this page">${sections.map(([id, title]) =>
+      ${jumps.length ? `<nav class="work-jumps" aria-label="On this page">${jumps.map(([id, title]) =>
         action('#' + id, title)).join('')}</nav>` : ''}
     </header>
     <div class="work-lead"${feature.slug === 'unesco-ai-forum' ? ' id="event-unesco"' : ''}>
       ${projectEntry(feature, { featured: true, eagerImage: true, actionLabel: 'Read more' })}
     </div>
-    ${sections.map(([id, title, entries]) => `<section class="work-section work-${id}" id="${id}" aria-labelledby="work-${id}-title" tabindex="-1">
-      <h2 id="work-${id}-title">${escape(title)}</h2>
+    ${evidence}
+    ${sections.map(([id, title, entries]) => `<section class="work-section work-${id}" id="${id}" aria-labelledby="work-${id}-title" tabindex="-1" data-share-section>
+      ${sharedHeading(id, title, { headingId: `work-${id}-title` })}
       <div class="work-entries">${entries.map(item => id === 'events' ? workEvent(item) : projectEntry(item, {
         heading: 'h3', featured: Boolean(item.image), showSummary: true, actionLabel: 'Read more',
       })).join('')}</div>
@@ -190,7 +197,7 @@ function workIndex(items, introduction) {
   </div>`;
 }
 
-function collectionPages(add, data, items, path, label) {
+function collectionPages(add, data, items, path, label, evidence = '') {
   if (!items.length) return;
   const slugs = new Set();
   for (const item of items) {
@@ -208,9 +215,10 @@ function collectionPages(add, data, items, path, label) {
     const featuredReport = isWorkEvent && item.selected;
     const mark = isWorkEvent ? eventMark(item) : '';
     const sources = item.sources?.length
-      ? `<section class="article-section"><h2>Sources</h2><ul>${item.sources.map(source =>
+      ? `<section class="article-section" id="sources" data-share-section tabindex="-1" aria-labelledby="sources-title">${sharedHeading('sources', 'Sources')}<ul>${item.sources.map(source =>
         `<li><a href="${safeLink(source.url)}">${escape(source.label)}</a></li>`).join('')}</ul></section>` : '';
-    const parts = (item.sections || []).map(part => `<section class="article-section"><h2>${escape(part.title)}</h2>${paragraphs(part.paragraphs)}</section>`).join('');
+    const renderText = isWriting ? escape : glossary;
+    const parts = (item.sections || []).map(part => `<section class="article-section"><h2>${escape(part.title)}</h2>${paragraphs(part.paragraphs, renderText)}</section>`).join('');
     const neighbours = isWriting ? [
       [detailed[index - 1], 'Previous article'],
       [detailed[index + 1], 'Next article'],
@@ -221,12 +229,12 @@ function collectionPages(add, data, items, path, label) {
         <header class="page-heading article-heading${mark ? ' work-event-heading' : ''}"${mark ? ` data-event="${escape(item.slug)}"` : ''}>
           <div>
             ${metadata ? `<p class="eyebrow">${metadata}</p>` : ''}
-            <h1>${escape(item.title)}</h1><p class="lead">${escape(item.description)}</p>
+            <h1>${escape(item.title)}</h1><p class="lead">${renderText(item.description)}</p>
           </div>
           ${mark}
         </header>
         ${image(item.image, { eager: true, sizes: hasCover ? '(max-width: 650px) 190px, 240px' : '(max-width: 700px) calc(100vw - 40px), 780px' })}
-        <div class="reading article-body">${paragraphs(item.body)}
+        <div class="reading article-body">${paragraphs(item.body, renderText)}
           ${parts && !isWriting ? `<div class="work-detail-parts">${parts}</div>` : parts}
           ${item.url ? action(item.url, 'View supporting material') : ''}${sources}
         </div>
@@ -238,7 +246,7 @@ function collectionPages(add, data, items, path, label) {
   const introduction = data[`${path}Introduction`];
   const description = data.seo[path] || `${label} by ${data.name}.`;
   if (!isWriting) {
-    add('/work/', label, description, workIndex(items, introduction));
+    add('/work/', label, description, workIndex(items, introduction, evidence));
     return;
   }
 
@@ -260,13 +268,18 @@ export function createPages(data) {
   function add(path, label, description, body, type = 'website') {
     pages.push({ path, label, description, body, type });
   }
+  const novel = findNovel(data.writing);
+  const records = portfolioRecords(data, novel);
+  const journey = journeyPage(data, records);
+  const education = chronology(data.education, { renderText: glossary });
   const background = [
-    ['education', 'Education', chronology(data.education)],
+    ['education', 'Education', education && education + (journey ? action('/journey/', 'Explore my journey', 'action-link education-journey') : '')],
     ['experience', 'Experience', chronology(data.experience)],
     ['languages', 'Languages', languageList(data.languages, data.duolingoScoresUpdated)],
-    ['courses', 'Independent courses', chronology(data.courses || [])],
+    ['capabilities', 'Capabilities', capabilitiesMatrix(data.capabilities, records)],
+    ['courses', 'Independent courses', chronology(data.courses || [], { detailLabel: 'Course details', renderText: glossary })],
     ['achievements', 'Achievements', chronology(data.achievements)],
-    ['interests', 'Interests', paragraphs(data.interests)],
+    ['interests', 'Interests', paragraphs(data.interests, glossary)],
   ].filter(([, , body]) => body);
   const hasAbout = data.biography.length || background.length;
   const contact = data.contact;
@@ -277,8 +290,8 @@ export function createPages(data) {
   if (hasAbout) {
     add('/about/', 'About', data.seo.about || `Background, education and interests of ${data.name}.`, aboutPage(data, background));
   }
-  collectionPages(add, data, data.projects, 'work', 'Work');
-  const novel = findNovel(data.writing);
+  if (journey) add('/journey/', 'Journey', `Education, work and milestones in ${data.name}’s journey.`, journey);
+  collectionPages(add, data, data.projects, 'work', 'Work', evidenceMap(records));
   if (novel) {
     pages.push({
       path: novelPath, label: novel.title, description: novel.description,

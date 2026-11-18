@@ -82,6 +82,7 @@ try {
     await pause(550);
     await clickRoute('.nav a[href="/"]', '/', 'fade', null, width);
     await clickRoute('.text-actions a[href="/about/"]', '/about/', 'fade', null, width);
+    await clickRoute('.nav a[href="/journey/"]', '/journey/', 'fade', null, width);
     await clickRoute('.nav a[href="/contact/"]', '/contact/', 'contact-card', 'route-card', width);
     await clickRoute('.nav a[href="/about/"]', '/about/', 'fade', null, width);
     await clickRoute('.footer-contact', '/contact/', 'contact', 'route-contact', width);

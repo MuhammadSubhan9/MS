@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
+  <link rel="stylesheet" href="/portfolio-features.css">
+  <script src="/portfolio-features.js" defer></script>
 
 
   <link rel="stylesheet" href="/commands.css">
@@ -37,7 +39,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
-      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/" aria-current="page">About</a><a href="/work/">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
+      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/" aria-current="page">About</a><a href="/journey/">Journey</a><a href="/work/">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
     </div>
   </header>
   <main class="about-main" id="main" tabindex="-1"><div class="profile-page">
@@ -48,7 +50,7 @@
             <p class="eyebrow">About</p>
             <h1>Muhammad Subhan</h1>
           </div>
-          <div class="about-biography"><p>I’m a Pakistani student living in Riyadh, Saudi Arabia. I completed my IGCSEs at Al-Rowad International Schools, where I now study Mathematics, Physics and Computer Science at International A Level. I expect to finish in 2028.</p><p>Aviation was one of my first interests. Studying crew management and aircraft design made me curious about the decisions and coordination behind a flight. I’ve since explored business and technology through short courses and events in Riyadh.</p></div>
+          <div class="about-biography"><p>I’m a Pakistani student living in Riyadh, Saudi Arabia. I completed my <abbr data-glossary title="International General Certificate of Secondary Education. A secondary school qualification typically taken before A Levels.">IGCSEs</abbr> at Al-Rowad International Schools, where I now study Mathematics, Physics and Computer Science at <abbr data-glossary title="International A Level. An advanced school qualification commonly taken before university.">International A Level</abbr>. I expect to finish in 2028.</p><p>Aviation was one of my first interests. Studying crew management and aircraft design made me curious about the decisions and coordination behind a flight. I’ve since explored business and technology through short courses and events in Riyadh.</p></div>
         </div>
         <figure><div class="media-window"><img src="/images/about-portrait.jpg" alt="Muhammad Subhan wearing a dark sweater in warm window light."
     width="1178" height="1334" loading="eager" decoding="async" fetchpriority="high"
@@ -57,32 +59,46 @@
       </header>
     </div>
     <div class="container"><nav class="about-jumps" aria-label="On this page"><ul>
-      <li><a class="action-link" href="#education"><span class="link-label">Education</span><span class="arrow arrow-down" aria-hidden="true"></span></a></li><li><a class="action-link" href="#experience"><span class="link-label">Experience</span><span class="arrow arrow-down" aria-hidden="true"></span></a></li><li><a class="action-link" href="#languages"><span class="link-label">Languages</span><span class="arrow arrow-down" aria-hidden="true"></span></a></li><li><a class="action-link" href="#courses"><span class="link-label">Independent courses</span><span class="arrow arrow-down" aria-hidden="true"></span></a></li><li><a class="action-link" href="#interests"><span class="link-label">Interests</span><span class="arrow arrow-down" aria-hidden="true"></span></a></li>
+      <li><a class="action-link" href="#education"><span class="link-label">Education</span><span class="arrow arrow-down" aria-hidden="true"></span></a></li><li><a class="action-link" href="#experience"><span class="link-label">Experience</span><span class="arrow arrow-down" aria-hidden="true"></span></a></li><li><a class="action-link" href="#languages"><span class="link-label">Languages</span><span class="arrow arrow-down" aria-hidden="true"></span></a></li><li><a class="action-link" href="#capabilities"><span class="link-label">Capabilities</span><span class="arrow arrow-down" aria-hidden="true"></span></a></li><li><a class="action-link" href="#courses"><span class="link-label">Independent courses</span><span class="arrow arrow-down" aria-hidden="true"></span></a></li><li><a class="action-link" href="#interests"><span class="link-label">Interests</span><span class="arrow arrow-down" aria-hidden="true"></span></a></li>
     </ul></nav>
-    <div class="about-records"><section class="section" id="education" aria-labelledby="education-title" tabindex="-1">
-    <h2 id="education-title">Education</h2><div class="section-content"><article class="entry">
+    <div class="about-records"><section class="section" id="education" aria-labelledby="education-title" tabindex="-1" data-share-section>
+    <div class="share-heading"><h2 id="education-title">Education</h2><button class="section-copy" type="button" data-copy-section="education" aria-label="Copy link to Education" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button></div><div class="section-content"><article class="entry" id="international-a-levels" data-share-section tabindex="-1">
     <p class="meta entry-date">Expected 2028</p>
-    <div><h3>International A Levels</h3>
+    <div><h3><abbr data-glossary title="International A Level. An advanced school qualification commonly taken before university.">International A Levels</abbr></h3>
       <p class="entry-context">Al-Rowad International Schools · In progress</p>
       <p>Mathematics, Physics and Computer Science.</p>
 
 
 
+      <div class="entry-actions">
 
+        <button class="section-copy" type="button" data-copy-section="international-a-levels" aria-label="Copy link to International A Levels" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button>
+      </div>
     </div>
-  </article><article class="entry">
+  </article><article class="entry" id="igcses" data-share-section tabindex="-1">
     <p class="meta entry-date"></p>
-    <div><h3>IGCSEs</h3>
+    <div><h3><abbr data-glossary title="International General Certificate of Secondary Education. A secondary school qualification typically taken before A Levels.">IGCSEs</abbr></h3>
       <p class="entry-context">Al-Rowad International Schools · Completed</p>
 
       <ul class="entry-subjects" aria-label="Subjects"><li>Accounting</li><li>Biology</li><li>Business Studies</li><li>Chemistry</li><li>Computer Science</li><li>English as a Second Language</li><li>Mathematics</li><li>Physics</li></ul>
 
 
+      <div class="entry-actions">
 
+        <button class="section-copy" type="button" data-copy-section="igcses" aria-label="Copy link to IGCSEs" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button>
+      </div>
     </div>
-  </article></div>
-  </section><section class="section" id="experience" aria-labelledby="experience-title" tabindex="-1">
-    <h2 id="experience-title">Experience</h2><div class="section-content"><article class="entry">
+  </article><a class="action-link education-journey" href="/journey/"><span class="link-label">Explore my journey</span><span class="arrow" aria-hidden="true"></span></a></div>
+  </section><section class="section" id="experience" aria-labelledby="experience-title" tabindex="-1" data-share-section>
+    <div class="share-heading"><h2 id="experience-title">Experience</h2><button class="section-copy" type="button" data-copy-section="experience" aria-label="Copy link to Experience" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button></div><div class="section-content"><article class="entry">
     <p class="meta entry-date">May 2025</p>
     <div><h3>School graduation ceremony</h3>
       <p class="entry-context">Student volunteer · Al-Rowad International Schools</p>
@@ -93,8 +109,10 @@
 
     </div>
   </article></div>
-  </section><section class="section" id="languages" aria-labelledby="languages-title" tabindex="-1">
-    <h2 id="languages-title">Languages</h2><div class="section-content"><dl class="language-list"><div>
+  </section><section class="section" id="languages" aria-labelledby="languages-title" tabindex="-1" data-share-section>
+    <div class="share-heading"><h2 id="languages-title">Languages</h2><button class="section-copy" type="button" data-copy-section="languages" aria-label="Copy link to Languages" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button></div><div class="section-content"><dl class="language-list"><div>
     <dt>Urdu</dt>
     <dd>Native language
 
@@ -132,70 +150,140 @@
     </dd>
   </div></dl>
   <p class="meta language-score-source">Duolingo scores shared on LinkedIn, updated <time datetime="2026-06-30">30 June 2026</time>.</p></div>
-  </section><section class="section" id="courses" aria-labelledby="courses-title" tabindex="-1">
-    <h2 id="courses-title">Independent courses</h2><div class="section-content"><article class="entry">
+  </section><section class="section" id="capabilities" aria-labelledby="capabilities-title" tabindex="-1" data-share-section>
+    <div class="share-heading"><h2 id="capabilities-title">Capabilities</h2><button class="section-copy" type="button" data-copy-section="capabilities" aria-label="Copy link to Capabilities" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button></div><div class="section-content"><details class="capability" open>
+      <summary>Web development</summary>
+      <dl class="capability-matrix">
+        <div><dt>What I studied</dt><dd>Studying Computer Science at <abbr data-glossary title="International A Level. An advanced school qualification commonly taken before university.">International A Level</abbr> and learning how a static site, browser JavaScript and small server functions work together.</dd></div>
+        <div><dt>Where I used it</dt><dd>I designed and built this portfolio with AI-assisted development, then reviewed how the layouts and interactions worked on phones, tablets and desktops.</dd></div>
+        <div><dt>What I’m developing next</dt><dd>Build smaller projects where I can work through the code and test the behaviour myself.</dd></div>
+      </dl>
+      <ul class="capability-evidence" aria-label="Related work and credentials"><li><a class="action-link" href="/work/layout-study/"><span class="link-label">Portfolio design</span><span class="arrow" aria-hidden="true"></span></a></li><li><a class="action-link" href="/about/#international-a-levels"><span class="link-label">International A Levels</span><span class="arrow" aria-hidden="true"></span></a></li></ul>
+    </details><details class="capability">
+      <summary>Negotiation and communication</summary>
+      <dl class="capability-matrix">
+        <div><dt>What I studied</dt><dd>Practised structuring a spoken argument, listening for the other side’s priorities and finding room to negotiate.</dd></div>
+        <div><dt>Where I used it</dt><dd>I used those skills in workshop simulations. I also helped with guest seating and backstage coordination during a school graduation.</dd></div>
+        <div><dt>What I’m developing next</dt><dd>Practise giving a short briefing that makes the main point clear and leaves room for questions.</dd></div>
+      </dl>
+      <ul class="capability-evidence" aria-label="Related work and credentials"><li><a class="action-link" href="/work/lead-influence-workshop/"><span class="link-label">Negotiation workshop</span><span class="arrow" aria-hidden="true"></span></a></li><li><a class="action-link" href="/work/graduation-volunteering/"><span class="link-label">Graduation volunteering</span><span class="arrow" aria-hidden="true"></span></a></li></ul>
+    </details><details class="capability">
+      <summary>Commercial and technology research</summary>
+      <dl class="capability-matrix">
+        <div><dt>What I studied</dt><dd>Studied business finance and explored how digital identity and permissions work when software acts on someone’s behalf.</dd></div>
+        <div><dt>Where I used it</dt><dd>I wrote about accountability at the UNESCO AI forum and about the permissions that businesses have to check in <abbr data-glossary title="Shopping in which software acts on someone’s behalf, such as finding a product or placing an order within agreed limits.">agentic commerce</abbr>.</dd></div>
+        <div><dt>What I’m developing next</dt><dd>Learn how companies allocate risk in transactions and in contracts for new technology.</dd></div>
+      </dl>
+      <ul class="capability-evidence" aria-label="Related work and credentials"><li><a class="action-link" href="/work/unesco-ai-forum/"><span class="link-label">UNESCO AI forum</span><span class="arrow" aria-hidden="true"></span></a></li><li><a class="action-link" href="/work/money2020-middle-east/"><span class="link-label">Money20/20</span><span class="arrow" aria-hidden="true"></span></a></li><li><a class="action-link" href="/about/#course-business-finance"><span class="link-label">Business finance</span><span class="arrow" aria-hidden="true"></span></a></li></ul>
+    </details><details class="capability">
+      <summary>Aviation systems</summary>
+      <dl class="capability-matrix">
+        <div><dt>What I studied</dt><dd>Took independent courses in aircraft design, crew coordination and airport management.</dd></div>
+        <div><dt>Where I used it</dt><dd>I spoke with people at the Global Airports Forum about how airport teams respond when a delay affects gates, baggage and the next flight.</dd></div>
+        <div><dt>What I’m developing next</dt><dd>Keep looking at how airport teams use better information to make better decisions when plans change.</dd></div>
+      </dl>
+      <ul class="capability-evidence" aria-label="Related work and credentials"><li><a class="action-link" href="/work/global-airports-forum/"><span class="link-label">Global Airports Forum</span><span class="arrow" aria-hidden="true"></span></a></li><li><a class="action-link" href="/about/#course-aircraft-design"><span class="link-label">Aircraft design</span><span class="arrow" aria-hidden="true"></span></a></li><li><a class="action-link" href="/about/#course-crew-management"><span class="link-label">Crew management</span><span class="arrow" aria-hidden="true"></span></a></li></ul>
+    </details></div>
+  </section><section class="section" id="courses" aria-labelledby="courses-title" tabindex="-1" data-share-section>
+    <div class="share-heading"><h2 id="courses-title">Independent courses</h2><button class="section-copy" type="button" data-copy-section="courses" aria-label="Copy link to Independent courses" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button></div><div class="section-content"><article class="entry" id="course-sales-fundamentals" data-share-section tabindex="-1">
     <p class="meta entry-date">July 2026</p>
     <div><h3>Sales Fundamentals for Entrepreneurs</h3>
       <p class="entry-context">LinkedIn Learning</p>
 
 
 
-      <a class="action-link entry-certificate" href="https://www.linkedin.com/learning/certificates/df10c19e671351a32002e9151bb17200b70d64f4c6d8ff0494e88b633529c6b2/"><span class="link-label">View certificate<span class="visually-hidden"> for Sales Fundamentals for Entrepreneurs</span></span><span class="arrow arrow-external" aria-hidden="true"></span></a>
-
+      <details class="entry-details" data-open-for-section-link><summary>Course details<span class="visually-hidden"> for Sales Fundamentals for Entrepreneurs</span></summary><div class="entry-detail-copy"><p>The course covered finding the right customers, explaining the value of an offer, listening carefully and responding to objections.</p><p>It gave me a practical way to think about what a customer needs before deciding how to explain a product or service.</p></div></details>
+      <div class="entry-actions">
+        <a class="action-link entry-certificate" href="https://www.linkedin.com/learning/certificates/df10c19e671351a32002e9151bb17200b70d64f4c6d8ff0494e88b633529c6b2/"><span class="link-label">View certificate<span class="visually-hidden"> for Sales Fundamentals for Entrepreneurs</span></span><span class="arrow arrow-external" aria-hidden="true"></span></a>
+        <button class="section-copy" type="button" data-copy-section="course-sales-fundamentals" aria-label="Copy link to Sales Fundamentals for Entrepreneurs" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button>
+      </div>
     </div>
-  </article><article class="entry">
+  </article><article class="entry" id="course-business-finance" data-share-section tabindex="-1">
     <p class="meta entry-date">October 2025</p>
     <div><h3>Introduction to Business Finance</h3>
       <p class="entry-context">Alison</p>
 
 
 
-      <a class="action-link entry-certificate" href="https://alison.com/verify/640283d4a4"><span class="link-label">View certificate<span class="visually-hidden"> for Introduction to Business Finance</span></span><span class="arrow arrow-external" aria-hidden="true"></span></a>
-
+      <details class="entry-details" data-open-for-section-link><summary>Course details<span class="visually-hidden"> for Introduction to Business Finance</span></summary><div class="entry-detail-copy"><p>The course introduced funding options, investment analysis and how organisations evaluate financial decisions.</p><p>It gave me a starting point for understanding how companies compare investment choices and decide which risks to take on.</p></div></details>
+      <div class="entry-actions">
+        <a class="action-link entry-certificate" href="https://alison.com/verify/640283d4a4"><span class="link-label">View certificate<span class="visually-hidden"> for Introduction to Business Finance</span></span><span class="arrow arrow-external" aria-hidden="true"></span></a>
+        <button class="section-copy" type="button" data-copy-section="course-business-finance" aria-label="Copy link to Introduction to Business Finance" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button>
+      </div>
     </div>
-  </article><article class="entry">
+  </article><article class="entry" id="course-aircraft-design" data-share-section tabindex="-1">
     <p class="meta entry-date">May 2025</p>
     <div><h3>Introduction to Aircraft Design</h3>
       <p class="entry-context">Alison</p>
 
 
 
-      <a class="action-link entry-certificate" href="https://alison.com/verify/f1e8c7db59"><span class="link-label">View certificate<span class="visually-hidden"> for Introduction to Aircraft Design</span></span><span class="arrow arrow-external" aria-hidden="true"></span></a>
-
+      <details class="entry-details" data-open-for-section-link><summary>Course details<span class="visually-hidden"> for Introduction to Aircraft Design</span></summary><div class="entry-detail-copy"><p>The course introduced aircraft configuration, component design and <abbr data-glossary title="The condition of an aircraft being safe and fit to fly under applicable standards.">airworthiness</abbr>.</p><p>It helped me connect the shape and layout of an aircraft to the engineering choices behind its performance.</p></div></details>
+      <div class="entry-actions">
+        <a class="action-link entry-certificate" href="https://alison.com/verify/f1e8c7db59"><span class="link-label">View certificate<span class="visually-hidden"> for Introduction to Aircraft Design</span></span><span class="arrow arrow-external" aria-hidden="true"></span></a>
+        <button class="section-copy" type="button" data-copy-section="course-aircraft-design" aria-label="Copy link to Introduction to Aircraft Design" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button>
+      </div>
     </div>
-  </article><article class="entry">
+  </article><article class="entry" id="course-business-administration" data-share-section tabindex="-1">
     <p class="meta entry-date">December 2024</p>
     <div><h3>Diploma in Business Administration</h3>
       <p class="entry-context">Alison</p>
 
 
 
-      <a class="action-link entry-certificate" href="https://alison.com/verify/658694076c"><span class="link-label">View certificate<span class="visually-hidden"> for Diploma in Business Administration</span></span><span class="arrow arrow-external" aria-hidden="true"></span></a>
-
+      <details class="entry-details" data-open-for-section-link><summary>Course details<span class="visually-hidden"> for Diploma in Business Administration</span></summary><div class="entry-detail-copy"><p>The diploma covered how organisations are structured, how administrative work supports operations and the basics of customer service.</p><p>It gave me a clearer picture of how the day-to-day work of different teams fits together.</p></div></details>
+      <div class="entry-actions">
+        <a class="action-link entry-certificate" href="https://alison.com/verify/658694076c"><span class="link-label">View certificate<span class="visually-hidden"> for Diploma in Business Administration</span></span><span class="arrow arrow-external" aria-hidden="true"></span></a>
+        <button class="section-copy" type="button" data-copy-section="course-business-administration" aria-label="Copy link to Diploma in Business Administration" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button>
+      </div>
     </div>
-  </article><article class="entry">
+  </article><article class="entry" id="course-aviation-management" data-share-section tabindex="-1">
     <p class="meta entry-date">March 2024</p>
     <div><h3>Basics of Aviation Management</h3>
       <p class="entry-context">Alison</p>
 
 
 
-      <a class="action-link entry-certificate" href="https://alison.com/verify/cc4ec37d25"><span class="link-label">View certificate<span class="visually-hidden"> for Basics of Aviation Management</span></span><span class="arrow arrow-external" aria-hidden="true"></span></a>
-
+      <details class="entry-details" data-open-for-section-link><summary>Course details<span class="visually-hidden"> for Basics of Aviation Management</span></summary><div class="entry-detail-copy"><p>The course looked at how airports and airlines operate, with topics including airport security, risk management and the responsibilities of aviation managers.</p><p>It helped me see how much coordination takes place on the ground before passengers board.</p></div></details>
+      <div class="entry-actions">
+        <a class="action-link entry-certificate" href="https://alison.com/verify/cc4ec37d25"><span class="link-label">View certificate<span class="visually-hidden"> for Basics of Aviation Management</span></span><span class="arrow arrow-external" aria-hidden="true"></span></a>
+        <button class="section-copy" type="button" data-copy-section="course-aviation-management" aria-label="Copy link to Basics of Aviation Management" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button>
+      </div>
     </div>
-  </article><article class="entry">
+  </article><article class="entry" id="course-crew-management" data-share-section tabindex="-1">
     <p class="meta entry-date">January 2024</p>
     <div><h3>Crew Management in Multi-Pilot Aircraft</h3>
       <p class="entry-context">Alison</p>
 
 
 
-      <a class="action-link entry-certificate" href="https://alison.com/certification/check/2y10MjgCMik9bOBpRxHAjte8mp7VozAs2192PrAxkYWLGKyTYqa62"><span class="link-label">View certificate<span class="visually-hidden"> for Crew Management in Multi-Pilot Aircraft</span></span><span class="arrow arrow-external" aria-hidden="true"></span></a>
-
+      <details class="entry-details" data-open-for-section-link><summary>Course details<span class="visually-hidden"> for Crew Management in Multi-Pilot Aircraft</span></summary><div class="entry-detail-copy"><p>The course covered how pilots share information and responsibilities, manage threats and errors, and make decisions in a multi-pilot cockpit.</p><p>It introduced me to the role of clear communication and coordination when a team has to act under pressure.</p></div></details>
+      <div class="entry-actions">
+        <a class="action-link entry-certificate" href="https://alison.com/certification/check/2y10MjgCMik9bOBpRxHAjte8mp7VozAs2192PrAxkYWLGKyTYqa62"><span class="link-label">View certificate<span class="visually-hidden"> for Crew Management in Multi-Pilot Aircraft</span></span><span class="arrow arrow-external" aria-hidden="true"></span></a>
+        <button class="section-copy" type="button" data-copy-section="course-crew-management" aria-label="Copy link to Crew Management in Multi-Pilot Aircraft" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button>
+      </div>
     </div>
   </article></div>
-  </section><section class="section" id="interests" aria-labelledby="interests-title" tabindex="-1">
-    <h2 id="interests-title">Interests</h2><div class="section-content"><p>I’m an avid reader and am currently working on The Eleventh Rehearsal, a psychological thriller about memory and the stories people tell about the past.</p><p>I’m interested in how companies make decisions, particularly when acquiring a business or using new technology. That’s part of what draws me to corporate and commercial law.</p></div>
+  </section><section class="section" id="interests" aria-labelledby="interests-title" tabindex="-1" data-share-section>
+    <div class="share-heading"><h2 id="interests-title">Interests</h2><button class="section-copy" type="button" data-copy-section="interests" aria-label="Copy link to Interests" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button></div><div class="section-content"><p>I’m an avid reader and am currently working on The Eleventh Rehearsal, a psychological thriller about memory and the stories people tell about the past.</p><p>I’m interested in how companies make decisions, particularly when acquiring a business or using new technology. That’s part of what draws me to corporate and commercial law.</p></div>
   </section></div></div>
   </div></main>
   <footer class="site-footer"><div class="container footer-inner">
@@ -210,11 +298,20 @@
     </details>
     </div>
     <nav class="footer-nav" aria-label="Footer">
-      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
+      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/journey/">Journey</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
       <a class="footer-link" href="/#now">Now</a>
+
       <a class="button-link footer-contact" href="/contact/"><span class="link-label">Get in touch</span><span class="arrow" aria-hidden="true"></span></a>
     </nav>
   </div></footer>
+  <dialog class="section-link-dialog" aria-labelledby="section-link-title">
+    <form method="dialog">
+      <h2 id="section-link-title">Share this section</h2>
+      <label for="section-link-url">Copy this address</label>
+      <input id="section-link-url" type="text" readonly>
+      <button class="button-link" type="submit">Done</button>
+    </form>
+  </dialog>
   <dialog class="command-palette" aria-labelledby="command-title">
     <form class="command-form">
       <div class="command-heading">

@@ -48,6 +48,7 @@
   "duolingoScoresUpdated": "2026-06-30",
   "education": [
     {
+      "id": "international-a-levels",
       "date": "Expected 2028",
       "title": "International A Levels",
       "institution": "Al-Rowad International Schools",
@@ -56,6 +57,7 @@
       "description": "Mathematics, Physics and Computer Science."
     },
     {
+      "id": "igcses",
       "title": "IGCSEs",
       "institution": "Al-Rowad International Schools",
       "status": "Completed",
@@ -73,39 +75,75 @@
   ],
   "courses": [
     {
+      "id": "course-sales-fundamentals",
       "date": "July 2026",
       "title": "Sales Fundamentals for Entrepreneurs",
       "institution": "LinkedIn Learning",
+      "evidence": { "label": "Sales fundamentals", "topics": ["business"] },
+      "details": [
+        "The course covered finding the right customers, explaining the value of an offer, listening carefully and responding to objections.",
+        "It gave me a practical way to think about what a customer needs before deciding how to explain a product or service."
+      ],
       "certificateUrl": "https://www.linkedin.com/learning/certificates/df10c19e671351a32002e9151bb17200b70d64f4c6d8ff0494e88b633529c6b2/"
     },
     {
+      "id": "course-business-finance",
       "date": "October 2025",
       "title": "Introduction to Business Finance",
       "institution": "Alison",
+      "evidence": { "label": "Business finance", "topics": ["business"] },
+      "details": [
+        "The course introduced funding options, investment analysis and how organisations evaluate financial decisions.",
+        "It gave me a starting point for understanding how companies compare investment choices and decide which risks to take on."
+      ],
       "certificateUrl": "https://alison.com/verify/640283d4a4"
     },
     {
+      "id": "course-aircraft-design",
       "date": "May 2025",
       "title": "Introduction to Aircraft Design",
       "institution": "Alison",
+      "evidence": { "label": "Aircraft design", "topics": ["aviation", "technology"] },
+      "details": [
+        "The course introduced aircraft configuration, component design and airworthiness.",
+        "It helped me connect the shape and layout of an aircraft to the engineering choices behind its performance."
+      ],
       "certificateUrl": "https://alison.com/verify/f1e8c7db59"
     },
     {
+      "id": "course-business-administration",
       "date": "December 2024",
       "title": "Diploma in Business Administration",
       "institution": "Alison",
+      "evidence": { "label": "Business administration", "topics": ["business"] },
+      "details": [
+        "The diploma covered how organisations are structured, how administrative work supports operations and the basics of customer service.",
+        "It gave me a clearer picture of how the day-to-day work of different teams fits together."
+      ],
       "certificateUrl": "https://alison.com/verify/658694076c"
     },
     {
+      "id": "course-aviation-management",
       "date": "March 2024",
       "title": "Basics of Aviation Management",
       "institution": "Alison",
+      "evidence": { "label": "Aviation management", "topics": ["aviation", "business"] },
+      "details": [
+        "The course looked at how airports and airlines operate, with topics including airport security, risk management and the responsibilities of aviation managers.",
+        "It helped me see how much coordination takes place on the ground before passengers board."
+      ],
       "certificateUrl": "https://alison.com/verify/cc4ec37d25"
     },
     {
+      "id": "course-crew-management",
       "date": "January 2024",
       "title": "Crew Management in Multi-Pilot Aircraft",
       "institution": "Alison",
+      "evidence": { "label": "Crew management", "topics": ["aviation", "communication"] },
+      "details": [
+        "The course covered how pilots share information and responsibilities, manage threats and errors, and make decisions in a multi-pilot cockpit.",
+        "It introduced me to the role of clear communication and coordination when a team has to act under pressure."
+      ],
       "certificateUrl": "https://alison.com/certification/check/2y10MjgCMik9bOBpRxHAjte8mp7VozAs2192PrAxkYWLGKyTYqa62"
     }
   ],
@@ -119,9 +157,58 @@
     }
   ],
   "achievements": [],
+  "capabilities": [
+    {
+      "title": "Web development",
+      "learning": "Studying Computer Science at International A Level and learning how a static site, browser JavaScript and small server functions work together.",
+      "application": "I designed and built this portfolio with AI-assisted development, then reviewed how the layouts and interactions worked on phones, tablets and desktops.",
+      "next": "Build smaller projects where I can work through the code and test the behaviour myself.",
+      "records": ["work:layout-study", "education:international-a-levels"]
+    },
+    {
+      "title": "Negotiation and communication",
+      "learning": "Practised structuring a spoken argument, listening for the other side’s priorities and finding room to negotiate.",
+      "application": "I used those skills in workshop simulations. I also helped with guest seating and backstage coordination during a school graduation.",
+      "next": "Practise giving a short briefing that makes the main point clear and leaves room for questions.",
+      "records": ["work:lead-influence-workshop", "work:graduation-volunteering"]
+    },
+    {
+      "title": "Commercial and technology research",
+      "learning": "Studied business finance and explored how digital identity and permissions work when software acts on someone’s behalf.",
+      "application": "I wrote about accountability at the UNESCO AI forum and about the permissions that businesses have to check in agentic commerce.",
+      "next": "Learn how companies allocate risk in transactions and in contracts for new technology.",
+      "records": ["work:unesco-ai-forum", "work:money2020-middle-east", "course:course-business-finance"]
+    },
+    {
+      "title": "Aviation systems",
+      "learning": "Took independent courses in aircraft design, crew coordination and airport management.",
+      "application": "I spoke with people at the Global Airports Forum about how airport teams respond when a delay affects gates, baggage and the next flight.",
+      "next": "Keep looking at how airport teams use better information to make better decisions when plans change.",
+      "records": ["work:global-airports-forum", "course:course-aircraft-design", "course:course-crew-management"]
+    }
+  ],
+  "journey": {
+    "current": ["education:international-a-levels", "work:layout-study", "writing:the-eleventh-rehearsal"],
+    "milestones": [
+      { "record": "work:unesco-ai-forum" },
+      { "record": "work:money2020-middle-east" },
+      { "record": "course:course-sales-fundamentals" },
+      { "record": "education:igcses", "date": "May–June 2026" },
+      { "record": "work:black-hat-mea" },
+      { "record": "work:global-airports-forum" },
+      { "record": "course:course-business-finance" },
+      { "record": "work:graduation-volunteering" },
+      { "record": "course:course-aircraft-design" },
+      { "record": "course:course-business-administration" },
+      { "record": "course:course-aviation-management" },
+      { "record": "course:course-crew-management" }
+    ],
+    "lookingAheadTitle": "Studying law"
+  },
   "projects": [
     {
       "slug": "unesco-ai-forum",
+      "evidence": { "label": "UNESCO AI forum", "topics": ["technology"] },
       "title": "UNESCO Global Forum on the Ethics of AI",
       "category": "Event",
       "kind": "event",
@@ -175,6 +262,7 @@
     },
     {
       "slug": "lead-influence-workshop",
+      "evidence": { "label": "Negotiation workshop", "topics": ["communication", "business"] },
       "title": "Lead & Influence: Negotiation and Communication Workshop",
       "category": "Two-day workshop · NY Empire Academy",
       "selected": true,
@@ -202,6 +290,7 @@
     },
     {
       "slug": "graduation-volunteering",
+      "evidence": { "label": "Graduation volunteering", "topics": ["communication"] },
       "title": "Graduation ceremony volunteering",
       "category": "Volunteering · Al-Rowad International Schools",
       "date": "May 2025",
@@ -218,6 +307,7 @@
     },
     {
       "slug": "layout-study",
+      "evidence": { "label": "Portfolio design", "topics": ["technology"] },
       "title": "Designing a personal portfolio",
       "category": "Independent project",
       "description": "I built this site to bring my education, projects and interests together in one place.",
@@ -232,6 +322,7 @@
     },
     {
       "slug": "money2020-middle-east",
+      "evidence": { "label": "Money20/20", "topics": ["business", "technology"] },
       "title": "Money20/20 Middle East",
       "category": "Event",
       "kind": "event",
@@ -251,6 +342,7 @@
     },
     {
       "slug": "leap-riyadh",
+      "evidence": { "label": "LEAP Riyadh", "topics": ["technology"] },
       "title": "LEAP Riyadh",
       "category": "Technology event",
       "kind": "event",
@@ -270,6 +362,7 @@
     },
     {
       "slug": "black-hat-mea",
+      "evidence": { "label": "Black Hat MEA", "topics": ["technology"] },
       "title": "Black Hat Middle East & Africa",
       "category": "Cybersecurity event",
       "kind": "event",
@@ -289,6 +382,7 @@
     },
     {
       "slug": "global-airports-forum",
+      "evidence": { "label": "Global Airports Forum", "topics": ["aviation"] },
       "title": "Global Airports Forum",
       "category": "Aviation event",
       "kind": "event",
@@ -348,11 +442,20 @@
       { "label": "LinkedIn", "display": "Connect on LinkedIn", "url": "https://www.linkedin.com/in/ms910/" }
     ],
     "topics": [
-      { "title": "Student opportunities", "description": "Work experience, workshops, or events in law, business, or technology.", "subject": "Student opportunity" },
-      { "title": "Projects and ideas", "description": "A project you’re working on, an idea to explore together, or feedback on the portfolio.", "subject": "Project or idea" },
-      { "title": "Writing and reading", "description": "Thoughts on The Eleventh Rehearsal, book recommendations, or a conversation about fiction.", "subject": "Writing and reading" }
+      { "title": "Student opportunities", "prompt": "Tell me about the organisation, the opportunity, any deadline and what you’d like me to do." },
+      { "title": "Projects and ideas", "prompt": "Describe the project or idea, what stage it’s at and how you’d like me to help." },
+      { "title": "Writing and reading", "prompt": "Tell me which book, scene or idea you’d like to talk about." }
     ],
     "cv": null
+  },
+  "siteUpdate": {
+    "id": "2026-11-18-journey-and-evidence",
+    "date": "2026-11-18",
+    "items": [
+      { "href": "/work/#evidence", "label": "Evidence map", "description": "Explore courses, events and projects by subject." },
+      { "href": "/journey/", "label": "Journey", "description": "Follow the milestones from independent courses to my current work." },
+      { "href": "/about/#capabilities", "label": "Capabilities", "description": "See what I’ve studied and where I’ve put it into practice." }
+    ]
   },
   "analytics": {
     "clarityProject": "yu3io6wskv",

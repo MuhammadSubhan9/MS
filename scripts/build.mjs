@@ -43,7 +43,7 @@ export async function build({ preview = false } = {}) {
   }
   const pages = createPages(data);
   await verifyLocalFiles(pages);
-  const navigation = ['/', '/about/', '/work/', '/writing/', '/contact/']
+  const navigation = ['/', '/about/', '/journey/', '/work/', '/writing/', '/contact/']
     .map(path => pages.find(page => page.path === path)).filter(Boolean);
   let origin = '';
   if (data.seo.origin) {

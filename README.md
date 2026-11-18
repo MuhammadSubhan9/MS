@@ -17,6 +17,10 @@ Use `workIntroduction` and `writingIntroduction` for approved index introduction
 
 The contact form uses the verified SilentForms endpoint in `contact.formEndpoint`. The public email shown on the page uses `contact.email`. To replace the delivery service, use an activated HTTPS endpoint that accepts form data and returns a JSON acknowledgement after accepting the message. The form recognises `ok: true`, `status: "success"` or `success: true`.
 
+The evidence map uses the subject tags on projects and courses. The capabilities and Journey sections refer to the same records by keys such as `work:layout-study` and `education:igcses`. Keep IDs stable so shared links keep working. Enter Journey milestones newest first and use date labels that match the source records.
+
+For a major site update, replace `siteUpdate` in `content/site.json` with a new ID, date and a few links to the changes. Returning visitors using the same browser can see the notice after the ID changes, and the homepage footer always links to the latest briefing.
+
 The optional `portrait` and project `image` fields accept `src`, descriptive `alt`, integer `width` and `height`, optional `caption`, and optional `sources` entries with `src` and `width` for responsive delivery. Supply compressed WebP or AVIF assets at appropriate sizes. The Home portrait is framed in a 4:5.8 crop and the featured Work image uses 16:10. The image directory includes WebP, JPEG and PNG assets.
 
 The canonical domain is [muhammadsubhan.pages.dev](https://muhammadsubhan.pages.dev/). Add an approved absolute social image URL to `seo.image` if available. The local server binds to loopback only.

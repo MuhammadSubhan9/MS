@@ -35,6 +35,17 @@ if (contactForm) {
   const status = contactForm.querySelector('.contact-form-status');
   const statusText = status.querySelector('.contact-status-text');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const reason = contactForm.elements.namedItem('reason');
+  const message = contactForm.elements.namedItem('message');
+
+  function updateMessagePrompt() {
+    message.placeholder = reason.selectedOptions[0]?.dataset.messagePrompt || '';
+  }
+
+  reason.addEventListener('change', updateMessagePrompt);
+  contactForm.addEventListener('reset', () => queueMicrotask(updateMessagePrompt));
+  addEventListener('pageshow', updateMessagePrompt);
+  updateMessagePrompt();
 
   function updateError(field) {
     const error = document.getElementById(`${field.id}-error`);

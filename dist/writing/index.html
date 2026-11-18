@@ -18,6 +18,8 @@
   <link rel="stylesheet" href="/novel.css">
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
+  <link rel="stylesheet" href="/portfolio-features.css">
+  <script src="/portfolio-features.js" defer></script>
   <script src="/novel.js" defer blocking="render"></script>
   <script src="/novel-subscription.js" defer></script>
   <link rel="stylesheet" href="/commands.css">
@@ -74,7 +76,7 @@
       </div>
     </section>
 
-    <section class="novel-synopsis" id="synopsis" aria-labelledby="synopsis-title" tabindex="-1">
+    <section class="novel-synopsis" id="synopsis" aria-labelledby="synopsis-title" tabindex="-1" data-share-section>
       <div class="synopsis-still">
         <img src="/images/rehearsal-conservatory-1280.webp"
           srcset="/images/rehearsal-conservatory-768.webp 768w, /images/rehearsal-conservatory-1280.webp 1280w"
@@ -90,17 +92,25 @@
           <div class="novel-waveform" aria-hidden="true" hidden>
             <canvas width="680" height="118" data-waveform></canvas>
           </div>
-          <a class="novel-text-link" href="#excerpt" data-open-reader>Start reading <span aria-hidden="true">↗</span></a>
+          <div class="novel-section-actions">
+            <a class="novel-text-link" href="#excerpt" data-open-reader>Start reading <span aria-hidden="true">↗</span></a>
+            <button class="section-copy" type="button" data-copy-section="synopsis" aria-label="Copy link to the synopsis" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="novel-excerpt" id="excerpt" aria-labelledby="excerpt-title" tabindex="-1">
+    <section class="novel-excerpt" id="excerpt" aria-labelledby="excerpt-title" tabindex="-1" data-share-section>
       <div class="novel-wrap excerpt-wrap">
         <header class="excerpt-heading">
           <p class="novel-label">An excerpt</p>
           <h2 id="excerpt-title">The opening pages</h2>
           <p class="excerpt-chapter">Chapter one <span aria-hidden="true">/</span> Room Tone</p>
+          <button class="section-copy" type="button" data-copy-section="excerpt" aria-label="Copy link to the opening pages" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button>
         </header>
         <div data-inline-reader>
     <div class="book-reader" data-reader>
@@ -211,6 +221,14 @@
     </details></div>
     <a class="novel-text-link" href="/">Back to the portfolio <span aria-hidden="true">↗</span></a>
   </footer>
+  <dialog class="section-link-dialog" aria-labelledby="section-link-title">
+    <form method="dialog">
+      <h2 id="section-link-title">Share this section</h2>
+      <label for="section-link-url">Copy this address</label>
+      <input id="section-link-url" type="text" readonly>
+      <button class="button-link" type="submit">Done</button>
+    </form>
+  </dialog>
   <dialog class="command-palette" aria-labelledby="command-title">
     <form class="command-form">
       <div class="command-heading">

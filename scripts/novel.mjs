@@ -1,7 +1,8 @@
-import { escape, image, paragraphs, safeLink } from './components.mjs';
+import { copySectionButton, escape, image, paragraphs, safeLink } from './components.mjs';
 import { commandAssets, commandPalette } from './commands.mjs';
 import { clarityTag, googleAnalytics } from './analytics.mjs';
 import excerpt from '../content/eleventh-rehearsal.json' with { type: 'json' };
+import { portfolioAssets, sectionLinkDialog } from './portfolio-features.mjs';
 
 const slug = 'the-eleventh-rehearsal';
 export const novelPath = '/writing/';
@@ -89,7 +90,7 @@ export function novelContent(book, author) {
       </div>
     </section>
 
-    <section class="novel-synopsis" id="synopsis" aria-labelledby="synopsis-title" tabindex="-1">
+    <section class="novel-synopsis" id="synopsis" aria-labelledby="synopsis-title" tabindex="-1" data-share-section>
       <div class="synopsis-still">
         <img src="/images/rehearsal-conservatory-1280.webp"
           srcset="/images/rehearsal-conservatory-768.webp 768w, /images/rehearsal-conservatory-1280.webp 1280w"
@@ -105,17 +106,21 @@ export function novelContent(book, author) {
           <div class="novel-waveform" aria-hidden="true" hidden>
             <canvas width="680" height="118" data-waveform></canvas>
           </div>
-          <a class="novel-text-link" href="#excerpt" data-open-reader>Start reading <span aria-hidden="true">↗</span></a>
+          <div class="novel-section-actions">
+            <a class="novel-text-link" href="#excerpt" data-open-reader>Start reading <span aria-hidden="true">↗</span></a>
+            ${copySectionButton('synopsis', 'the synopsis')}
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="novel-excerpt" id="excerpt" aria-labelledby="excerpt-title" tabindex="-1">
+    <section class="novel-excerpt" id="excerpt" aria-labelledby="excerpt-title" tabindex="-1" data-share-section>
       <div class="novel-wrap excerpt-wrap">
         <header class="excerpt-heading">
           <p class="novel-label">An excerpt</p>
           <h2 id="excerpt-title">The opening pages</h2>
           <p class="excerpt-chapter">Chapter one <span aria-hidden="true">/</span> ${escape(excerpt.chapter)}</p>
+          ${copySectionButton('excerpt', 'the opening pages')}
         </header>
         <div data-inline-reader>${reader(book, author)}</div>
       </div>
@@ -183,6 +188,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
   <link rel="stylesheet" href="/novel.css">
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
+  ${portfolioAssets}
   <script src="/novel.js" defer blocking="render"></script>
   <script src="/novel-subscription.js" defer></script>
   ${data.now ? commandAssets : ''}
@@ -206,6 +212,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
     <div><p>${escape(page.label)}</p><span>A novel in progress by ${escape(data.name)}</span>${google.notice}</div>
     <a class="novel-text-link" href="/">Back to the portfolio <span aria-hidden="true">↗</span></a>
   </footer>
+  ${sectionLinkDialog}
   ${data.now ? commandPalette : ''}
 </body>
 </html>`;

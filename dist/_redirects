@@ -3,8 +3,9 @@
 /about.html /about/ 301
 /education.html /about/#education 301
 /education /about/#education 301
-/journey.html /about/#experience 301
-/journey /about/#experience 301
+/journey.html /journey/ 301
+/timeline.html /journey/ 301
+/timeline /journey/ 301
 /direction.html /about/#interests 301
 /direction /about/#interests 301
 /direction/transactions.html /about/#interests 301

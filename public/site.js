@@ -2,7 +2,7 @@ document.documentElement.classList.add('js');
 const button = document.querySelector('.menu');
 const navigation = document.querySelector('#navigation');
 if (button && navigation) {
-  const mobile = matchMedia('(max-width: 700px)');
+  const mobile = matchMedia('(max-width: 800px)');
   function close() {
     navigation.hidden = mobile.matches;
     button.setAttribute('aria-expanded', 'false');

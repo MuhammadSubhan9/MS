@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
+  <link rel="stylesheet" href="/portfolio-features.css">
+  <script src="/portfolio-features.js" defer></script>
 
 
   <link rel="stylesheet" href="/commands.css">
@@ -37,7 +39,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
-      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/">About</a><a href="/work/" aria-current="page">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
+      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/">About</a><a href="/journey/">Journey</a><a href="/work/" aria-current="page">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
     </div>
   </header>
   <main class="container" id="main" tabindex="-1">
@@ -56,7 +58,9 @@
     <figcaption>Forum delegates in Riyadh. Photo by the Saudi Press Agency.</figcaption></figure>
         <div class="reading article-body"><p>I went to the fourth UNESCO Global Forum on the Ethics of AI expecting something closer to LEAP. I thought I would spend most of the day seeing what the latest tools could do. Instead, I listened to people from governments, international organisations, research and industry work through what should happen when those tools are put to use. It was the first edition of the forum held in the Gulf. UNESCO reported more than 10,000 participants and delegations from over 50 Member States across the event in Riyadh.</p>
           <div class="work-detail-parts"><section class="article-section"><h2>Who takes responsibility?</h2><p>The question I kept coming back to was who has to answer when AI causes harm. Think of a company using software to screen applicants. If the software rejects someone unfairly, the company needs to know who can explain what happened, who can review the decision and who can put it right. The answers get more complicated when the company, the vendor and the people affected are in different countries. The forum made the practical side of human oversight easier for me to see.</p></section><section class="article-section"><h2>From principles to implementation</h2><p>I learned more about UNESCO’s 2021 Recommendation on the Ethics of Artificial Intelligence. It gives countries a shared framework for issues such as privacy, transparency, human oversight and fair treatment. One development at the forum was RAM 2.0, an updated readiness assessment that helps countries identify gaps in their laws, institutions and technical capacity. UNESCO also released a synthesis of 55 country reports. These tools made it easier to see how governments can turn a broad commitment into work they can actually measure.</p></section><section class="article-section"><h2>The resources behind the technology</h2><p>I had mostly thought about AI ethics through the decisions a system makes about people. The environmental discussions gave me another set of questions to consider. Scaling AI can put pressure on electricity, water and other resources, and those costs also have to be part of decisions about deployment. UNESCO launched a toolkit at the forum to help policymakers account for those impacts.</p></section><section class="article-section"><h2>Conversations beyond the sessions</h2><p>I spoke with people from different countries and backgrounds between sessions. Those conversations helped me understand why a shared framework can matter even when countries have different priorities. Some are deciding how to supervise systems they already rely on. Others are still building the institutions and skills they would need to do that. Hearing how people approached those questions was one of the most memorable parts of the day.</p></section><section class="article-section"><h2>What I took away for corporate law</h2><p>My interest in corporate law gave me another way into the discussion. When a business brings an AI system into its operations, there are questions about what data the vendor can use, who can investigate a problem and what the company has agreed to do when something goes wrong. I left wanting to understand how businesses and governments turn ethical commitments into decisions people can review and challenge.</p></section></div>
-          <section class="article-section"><h2>Sources</h2><ul><li><a href="https://www.linkedin.com/feed/update/urn:li:activity:7505991669549256705/">My reflection on the forum</a></li><li><a href="https://www.unesco.org/en/articles/global-cooperation-ethical-ai-governance-reinforced-unescos-4th-global-forum-ethics-ai-saudi-arabia">UNESCO’s forum report and resources</a></li><li><a href="https://spa.gov.sa/en/w2679667">Forum coverage by the Saudi Press Agency</a></li><li><a href="https://www.unesco.org/en/artificial-intelligence/recommendation-ethics">UNESCO’s Recommendation on the Ethics of AI</a></li></ul></section>
+          <section class="article-section" id="sources" data-share-section tabindex="-1" aria-labelledby="sources-title"><div class="share-heading"><h2 id="sources-title">Sources</h2><button class="section-copy" type="button" data-copy-section="sources" aria-label="Copy link to Sources" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button></div><ul><li><a href="https://www.linkedin.com/feed/update/urn:li:activity:7505991669549256705/">My reflection on the forum</a></li><li><a href="https://www.unesco.org/en/articles/global-cooperation-ethical-ai-governance-reinforced-unescos-4th-global-forum-ethics-ai-saudi-arabia">UNESCO’s forum report and resources</a></li><li><a href="https://spa.gov.sa/en/w2679667">Forum coverage by the Saudi Press Agency</a></li><li><a href="https://www.unesco.org/en/artificial-intelligence/recommendation-ethics">UNESCO’s Recommendation on the Ethics of AI</a></li></ul></section>
         </div>
 
       </article></main>
@@ -72,11 +76,20 @@
     </details>
     </div>
     <nav class="footer-nav" aria-label="Footer">
-      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
+      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/journey/">Journey</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
       <a class="footer-link" href="/#now">Now</a>
+
       <a class="button-link footer-contact" href="/contact/"><span class="link-label">Get in touch</span><span class="arrow" aria-hidden="true"></span></a>
     </nav>
   </div></footer>
+  <dialog class="section-link-dialog" aria-labelledby="section-link-title">
+    <form method="dialog">
+      <h2 id="section-link-title">Share this section</h2>
+      <label for="section-link-url">Copy this address</label>
+      <input id="section-link-url" type="text" readonly>
+      <button class="button-link" type="submit">Done</button>
+    </form>
+  </dialog>
   <dialog class="command-palette" aria-labelledby="command-title">
     <form class="command-form">
       <div class="command-heading">

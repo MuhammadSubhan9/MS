@@ -420,7 +420,7 @@ body:has(.profile-page) .nav a[aria-current="page"] { background: #e1d2bb; color
 
 .about-records { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(1.75rem, 4vw, 3.8rem) 1rem; }
 .about-records > .section { grid-column: 1 / -1; margin: 0; }
-.about-records > .section > h2 { font-size: clamp(1.85rem, 3.45vw, 3rem); color: var(--profile-heading); }
+.about-records > .section > .share-heading > h2 { font-size: clamp(1.85rem, 3.45vw, 3rem); color: var(--profile-heading); }
 .about-records:has(> #education):has(> #experience) > #education { grid-column: span 7; }
 .about-records:has(> #education):has(> #experience) > #experience { grid-column: span 5; }
 .about-records > :is(#education, #experience) {
@@ -431,7 +431,7 @@ body:has(.profile-page) .nav a[aria-current="page"] { background: #e1d2bb; color
 }
 
 .about-records > #experience { border-top-color: var(--profile-accent); background: #eeddd4; }
-.about-records > #experience > h2 {
+.about-records > #experience > .share-heading > h2 {
   width: fit-content;
   padding: .24em .4em;
   background: var(--profile-accent);
@@ -528,7 +528,7 @@ body:has(.profile-page) .nav a[aria-current="page"] { background: #e1d2bb; color
 
 .section { padding-block: var(--space-3); border-top: 1px solid var(--rule); }
 .section:target { border-top-color: var(--accent); }
-.section > h2 { margin-bottom: .85rem; }
+.section > .share-heading { margin-bottom: .85rem; }
 .section-content > p + p { margin-top: var(--space-2); }
 .entry { display: grid; grid-template-columns: minmax(6rem, 8rem) minmax(0, 1fr); gap: var(--space-2); padding: .95rem 0; }
 .entry + .entry { border-top: 1px solid var(--rule); }
@@ -647,9 +647,10 @@ details p { padding: .2rem 0; }
 .work-lead .project-action:hover { background: #e8d5b5; }
 
 .work-section { margin-top: clamp(2.65rem, 5.7vw, 5.3rem); }
-.work-section > h2 { width: fit-content; margin-bottom: 1rem; font-size: clamp(1.85rem, 3.3vw, 3rem); }
+.work-section > .share-heading { margin-bottom: 1rem; }
+.work-section > .share-heading > h2 { font-size: clamp(1.85rem, 3.3vw, 3rem); }
 .work-section:focus-visible { outline: none; }
-.work-section:focus-visible > h2 { outline: 2px solid var(--accent); outline-offset: 5px; }
+.work-section:focus-visible > .share-heading > h2 { outline: 2px solid var(--accent); outline-offset: 5px; }
 .work-experiences .work-entries {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -824,14 +825,17 @@ details p { padding: .2rem 0; }
   .now-copy { padding-block-start: 1.2rem; border-block-start: 1px solid var(--rule); }
 }
 
-@media (max-width: 700px) {
-  html { scroll-padding-top: 5rem; }
-  body { font-size: 1rem; }
-  main { padding-bottom: var(--space-5); }
+@media (max-width: 800px) {
   .header-inner { flex-wrap: wrap; min-height: 64px; gap: 0; }
   .menu:not([hidden]) { display: inline-flex; }
   .nav { width: 100%; flex-wrap: wrap; margin-bottom: .6rem; }
   .js .nav[hidden] { display: none; }
+}
+
+@media (max-width: 700px) {
+  html { scroll-padding-top: 5rem; }
+  body { font-size: 1rem; }
+  main { padding-bottom: var(--space-5); }
   .home-opening {
     background:
       radial-gradient(ellipse at 52% 76%, #efd4b7, transparent 66%),

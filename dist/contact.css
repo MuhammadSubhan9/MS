@@ -122,6 +122,7 @@
   transition: border-color 170ms ease, background-color 170ms ease;
 }
 .contact-field textarea { min-height: 7rem; resize: vertical; }
+.contact-field textarea::placeholder { color: #dfcdb7; opacity: 1; }
 .contact-field select { color-scheme: dark; }
 .contact-field option { background: #413b32; color: var(--contact-cream); }
 .contact-field :is(input, select, textarea):focus { background: #dfc9ae40; }

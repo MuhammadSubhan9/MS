@@ -21,7 +21,7 @@
     if (!link || link.download || link.hasAttribute('download') || link.target && link.target !== '_self') return;
     const to = new URL(link.href);
     if (to.origin !== location.origin || to.pathname === location.pathname && to.search === location.search ||
-        !/^\/(?:about\/|contact\/|writing\/|work\/(?:[a-z0-9-]+\/)?)?$/.test(to.pathname) || to.hash === '#edit') return;
+        !/^\/(?:about\/|journey\/|contact\/|writing\/|work\/(?:[a-z0-9-]+\/)?)?$/.test(to.pathname) || to.hash === '#edit') return;
     return link;
   }
 

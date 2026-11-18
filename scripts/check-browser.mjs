@@ -16,7 +16,7 @@ try {
   });
   await chrome.call('Runtime.enable');
   await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
-  for (const route of ['/', '/about/', '/work/', '/writing/', '/contact/']) {
+  for (const route of ['/', '/about/', '/journey/', '/work/', '/writing/', '/contact/']) {
     await chrome.navigate(origin + route, 320);
     assert.equal(await chrome.evaluate('document.documentElement.scrollWidth <= innerWidth'), true, route);
   }
@@ -62,8 +62,73 @@ try {
   await waitFor(async () => (await page()) !== initial, 'keyboard page turn');
   await chrome.key('Escape','Escape',27);
   await waitFor(() => chrome.evaluate("!!document.querySelector('[data-inline-reader] [data-reader]')"), 'closing the reader');
+
+  await chrome.navigate(origin + '/work/#evidence', 390);
+  await chrome.evaluate("document.querySelector('[data-evidence-filter=aviation]').click()");
+  assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=black-hat-mea]').closest('li').hidden"), true);
+  assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=global-airports-forum]').getAttribute('aria-current')"), 'true');
+  await chrome.evaluate("document.querySelector('[data-evidence-node=course-aircraft-design]').click()");
+  assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-selection] h3').textContent"), 'Introduction to Aircraft Design');
+  await chrome.evaluate("document.querySelector('[data-evidence-selection] a').click()");
+  await waitFor(() => chrome.evaluate("location.hash === '#course-aircraft-design' && document.querySelector('#course-aircraft-design details')?.open"), 'opening course details from the map');
+  assert.equal(await chrome.evaluate("!!document.querySelector('#course-aircraft-design a.entry-certificate[href^=\"https://\"]')"), true);
+  await chrome.evaluate(`
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true, value: { writeText: async value => { window.sectionShared = value; } },
+    });
+    document.querySelector('[data-copy-section=course-aircraft-design]').click();
+  `);
+  await waitFor(() => chrome.evaluate("document.querySelector('[data-copy-section=course-aircraft-design] [data-section-copy-label]').textContent === 'Copied'"), 'copy confirmation');
+  assert.equal(await chrome.evaluate('window.sectionShared'), origin + '/about/#course-aircraft-design');
+  await chrome.evaluate(`
+    navigator.clipboard.writeText = async () => { throw new Error('Clipboard blocked'); };
+    document.querySelector('[data-copy-section=course-aircraft-design]').click();
+  `);
+  await waitFor(() => chrome.evaluate("document.querySelector('.section-link-dialog').open"), 'manual section link');
+  assert.equal(await chrome.evaluate("document.querySelector('#section-link-url').value"), origin + '/about/#course-aircraft-design');
+  await chrome.key('Escape', 'Escape', 27);
+
+  await chrome.navigate(origin + '/about/#capabilities', 390);
+  await chrome.evaluate("document.querySelectorAll('.capability > summary')[1].click()");
+  assert.equal(await chrome.evaluate("document.querySelectorAll('.capability[open] .capability-matrix > div').length >= 3"), true);
+  await chrome.navigate(origin + '/about/#igcses', 390);
+  await chrome.evaluate("document.querySelector('#igcses .glossary-term').click()");
+  assert.match(await chrome.evaluate("document.querySelector('#glossary-definition').textContent"), /International General Certificate/);
+  await chrome.key('Escape', 'Escape', 27);
+  assert.equal(await chrome.evaluate("document.querySelector('#glossary-definition').hidden"), true);
+
+  await chrome.navigate(origin + '/journey/#milestone-igcses', 390);
+  assert.equal(await chrome.evaluate("document.querySelector('#milestone-igcses details').open"), true);
+  assert.equal(await chrome.evaluate("!!document.querySelector('#looking-ahead')"), true);
+  await chrome.evaluate("document.querySelector('#milestone-igcses a[href=\"#milestone-black-hat-mea\"]').click()");
+  await waitFor(() => chrome.evaluate("location.hash === '#milestone-black-hat-mea' && document.querySelector('#milestone-black-hat-mea details').open"), 'older milestone');
+  assert.equal(await chrome.evaluate("document.querySelector('#milestone-igcses details').open"), false);
+  await chrome.evaluate("document.querySelector('#milestone-igcses summary').click(); document.querySelector('#milestone-igcses a[href=\"#milestone-black-hat-mea\"]').click()");
+  assert.equal(await chrome.evaluate("document.querySelector('#milestone-black-hat-mea details').open"), true);
+
+  await chrome.evaluate("localStorage.setItem('portfolio-seen-update','older-release')");
+  await chrome.navigate(origin + '/', 390);
+  assert.equal(await chrome.evaluate("document.querySelector('[data-site-update]').hasAttribute('data-new-release')"), true);
+  await chrome.evaluate("document.querySelector('[data-dismiss-site-update]').click()");
+  await chrome.navigate(origin + '/?return=1', 390);
+  assert.equal(await chrome.evaluate("document.querySelector('[data-site-update]').hasAttribute('data-new-release')"), false);
+  await chrome.evaluate("document.querySelector('footer a[href=\"#site-updates\"]').click()");
+  await waitFor(() => chrome.evaluate("document.querySelector('#site-updates details').open"), 'latest updates still available after dismissal');
+
+  await chrome.navigate(origin + '/contact/', 390);
+  await chrome.evaluate(`
+    const contact = document.querySelector('.contact-form');
+    contact.elements.message.value = 'Keep this draft.';
+    contact.elements.reason.value = 'Student opportunities';
+    contact.elements.reason.dispatchEvent(new Event('change'));
+  `);
+  assert.match(await chrome.evaluate("document.querySelector('#contact-message').placeholder"), /organisation.*deadline/);
+  assert.equal(await chrome.evaluate("document.querySelector('#contact-message').value"), 'Keep this draft.');
+  await chrome.evaluate("document.querySelector('.contact-form').reset()");
+  assert.equal(await chrome.evaluate("document.querySelector('#contact-message').placeholder"), '');
+
   assert.deepEqual(errors, []);
-  console.log('Browser checks passed for five mobile pages, expanded text spacing, draft recovery, keyboard reader and runtime errors.');
+  console.log('Browser checks passed for mobile layout, the contact form and card, draft recovery, the reader, evidence, credentials, sharing, glossary, Journey and site updates.');
 } finally {
   try { await chrome?.close(); } finally { server.closeAllConnections(); server.close(); }
 }

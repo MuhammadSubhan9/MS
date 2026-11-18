@@ -26,7 +26,7 @@ function messageForm(endpoint, topics) {
         <label for="contact-reason">Reason <span>(optional)</span></label>
         <select id="contact-reason" name="reason">
           <option value="">Choose a reason</option>
-          ${topics.map(({ title }) => `<option>${escape(title)}</option>`).join('')}
+          ${topics.map(({ title, prompt }) => `<option${prompt ? ` data-message-prompt="${escape(prompt)}"` : ''}>${escape(title)}</option>`).join('')}
           <option>Other</option>
         </select>
       </div>

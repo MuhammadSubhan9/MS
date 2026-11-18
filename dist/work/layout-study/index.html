@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
+  <link rel="stylesheet" href="/portfolio-features.css">
+  <script src="/portfolio-features.js" defer></script>
 
 
   <link rel="stylesheet" href="/commands.css">
@@ -37,7 +39,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
-      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/">About</a><a href="/work/" aria-current="page">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
+      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/">About</a><a href="/journey/">Journey</a><a href="/work/" aria-current="page">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
     </div>
   </header>
   <main class="container" id="main" tabindex="-1">
@@ -69,11 +71,20 @@
     </details>
     </div>
     <nav class="footer-nav" aria-label="Footer">
-      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
+      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/journey/">Journey</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
       <a class="footer-link" href="/#now">Now</a>
+
       <a class="button-link footer-contact" href="/contact/"><span class="link-label">Get in touch</span><span class="arrow" aria-hidden="true"></span></a>
     </nav>
   </div></footer>
+  <dialog class="section-link-dialog" aria-labelledby="section-link-title">
+    <form method="dialog">
+      <h2 id="section-link-title">Share this section</h2>
+      <label for="section-link-url">Copy this address</label>
+      <input id="section-link-url" type="text" readonly>
+      <button class="button-link" type="submit">Done</button>
+    </form>
+  </dialog>
   <dialog class="command-palette" aria-labelledby="command-title">
     <form class="command-form">
       <div class="command-heading">

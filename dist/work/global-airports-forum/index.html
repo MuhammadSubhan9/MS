@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
+  <link rel="stylesheet" href="/portfolio-features.css">
+  <script src="/portfolio-features.js" defer></script>
 
 
   <link rel="stylesheet" href="/commands.css">
@@ -37,7 +39,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
-      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/">About</a><a href="/work/" aria-current="page">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
+      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/">About</a><a href="/journey/">Journey</a><a href="/work/" aria-current="page">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
     </div>
   </header>
   <main class="container" id="main" tabindex="-1">
@@ -56,7 +58,9 @@
 
         <div class="reading article-body"><p>The forum brought airport operators, technology providers and aviation professionals to Riyadh. I met people working across different parts of the industry and heard how they manage airport operations. A short boarding delay offered a useful example. It can affect gate availability, baggage handling and the aircraft’s next flight, so several teams may need to adjust their plans together.</p>
           <div class="work-detail-parts"><section class="article-section"><h2>What I took away</h2><p>I became interested in how airports can use AI to anticipate delays and manage passenger flow. A prediction is useful when the teams involved can act on it, and the forum helped me see how much coordination sits behind decisions that look simple from the terminal.</p></section><section class="article-section"><h2>A piece of a retired Emirates A380</h2><p>I also acquired a metal collectible cut from the vertical stabiliser of a retired Emirates Airbus A380. The vertical stabiliser is the upright part of the tail. It was striking to hold a piece of an aircraft that size and know exactly where on the airframe it came from.</p></section></div>
-          <section class="article-section"><h2>Sources</h2><ul><li><a href="https://aaae.org/hubfs/GAIC%202025%20Programme_Updated%20110725.pdf?hsLang=en">Global Airports Forum’s 2025 programme</a></li><li><a href="https://www.linkedin.com/feed/update/urn:li:activity:7406670810586828802/">My Global Airports Forum reflection</a></li></ul></section>
+          <section class="article-section" id="sources" data-share-section tabindex="-1" aria-labelledby="sources-title"><div class="share-heading"><h2 id="sources-title">Sources</h2><button class="section-copy" type="button" data-copy-section="sources" aria-label="Copy link to Sources" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button></div><ul><li><a href="https://aaae.org/hubfs/GAIC%202025%20Programme_Updated%20110725.pdf?hsLang=en">Global Airports Forum’s 2025 programme</a></li><li><a href="https://www.linkedin.com/feed/update/urn:li:activity:7406670810586828802/">My Global Airports Forum reflection</a></li></ul></section>
         </div>
 
       </article></main>
@@ -72,11 +76,20 @@
     </details>
     </div>
     <nav class="footer-nav" aria-label="Footer">
-      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
+      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/journey/">Journey</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
       <a class="footer-link" href="/#now">Now</a>
+
       <a class="button-link footer-contact" href="/contact/"><span class="link-label">Get in touch</span><span class="arrow" aria-hidden="true"></span></a>
     </nav>
   </div></footer>
+  <dialog class="section-link-dialog" aria-labelledby="section-link-title">
+    <form method="dialog">
+      <h2 id="section-link-title">Share this section</h2>
+      <label for="section-link-url">Copy this address</label>
+      <input id="section-link-url" type="text" readonly>
+      <button class="button-link" type="submit">Done</button>
+    </form>
+  </dialog>
   <dialog class="command-palette" aria-labelledby="command-title">
     <form class="command-form">
       <div class="command-heading">

@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
 
+
   <link rel="stylesheet" href="/contact.css">
   <script src="/contact.js" defer></script>
   <script src="/contact-card.js" type="module"></script>
@@ -39,7 +40,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
-      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/">About</a><a href="/work/">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/" aria-current="page">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
+      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/">About</a><a href="/journey/">Journey</a><a href="/work/">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/" aria-current="page">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
     </div>
   </header>
   <main class="container" id="main" tabindex="-1"><div class="contact-layout">
@@ -90,7 +91,7 @@
         <label for="contact-reason">Reason <span>(optional)</span></label>
         <select id="contact-reason" name="reason">
           <option value="">Choose a reason</option>
-          <option>Student opportunities</option><option>Projects and ideas</option><option>Writing and reading</option>
+          <option data-message-prompt="Tell me about the organisation, the opportunity, any deadline and what you’d like me to do.">Student opportunities</option><option data-message-prompt="Describe the project or idea, what stage it’s at and how you’d like me to help.">Projects and ideas</option><option data-message-prompt="Tell me which book, scene or idea you’d like to talk about.">Writing and reading</option>
           <option>Other</option>
         </select>
       </div>
@@ -150,11 +151,13 @@
     </details>
     </div>
     <nav class="footer-nav" aria-label="Footer">
-      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
+      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/journey/">Journey</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
       <a class="footer-link" href="/#now">Now</a>
+
       <a class="button-link footer-contact" href="/contact/"><span class="link-label">Get in touch</span><span class="arrow" aria-hidden="true"></span></a>
     </nav>
   </div></footer>
+
   <dialog class="command-palette" aria-labelledby="command-title">
     <form class="command-form">
       <div class="command-heading">

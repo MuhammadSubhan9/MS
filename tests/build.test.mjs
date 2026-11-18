@@ -40,6 +40,7 @@ test('public build excludes fixture data and includes production SEO', async () 
   const html = await readFile(`${output}/index.html`, 'utf8');
   assert.ok(html.includes('href="/about/"'));
   assert.ok(html.includes('href="/work/"'));
+  assert.ok(html.includes('href="/journey/"'));
   assert.match(html, /class="footer-link" href="\/#now">Now<\/a>/);
   const legacyNow = await readFile(`${output}/now/index.html`, 'utf8');
   assert.match(legacyNow, /http-equiv="refresh" content="0;url=\/#now"/);
@@ -58,6 +59,9 @@ test('public build excludes fixture data and includes production SEO', async () 
   assert.ok(vcard.includes(`FN:${source.name}\r\n`));
   assert.ok(vcard.includes(`EMAIL;TYPE=INTERNET:${source.contact.email}\r\n`));
   const novel = await readFile(`${output}/writing/index.html`, 'utf8');
+  const journey = await readFile(`${output}/journey/index.html`, 'utf8');
+  assert.match(journey, /id="milestone-igcses"/);
+  assert.match(journey, /href="\/about\/#igcses"/);
   for (const page of [html, contact, novel]) {
     assert.equal(page.split(`data-clarity-project="${source.analytics.clarityProject}"`).length, 2);
     assert.equal(page.split(`data-ga4-id="${source.analytics.googleMeasurementId}"`).length, 2);
@@ -77,7 +81,9 @@ test('public build excludes fixture data and includes production SEO', async () 
   await assert.rejects(readFile(`${output}/writing/sample-article/index.html`), { code: 'ENOENT' });
   assert.ok(html.includes('content="index,follow"'));
   assert.ok(html.includes(`rel="canonical" href="${source.seo.origin}/"`));
-  assert.ok((await readFile(`${output}/sitemap.xml`, 'utf8')).includes(`${source.seo.origin}/work/unesco-ai-forum/`));
+  const sitemap = await readFile(`${output}/sitemap.xml`, 'utf8');
+  assert.ok(sitemap.includes(`${source.seo.origin}/work/unesco-ai-forum/`));
+  assert.ok(sitemap.includes(`${source.seo.origin}/journey/`));
   assert.ok((await readFile(`${output}/404.html`, 'utf8')).includes('Return home'));
 });
 

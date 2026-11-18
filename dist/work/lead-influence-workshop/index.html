@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
+  <link rel="stylesheet" href="/portfolio-features.css">
+  <script src="/portfolio-features.js" defer></script>
 
 
   <link rel="stylesheet" href="/commands.css">
@@ -37,7 +39,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
-      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/">About</a><a href="/work/" aria-current="page">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
+      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/">Home</a><a href="/about/">About</a><a href="/journey/">Journey</a><a href="/work/" aria-current="page">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
     </div>
   </header>
   <main class="container" id="main" tabindex="-1">
@@ -56,7 +58,9 @@
     <figcaption>Nicholas Coburn-Palo speaking about strategic listening at Harvard Business School’s Lectures that Last event. Photo from his public LinkedIn post.</figcaption></figure>
         <div class="reading article-body"><p>I took NY Empire Academy’s two-day Essentials Workshop with Nicholas Coburn-Palo, a preceptor in public speaking at Harvard University, and Kate Clark. The format gave me time to practise both delivering a clear message and listening carefully to the person across the table.</p>
           <div class="work-detail-parts"><section class="article-section"><h2>Public speaking</h2><p>The speaking exercises gave me a chance to organise my points before delivering them. I practised making the main point clear and giving the listener enough context to follow it.</p></section><section class="article-section"><h2>Negotiation</h2><p>In the simulations I practised explaining my position and listening for the other side’s priorities. Hearing what mattered to them helped me think about which parts of a proposal had room to move.</p></section></div>
-          <section class="article-section"><h2>Sources</h2><ul><li><a href="https://nyempireacademy.com/workshop-booking/leadership-negotiation-communication">NY Empire Academy workshop</a></li><li><a href="https://extension.harvard.edu/faculty/nicholas-coburn-palo/">Nicholas Coburn-Palo’s Harvard faculty profile</a></li><li><a href="https://www.linkedin.com/posts/nick-coburn-palo-2a19978_i-had-the-opportunity-to-deliver-a-talk-at-activity-7318683152632217602-RAjK">Event photo and talk details</a></li></ul></section>
+          <section class="article-section" id="sources" data-share-section tabindex="-1" aria-labelledby="sources-title"><div class="share-heading"><h2 id="sources-title">Sources</h2><button class="section-copy" type="button" data-copy-section="sources" aria-label="Copy link to Sources" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button></div><ul><li><a href="https://nyempireacademy.com/workshop-booking/leadership-negotiation-communication">NY Empire Academy workshop</a></li><li><a href="https://extension.harvard.edu/faculty/nicholas-coburn-palo/">Nicholas Coburn-Palo’s Harvard faculty profile</a></li><li><a href="https://www.linkedin.com/posts/nick-coburn-palo-2a19978_i-had-the-opportunity-to-deliver-a-talk-at-activity-7318683152632217602-RAjK">Event photo and talk details</a></li></ul></section>
         </div>
 
       </article></main>
@@ -72,11 +76,20 @@
     </details>
     </div>
     <nav class="footer-nav" aria-label="Footer">
-      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
+      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/journey/">Journey</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
       <a class="footer-link" href="/#now">Now</a>
+
       <a class="button-link footer-contact" href="/contact/"><span class="link-label">Get in touch</span><span class="arrow" aria-hidden="true"></span></a>
     </nav>
   </div></footer>
+  <dialog class="section-link-dialog" aria-labelledby="section-link-title">
+    <form method="dialog">
+      <h2 id="section-link-title">Share this section</h2>
+      <label for="section-link-url">Copy this address</label>
+      <input id="section-link-url" type="text" readonly>
+      <button class="button-link" type="submit">Done</button>
+    </form>
+  </dialog>
   <dialog class="command-palette" aria-labelledby="command-title">
     <form class="command-form">
       <div class="command-heading">

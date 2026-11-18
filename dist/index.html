@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/navigation-motion.css">
   <script src="/navigation-motion.js" blocking="render"></script>
+  <link rel="stylesheet" href="/portfolio-features.css">
+  <script src="/portfolio-features.js" defer></script>
   <link rel="stylesheet" href="/intro.css">
   <script src="/intro.js" defer blocking="render"></script>
 
@@ -46,10 +48,22 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
-      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/" aria-current="page">Home</a><a href="/about/">About</a><a href="/work/">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
+      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/" aria-current="page">Home</a><a href="/about/">About</a><a href="/journey/">Journey</a><a href="/work/">Work</a><a href="/writing/">Writing</a><a class="nav-contact" href="/contact/">Contact<span class="arrow" aria-hidden="true"></span></a></nav>
     </div>
   </header>
   <main class="home-page" id="main" tabindex="-1">
+    <aside class="site-update container" id="site-updates" data-site-update="2026-11-18-journey-and-evidence" aria-label="Site updates">
+    <div class="site-update-inner">
+      <details>
+        <summary><span>Site updates</span><span class="site-update-unread" data-site-update-unread hidden>New since your last visit</span></summary>
+        <div class="site-update-content">
+          <p class="meta"><time datetime="2026-11-18">18 November 2026</time></p>
+          <ul><li><a class="action-link" href="/work/#evidence"><span class="link-label">Evidence map</span><span class="arrow" aria-hidden="true"></span></a><p>Explore courses, events and projects by subject.</p></li><li><a class="action-link" href="/journey/"><span class="link-label">Journey</span><span class="arrow" aria-hidden="true"></span></a><p>Follow the milestones from independent courses to my current work.</p></li><li><a class="action-link" href="/about/#capabilities"><span class="link-label">Capabilities</span><span class="arrow" aria-hidden="true"></span></a><p>See what I’ve studied and where I’ve put it into practice.</p></li></ul>
+        </div>
+      </details>
+      <button class="site-update-dismiss" type="button" data-dismiss-site-update hidden>Dismiss</button>
+    </div>
+  </aside>
     <section class="home-opening" aria-labelledby="home-title">
     <div class="container home-masthead home-masthead-portrait">
       <div class="home-intro">
@@ -183,11 +197,20 @@
     </details>
     </div>
     <nav class="footer-nav" aria-label="Footer">
-      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
+      <a class="footer-link" href="/about/">About</a><a class="footer-link" href="/journey/">Journey</a><a class="footer-link" href="/work/">Work</a><a class="footer-link" href="/writing/">Writing</a>
       <a class="footer-link" href="/#now">Now</a>
+      <a class="footer-link" href="#site-updates">Site updates</a>
       <a class="button-link footer-contact" href="/contact/"><span class="link-label">Get in touch</span><span class="arrow" aria-hidden="true"></span></a>
     </nav>
   </div></footer>
+  <dialog class="section-link-dialog" aria-labelledby="section-link-title">
+    <form method="dialog">
+      <h2 id="section-link-title">Share this section</h2>
+      <label for="section-link-url">Copy this address</label>
+      <input id="section-link-url" type="text" readonly>
+      <button class="button-link" type="submit">Done</button>
+    </form>
+  </dialog>
   <dialog class="command-palette" aria-labelledby="command-title">
     <form class="command-form">
       <div class="command-heading">

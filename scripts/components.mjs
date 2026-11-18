@@ -16,9 +16,40 @@ export function safeLink(value) {
   return escape(value);
 }
 
-export const paragraphs = (items = []) => items.map(item => `<p>${escape(item)}</p>`).join('');
+export const paragraphs = (items = [], renderText = escape) => items.map(item => `<p>${renderText(item)}</p>`).join('');
 
 export const arrow = '<span class="arrow arrow-external" aria-hidden="true"></span>';
+
+const definitions = {
+  igcse: 'International General Certificate of Secondary Education. A secondary school qualification typically taken before A Levels.',
+  ial: 'International A Level. An advanced school qualification commonly taken before university.',
+  cpd: 'Continuing professional development. Activities that help people keep developing knowledge and skills in their field.',
+  'agentic commerce': 'Shopping in which software acts on someone’s behalf, such as finding a product or placing an order within agreed limits.',
+  'private equity': 'Investment in privately held companies, often with the aim of growing or restructuring them over several years.',
+  airworthiness: 'The condition of an aircraft being safe and fit to fly under applicable standards.',
+};
+
+export function glossary(text) {
+  const terms = /\b(IGCSEs?|IAL|International A Levels?|CPD|continuing professional development|agentic commerce|private equity|airworthiness)\b/gi;
+  return String(text ?? '').split(terms).map((part, index) => {
+    if (index % 2 === 0) return escape(part);
+    const key = part.toLowerCase()
+      .replace(/^igcses$/, 'igcse')
+      .replace(/^international a levels?$/, 'ial')
+      .replace(/^continuing professional development$/, 'cpd');
+    return `<abbr data-glossary title="${escape(definitions[key])}">${escape(part)}</abbr>`;
+  }).join('');
+}
+
+export function copySectionButton(id, title) {
+  return `<button class="section-copy" type="button" data-copy-section="${escape(id)}" aria-label="Copy link to ${escape(title)}" hidden>
+    <span class="section-copy-icon" aria-hidden="true"></span><span data-section-copy-label>Copy link</span>
+  </button>`;
+}
+
+export function sharedHeading(id, title, { level = 2, headingId = `${id}-title`, renderText = escape } = {}) {
+  return `<div class="share-heading"><h${level} id="${escape(headingId)}">${renderText(title)}</h${level}>${copySectionButton(id, title)}</div>`;
+}
 
 export function action(href, label, className = 'action-link', context = '') {
   const anchor = /^#[a-z][a-z0-9-]*$/.test(href);
@@ -38,8 +69,8 @@ export function formatDate(value) {
 }
 
 export function section(id, title, body) {
-  return body ? `<section class="section" id="${id}" aria-labelledby="${id}-title" tabindex="-1">
-    <h2 id="${id}-title">${escape(title)}</h2><div class="section-content">${body}</div>
+  return body ? `<section class="section" id="${id}" aria-labelledby="${id}-title" tabindex="-1" data-share-section>
+    ${sharedHeading(id, title)}<div class="section-content">${body}</div>
   </section>` : '';
 }
 
@@ -62,16 +93,19 @@ export function image(asset, { eager = false, sizes = '(max-width: 700px) calc(1
     ${asset.caption ? `<figcaption>${escape(asset.caption)}</figcaption>` : ''}</figure>`;
 }
 
-export function chronology(items) {
-  return items.map(item => `<article class="entry">
+export function chronology(items, { detailLabel, renderText = escape } = {}) {
+  return items.map(item => `<article class="entry"${item.id ? ` id="${escape(item.id)}" data-share-section tabindex="-1"` : ''}>
     <p class="meta entry-date">${escape(item.date)}</p>
-    <div><h3>${escape(item.title)}</h3>
+    <div><h3>${renderText(item.title)}</h3>
       ${item.role || item.institution || item.status ? `<p class="entry-context">${[item.role, item.institution, item.status].filter(Boolean).map(escape).join(' · ')}</p>` : ''}
-      ${item.description ? `<p>${escape(item.description)}</p>` : ''}
+      ${item.description ? `<p>${renderText(item.description)}</p>` : ''}
       ${item.subjects?.length ? `<ul class="entry-subjects" aria-label="Subjects">${item.subjects.map(subject => `<li>${escape(subject)}</li>`).join('')}</ul>` : ''}
-      ${item.outcome ? `<p>${escape(item.outcome)}</p>` : ''}
-      ${item.certificateUrl ? action(item.certificateUrl, 'View certificate', 'action-link entry-certificate', `for ${item.title}`) : ''}
-      ${item.details?.length ? `<details><summary>Details<span class="visually-hidden"> for ${escape(item.title)}</span></summary>${paragraphs(item.details)}</details>` : ''}
+      ${item.outcome ? `<p>${renderText(item.outcome)}</p>` : ''}
+      ${item.details?.length ? `<details${detailLabel ? ' class="entry-details" data-open-for-section-link' : ''}><summary>${escape(detailLabel || 'Details')}<span class="visually-hidden"> for ${escape(item.title)}</span></summary><div class="entry-detail-copy">${paragraphs(item.details, renderText)}</div></details>` : ''}
+      ${item.certificateUrl || item.id ? `<div class="entry-actions">
+        ${item.certificateUrl ? action(item.certificateUrl, 'View certificate', 'action-link entry-certificate', `for ${item.title}`) : ''}
+        ${item.id ? copySectionButton(item.id, item.title) : ''}
+      </div>` : ''}
     </div>
   </article>`).join('');
 }

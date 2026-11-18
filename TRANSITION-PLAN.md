@@ -2,12 +2,12 @@
 
 Saved on 18 November 2026.
 
-[Certain] The author approved the following seven transitions. These transitions are implemented.
+[Certain] The following transitions reflect the author's current choices and are implemented.
 
 1. **Navigation-line handover.** The selected navigation link's underline expands to the centred header width, then sweeps down. The destination follows the completed sweep. The movement should feel quick and deliberate.
 2. **Book-cover entrance to Writing.** The novel's cover travels from its position on Home into the Writing page as the library appears around it.
 3. **Contact button becomes the form.** The clicked Get in touch button's outline moves into the contact form's outer panel. Its surface expands into the contact gradient before the fields become available.
-4. **The name connects Home and About.** Muhammad Subhan remains visible during the handover and settles into its position on About as the surrounding layout changes.
+4. **Home and About use the navigation line.** The author removed the travelling-name animation on 18 November 2026.
 5. **Event identity carries into its story.** The clicked event's logo stays visible and moves into the detail page's heading area. The full article appears around it.
 6. **Immediate navigation response.** The clicked link's underline starts moving immediately. The handover completes when the destination is ready.
 7. **Matching return from Writing.** Leaving Writing brings the cover forward as the library recedes. Returning Home settles the cover into the novel section.
@@ -36,7 +36,7 @@ Saved on 18 November 2026.
 
 ## Timing and alignment correction
 
-[Certain] The full-page sweep applies to general navigation. The name, event identity, book and contact panels perform their own handovers. Destination content becomes visible after the handover finishes, and interaction resumes when the transition completes.
+[Certain] The full-page sweep applies to general navigation, including Home and About. The event identity, book and contact panels perform their own handovers. Destination content becomes visible after the handover finishes, and interaction resumes when the transition completes.
 
 [Certain] The line uses the centred header content width with equal left and right margins, including at narrow and wide viewports. The Contact menu item carries into the contact-details card. Get in touch buttons carry into the message form.
 

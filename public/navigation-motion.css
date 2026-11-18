@@ -24,7 +24,7 @@
 @keyframes route-book-appear { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: no-preference) {
   :root { view-transition-name: root; --route-ease: cubic-bezier(.22,.68,.2,1); --route-duration: 280ms; }
-  html[data-route-motion="author"], html[data-route-motion="event"] { --route-duration: 380ms; }
+  html[data-route-motion="event"] { --route-duration: 380ms; }
   html[data-route-motion="contact"], html[data-route-motion="contact-card"] { --route-duration: 420ms; }
   html[data-route-motion="book"] { --route-duration: 540ms; }
   main { view-transition-name: none; }
@@ -38,9 +38,9 @@
   ::view-transition-group(route-line) { z-index: 10; animation: route-line-sweep var(--route-duration) var(--route-ease) both; }
   ::view-transition-old(route-line) { animation: none; opacity: 0; }
   ::view-transition-new(route-line) { animation: none; }
-  ::view-transition-group(route-author), ::view-transition-group(route-event) { z-index: 4; }
-  ::view-transition-old(route-author), ::view-transition-old(route-event) { opacity: 0; animation: none; }
-  ::view-transition-new(route-author), ::view-transition-new(route-event) { animation: none; mix-blend-mode: normal; }
+  ::view-transition-group(route-event) { z-index: 4; }
+  ::view-transition-old(route-event) { opacity: 0; animation: none; }
+  ::view-transition-new(route-event) { animation: none; mix-blend-mode: normal; }
   ::view-transition-group(route-book) { z-index: 5; }
   ::view-transition-new(route-book):only-child { animation: route-book-appear 420ms var(--route-ease) both; }
   ::view-transition-image-pair(route-book) { overflow: clip; box-shadow: 0 12px 40px #130c0740; }

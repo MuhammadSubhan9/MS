@@ -40,7 +40,6 @@
   function kind(from, to) {
     if (from.pathname === '/writing/' || to.pathname === '/writing/') return 'book';
     if (to.pathname === '/contact/') return 'contact';
-    if ([from.pathname, to.pathname].every(path => path === '/' || path === '/about/')) return 'author';
     if (/^\/work\/[^/]+\/$/.test(from.pathname) || /^\/work\/[^/]+\/$/.test(to.pathname)) return 'event';
     return 'line';
   }
@@ -51,10 +50,6 @@
     if (type === 'contact') {
       if (incoming) return document.querySelector('.contact-form-panel');
       return selected?.matches('.button-link') ? selected : null;
-    }
-    if (type === 'author') {
-      const heading = document.querySelector('#home-title, .about-hero h1');
-      return visible(heading) ? heading : document.querySelector('.wordmark span');
     }
     if (type === 'event') {
       const path = /^\/work\/[^/]+\/$/.test(to.pathname) ? to.pathname : from.pathname;
@@ -137,7 +132,7 @@
       reveal.classList.add('route-shared-settled');
     }
     const shared = visible(element) && (!incoming || pending?.shared || type === 'book');
-    const name = { book: 'route-book', author: 'route-author', contact: 'route-contact', 'contact-card': 'route-card', event: 'route-event' }[type];
+    const name = { book: 'route-book', contact: 'route-contact', 'contact-card': 'route-card', event: 'route-event' }[type];
     if (shared && name) {
       element.style.viewTransitionName = name;
       assigned.add(element);

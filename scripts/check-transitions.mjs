@@ -31,7 +31,7 @@ try {
           names: [...document.querySelectorAll('[style]')].map(node => node.style.viewTransitionName).filter(Boolean),
           destinationOpacity: getComputedStyle(document.documentElement, '::view-transition-new(root)').opacity,
           destinationDelay: getComputedStyle(document.documentElement, '::view-transition-new(root)').animationDelay,
-          handoverDuration: Math.max(...['route-line', 'route-author', 'route-event', 'route-book', 'route-contact', 'route-card'].map(name => {
+          handoverDuration: Math.max(...['route-line', 'route-event', 'route-book', 'route-contact', 'route-card'].map(name => {
             return parseFloat(getComputedStyle(document.documentElement, '::view-transition-group(' + name + ')').animationDuration) || 0;
           })),
           inert: document.body.inert,
@@ -56,6 +56,7 @@ try {
     await waitFor(() => chrome.evaluate(`location.pathname===${JSON.stringify(path)} && window.motionResult?.ready`), 'transition to ' + path);
     const result = await chrome.evaluate('window.motionResult');
     assert.equal(result.kind, type, path);
+    assert.ok(!result.names.includes('route-author'), 'the name does not carry between pages');
     if (shared) assert.ok(result.names.includes(shared), path + ' shared element');
     assert.equal(result.destinationOpacity, '0', path + ' destination waits for handover');
     assert.ok(parseFloat(result.destinationDelay) >= .28, path + ' coordinated delay');
@@ -83,8 +84,8 @@ try {
     await chrome.navigate(origin + '/about/', width);
     await chrome.evaluate("sessionStorage.setItem('subhan-intro-seen','1')");
     await pause(550);
-    await clickRoute('.nav a[href="/"]', '/', 'author', 'route-author', width);
-    await clickRoute('.text-actions a[href="/about/"]', '/about/', 'author', 'route-author', width);
+    await clickRoute('.nav a[href="/"]', '/', 'line', null, width);
+    await clickRoute('.text-actions a[href="/about/"]', '/about/', 'line', null, width);
     await clickRoute('.nav a[href="/contact/"]', '/contact/', 'contact-card', 'route-card', width);
     await clickRoute('.nav a[href="/about/"]', '/about/', 'line', null, width);
     await clickRoute('.footer-contact', '/contact/', 'contact', 'route-contact', width);

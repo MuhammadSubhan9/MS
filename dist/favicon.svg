@@ -1,24 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <title>Swept fin in brushed champagne metal</title>
+  <title>Muhammad Subhan — MS signature</title>
   <defs>
-    <radialGradient id="enamel" cx=".26" cy=".12" r="1.1">
-      <stop stop-color="#39534b"/><stop offset=".64" stop-color="#233932"/><stop offset="1" stop-color="#14251f"/>
-    </radialGradient>
-    <linearGradient id="metal" x1="0" y1="0" x2="1" y2=".75" gradientUnits="objectBoundingBox">
-      <stop stop-color="#ac8356"/><stop offset=".33" stop-color="#f9e7be"/><stop offset=".55" stop-color="#e4c698"/><stop offset="1" stop-color="#95724f"/>
-    </linearGradient>
-    <linearGradient id="edge" x2=".85" y2="1">
-      <stop stop-color="#fff5dc"/><stop offset="1" stop-color="#b69972"/>
+    <linearGradient id="ink" x2="0.8" y2="1">
+      <stop stop-color="#34473e"/><stop offset="1" stop-color="#182923"/>
     </linearGradient>
   </defs>
-  <rect x=".5" y=".5" width="63" height="63" rx="13" fill="url(#enamel)" stroke="#22372f"/>
-  <!-- The curved root and swept leading edge follow an aircraft tail in profile. -->
-  <path d="M7 49c8-2 13-7 18-14L43 12l10-2-6 32 10 3-9 5-35 3Z" fill="#10251e"/>
-  <path d="M6 48c8-2 13-7 18-14L42 11l10-2-7 31-16 6-16 5Z" fill="url(#metal)"/>
-  <path d="m6 48 18-11 19-24 9-4-10 2-18 23C18 42 14 45 6 48Z" fill="url(#edge)"/>
-  <path d="m49 14-6 24-9 4Z" fill="#826746"/>
-  <path d="m47 20-5 17-6 3Z" fill="#b39871"/>
-  <!-- A separate horizontal stabiliser catches the light along its machined edge. -->
-  <path d="m12 51 25-10 19 2-14 4Z" fill="#f0d7a9"/>
-  <path d="m12 51 30-4 14-4-9 6-33 4Z" fill="#a28460"/>
+  <rect width="64" height="64" rx="12" fill="url(#ink)"/>
+  <g fill="#f6e7cd">
+    <!-- Sloped capital M, with a fine entry stroke and two broad pen strokes. -->
+    <path d="M5 44Q8 46 11 39L18 20Q19 17 16 18Q12 19 9 24Q10 17 17 15Q22 13 24 16L24 34L36 16Q38 13 41 14L34 38Q32 45 38 42Q35 47 31 46Q27 45 29 38L34 22L21 43L19 44L19 21L13 40Q10 50 5 47Z"/>
+    <!-- Capital S, tapering into the long return stroke beneath the M. -->
+    <path d="M57 21Q59 16 55 16C51 15 45 19 44 23C42 27 49 29 52 32C59 39 51 47 45 50C37 54 28 52 21 49Q16 47 12 50Q15 44 23 47C34 51 43 51 48 44Q54 38 46 34C40 31 37 28 39 23C42 16 50 11 56 13Q63 15 57 21Z"/>
+  </g>
 </svg>

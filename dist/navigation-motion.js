@@ -4,10 +4,7 @@
   const key = 'portfolio-route-transition';
   const prefetched = new Set();
   let selected = null;
-  let line = null;
-  let active = false;
   let interactionHeld = false;
-  let fallbackAnimation;
   let sequence = 0;
   const assigned = new Set();
 
@@ -17,10 +14,7 @@
       return value && value.to === location.href && Date.now() - value.at < 15000 ? value : null;
     } catch { return null; }
   }
-  if (readPending() && !reduce.matches) {
-    root.classList.add('page-transitioning');
-    if (!('onpagereveal' in window)) root.classList.add('route-fallback-waiting');
-  }
+  if (readPending() && !reduce.matches) root.classList.add('page-transitioning');
 
   function routeLink(event) {
     const link = event.target.closest?.('a[href]');
@@ -41,7 +35,7 @@
     if (from.pathname === '/writing/' || to.pathname === '/writing/') return 'book';
     if (to.pathname === '/contact/') return 'contact';
     if (/^\/work\/[^/]+\/$/.test(from.pathname) || /^\/work\/[^/]+\/$/.test(to.pathname)) return 'event';
-    return 'line';
+    return 'fade';
   }
 
   function sharedElement(type, from, to, incoming) {
@@ -59,37 +53,12 @@
     return null;
   }
 
-  function removeLine() { line?.remove(); line = null; }
-  function makeLine() {
-    const frame = document.querySelector('.header-inner, .novel-header-inner');
-    const viewport = document.documentElement.clientWidth;
-    const width = Math.min(frame?.getBoundingClientRect().width || viewport - 40, viewport - 32);
-    const element = document.createElement('div');
-    element.className = 'route-line';
-    element.setAttribute('aria-hidden', 'true');
-    element.style.setProperty('--line-target-x', (viewport - width) / 2 + 'px');
-    element.style.setProperty('--line-target-width', width + 'px');
-    return element;
-  }
-  function beginLine(link) {
-    removeLine();
-    const box = link.getBoundingClientRect();
-    const width = Math.max(20, box.width - 20);
-    line = makeLine();
-    line.className = 'route-line route-line-pending';
-    line.style.setProperty('--line-x', box.left + (box.width - width) / 2 + 'px');
-    line.style.setProperty('--line-y', Math.min(box.bottom - 2, innerHeight - 2) + 'px');
-    line.style.setProperty('--line-width', width + 'px');
-    document.body.append(line);
-  }
-
   document.addEventListener('click', event => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     const link = routeLink(event);
     if (!link || reduce.matches) return;
     selected = link;
-    beginLine(link);
-    try { sessionStorage.setItem(key, JSON.stringify({ from: location.href, to: link.href, kind: kind(new URL(location.href), new URL(link.href)), shared: false, at: Date.now() })); } catch { /* Navigation works without storage. */ }
+    try { sessionStorage.setItem(key, JSON.stringify({ from: location.href, to: link.href, at: Date.now() })); } catch { /* Navigation works without storage. */ }
   });
 
   function prefetch(event) {
@@ -110,11 +79,9 @@
     const revision = ++sequence;
     for (const previous of assigned) previous.style.removeProperty('view-transition-name');
     assigned.clear();
-    let type = pending?.kind || kind(from, to);
+    let type = pending?.kind === 'contact-card' ? 'contact-card' : kind(from, to);
     if (!incoming && type === 'contact' && selected?.matches('.nav-contact')) type = 'contact-card';
     root.dataset.routeMotion = type;
-    const headerBottom = document.querySelector('.site-header, .novel-header')?.getBoundingClientRect().bottom || 0;
-    root.style.setProperty('--route-start', Math.max(0, headerBottom) + 'px');
     root.classList.add('page-transitioning');
     const element = sharedElement(type, from, to, incoming);
     // A travelling cover must arrive in the visible shelf, including on phones.
@@ -124,6 +91,7 @@
     }
     if (incoming && type === 'contact' && pending?.shared && element && !to.hash &&
         element.getBoundingClientRect().top > innerHeight * .6) {
+      const headerBottom = document.querySelector('.site-header')?.getBoundingClientRect().bottom || 0;
       scrollTo({ top: scrollY + element.getBoundingClientRect().top - Math.max(0, headerBottom) - 24, behavior: 'instant' });
     }
     const reveal = element?.closest('.scroll-reveal');
@@ -137,13 +105,6 @@
       element.style.viewTransitionName = name;
       assigned.add(element);
     }
-    removeLine();
-    if (type === 'line') {
-      line = makeLine();
-      line.style.viewTransitionName = 'route-line';
-      line.style.top = Math.max(0, headerBottom) + 'px';
-      document.body.append(line);
-    }
     if (incoming) {
       document.body.inert = true;
       interactionHeld = true;
@@ -152,13 +113,10 @@
       if (revision !== sequence) return;
       for (const previous of assigned) previous.style.removeProperty('view-transition-name');
       assigned.clear();
-      removeLine();
       delete root.dataset.routeMotion;
       if (interactionHeld) document.body.inert = false;
       interactionHeld = false;
-      active = false;
     }
-    active = true;
     transition.ready.catch(() => {});
     transition.finished.then(clean, clean);
     return { kind: type, shared: !!shared };
@@ -179,31 +137,11 @@
     try { sessionStorage.setItem(key, JSON.stringify({ ...details, from: from.href, to: to.href, at: Date.now() })); } catch { /* Navigation works without storage. */ }
   });
 
-  function fallback() {
-    if (reduce.matches || !readPending()) return;
-    root.classList.add('page-transitioning');
-    root.classList.add('route-fallback-waiting');
-    document.body.inert = true;
-    interactionHeld = true;
-    removeLine();
-    line = makeLine();
-    document.body.append(line);
-    fallbackAnimation = line.animate([{ translate: '0 0' }, { translate: '0 ' + innerHeight + 'px' }], { duration: 240, easing: 'ease-out' });
-    function finishFallback() {
-      removeLine();
-      root.classList.remove('route-fallback-waiting');
-      document.body.inert = false;
-      interactionHeld = false;
-      fallbackAnimation = null;
-    }
-    fallbackAnimation.finished.then(finishFallback, finishFallback);
-  }
   addEventListener('pagereveal', event => {
     const pending = readPending();
     if (!event.viewTransition || reduce.matches || root.classList.contains('intro-playing')) {
       event.viewTransition?.ready.catch(() => {});
       event.viewTransition?.skipTransition();
-      fallback();
     } else {
       const from = pending?.from || window.navigation?.activation?.from?.url;
       if (from) prepare(event.viewTransition, new URL(from), new URL(location.href), true, pending);
@@ -212,16 +150,8 @@
   });
   addEventListener('pageshow', () => {
     if (!('onpagereveal' in window)) {
-      fallback();
       try { sessionStorage.removeItem(key); } catch { /* Storage is optional. */ }
     }
-    if (!active && line?.classList.contains('route-line-pending')) removeLine();
     selected = null;
-  });
-  reduce.addEventListener('change', () => {
-    if (reduce.matches) {
-      fallbackAnimation?.finish();
-      removeLine();
-    }
   });
 })();

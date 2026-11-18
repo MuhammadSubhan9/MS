@@ -1,24 +1,4 @@
 @view-transition { navigation: auto; }
-.route-fallback-waiting main, .route-fallback-waiting footer { visibility: hidden; }
-.route-line {
-  position: fixed;
-  z-index: 10000;
-  top: 0;
-  left: var(--line-target-x);
-  width: var(--line-target-width);
-  height: 2px;
-  background: #285547;
-  pointer-events: none;
-}
-.novel-page .route-line { background: #c4a078; }
-.route-line-pending {
-  top: var(--line-y);
-  left: var(--line-x);
-  width: var(--line-width);
-  animation: route-line-begin 160ms cubic-bezier(.2,.7,.2,1) both;
-}
-@keyframes route-line-begin { to { left: var(--line-target-x); width: var(--line-target-width); } }
-@keyframes route-line-sweep { from { translate: 0 0; } to { translate: 0 calc(100vh - var(--route-start, 0px)); } }
 @keyframes route-destination { from { opacity: 0; } to { opacity: 1; } }
 @keyframes route-release { to { opacity: 0; } }
 @keyframes route-book-appear { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
@@ -34,10 +14,9 @@
   ::view-transition-group(*) { animation-duration: var(--route-duration); animation-timing-function: var(--route-ease); }
   ::view-transition-old(root) { animation: none; mix-blend-mode: normal; }
   ::view-transition-new(root) { animation: route-destination 90ms var(--route-duration) ease-out both; mix-blend-mode: normal; }
+  html[data-route-motion="fade"] { --route-duration: 150ms; }
+  html[data-route-motion="fade"]::view-transition-new(root) { animation: route-destination var(--route-duration) ease-out both; }
   ::view-transition-group(route-header) { z-index: 2; }
-  ::view-transition-group(route-line) { z-index: 10; animation: route-line-sweep var(--route-duration) var(--route-ease) both; }
-  ::view-transition-old(route-line) { animation: none; opacity: 0; }
-  ::view-transition-new(route-line) { animation: none; }
   ::view-transition-group(route-event) { z-index: 4; }
   ::view-transition-old(route-event) { opacity: 0; animation: none; }
   ::view-transition-new(route-event) { animation: none; mix-blend-mode: normal; }
@@ -50,6 +29,5 @@
   html.page-transitioning .novel-hero[data-entrance] * { animation: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .route-line { display: none; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }

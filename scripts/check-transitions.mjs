@@ -31,16 +31,11 @@ try {
           names: [...document.querySelectorAll('[style]')].map(node => node.style.viewTransitionName).filter(Boolean),
           destinationOpacity: getComputedStyle(document.documentElement, '::view-transition-new(root)').opacity,
           destinationDelay: getComputedStyle(document.documentElement, '::view-transition-new(root)').animationDelay,
-          handoverDuration: Math.max(...['route-line', 'route-event', 'route-book', 'route-contact', 'route-card'].map(name => {
+          handoverDuration: Math.max(...['route-event', 'route-book', 'route-contact', 'route-card'].map(name => {
             return parseFloat(getComputedStyle(document.documentElement, '::view-transition-group(' + name + ')').animationDuration) || 0;
           })),
           inert: document.body.inert,
-          line: (() => {
-            const line = document.querySelector('.route-line');
-            if (!line) return null;
-            const box = line.getBoundingClientRect();
-            return { left: box.left, rightMargin: document.documentElement.clientWidth - box.right };
-          })(),
+          hasLine: !!document.querySelector('.route-line'),
         });
       }).catch(error => { window.motionResult.error = String(error); });
     });
@@ -52,20 +47,21 @@ try {
     }
     await chrome.evaluate(`document.querySelector(${JSON.stringify(selector)}).scrollIntoView({block:'center',behavior:'instant'})`);
     await pause(100);
-    await chrome.evaluate(`document.querySelector(${JSON.stringify(selector)}).click()`);
+    const lineOnClick = await chrome.evaluate(`document.querySelector(${JSON.stringify(selector)}).click(); !!document.querySelector('.route-line')`);
+    assert.equal(lineOnClick, false, 'clicking does not draw a line');
     await waitFor(() => chrome.evaluate(`location.pathname===${JSON.stringify(path)} && window.motionResult?.ready`), 'transition to ' + path);
     const result = await chrome.evaluate('window.motionResult');
     assert.equal(result.kind, type, path);
     assert.ok(!result.names.includes('route-author'), 'the name does not carry between pages');
     if (shared) assert.ok(result.names.includes(shared), path + ' shared element');
-    assert.equal(result.destinationOpacity, '0', path + ' destination waits for handover');
-    assert.ok(parseFloat(result.destinationDelay) >= .28, path + ' coordinated delay');
-    assert.ok(parseFloat(result.destinationDelay) >= result.handoverDuration, path + ' destination follows completed handover');
     assert.equal(result.inert, true, path + ' hidden destination is not interactive');
-    if (type === 'line') {
-      assert.ok(result.line, 'navigation line exists');
-      assert.ok(Math.abs(result.line.left - result.line.rightMargin) <= 1, 'line has equal margins');
-    } else assert.equal(result.line, null, 'shared-element routes have their own handover');
+    assert.equal(result.hasLine, false, 'destination has no navigation line');
+    if (type === 'fade') {
+      assert.equal(parseFloat(result.destinationDelay), 0, path + ' fade starts immediately');
+    } else {
+      assert.equal(result.destinationOpacity, '0', path + ' destination waits for handover');
+      assert.ok(parseFloat(result.destinationDelay) >= result.handoverDuration, path + ' destination follows completed handover');
+    }
     if (capture && shared) {
       await mkdir(capture, { recursive: true });
       const shot = await chrome.call('Page.captureScreenshot', { format: 'png' });
@@ -84,23 +80,23 @@ try {
     await chrome.navigate(origin + '/about/', width);
     await chrome.evaluate("sessionStorage.setItem('subhan-intro-seen','1')");
     await pause(550);
-    await clickRoute('.nav a[href="/"]', '/', 'line', null, width);
-    await clickRoute('.text-actions a[href="/about/"]', '/about/', 'line', null, width);
+    await clickRoute('.nav a[href="/"]', '/', 'fade', null, width);
+    await clickRoute('.text-actions a[href="/about/"]', '/about/', 'fade', null, width);
     await clickRoute('.nav a[href="/contact/"]', '/contact/', 'contact-card', 'route-card', width);
-    await clickRoute('.nav a[href="/about/"]', '/about/', 'line', null, width);
+    await clickRoute('.nav a[href="/about/"]', '/about/', 'fade', null, width);
     await clickRoute('.footer-contact', '/contact/', 'contact', 'route-contact', width);
-    await clickRoute('.footer-link[href="/work/"]', '/work/', 'line', null, width);
+    await clickRoute('.footer-link[href="/work/"]', '/work/', 'fade', null, width);
     await clickRoute('.work-event-link[href="/work/money2020-middle-east/"]', '/work/money2020-middle-east/', 'event', 'route-event', width);
     await chrome.evaluate('history.back()');
     await waitFor(() => chrome.evaluate("location.pathname==='/work/' && !document.documentElement.dataset.routeMotion"), 'Back to Work');
-    await clickRoute('.wordmark', '/', 'line', null, width);
+    await clickRoute('.wordmark', '/', 'fade', null, width);
     await clickRoute('.home-writing-layout .button-link', '/writing/', 'book', 'route-book', width);
     await clickRoute('.novel-back', '/', 'book', 'route-book', width);
   }
 
   for (const width of [320, 2144]) {
     await chrome.navigate(origin + '/about/', width);
-    await clickRoute('.footer-link[href="/work/"]', '/work/', 'line', null, width);
+    await clickRoute('.footer-link[href="/work/"]', '/work/', 'fade', null, width);
   }
 
   await chrome.navigate(origin + '/contact/', 390);
@@ -148,8 +144,7 @@ try {
   // Turning off the source opt-in exercises the ordinary-navigation fallback.
   await chrome.evaluate("const s=document.createElement('style');s.textContent='@view-transition {navigation:none;}';document.head.append(s);document.querySelector('.footer-contact').click()");
   await waitFor(() => chrome.evaluate("location.pathname==='/contact/' && document.readyState==='complete'"), 'fallback navigation');
-  await waitFor(() => chrome.evaluate("!document.querySelector('.route-line')"), 'fallback cleanup');
-  assert.equal(await chrome.evaluate("document.body.inert || document.documentElement.classList.contains('route-fallback-waiting')"), false);
+  assert.equal(await chrome.evaluate("document.body.inert || !!document.querySelector('.route-line')"), false);
 
   await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   await chrome.navigate(origin + '/about/', 390);

@@ -4,7 +4,7 @@ import { commandAssets, commandPalette } from './commands.mjs';
 import { clarityTag, googleAnalytics } from './analytics.mjs';
 
 const welcome = `<dialog class="opening" aria-label="Welcome to Muhammad Subhan’s portfolio">
-    <div class="opening-top"><span><b>MS</b>A developing perspective</span><button type="button" autofocus>Skip intro</button></div>
+    <div class="opening-top"><span><img src="/favicon.svg?v=3" width="32" height="32" alt="">A developing perspective</span><button type="button" autofocus>Skip intro</button></div>
     <div class="opening-content">
       <p class="eyebrow">The story so far</p>
       <h2 class="opening-name"><span><i>Muhammad</i></span> <span><i>Subhan.</i></span></h2>
@@ -55,7 +55,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   <meta name="twitter:card" content="${data.seo.image ? 'summary_large_image' : 'summary'}">
   ${origin && !missing ? `<link rel="canonical" href="${escape(origin + page.path)}"><meta property="og:url" content="${escape(origin + page.path)}">` : ''}
   ${data.seo.image ? `<meta property="og:image" content="${safeLink(data.seo.image)}">` : ''}
-  <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+  <link rel="icon" href="/favicon.svg?v=3" type="image/svg+xml">
   <link rel="preload" href="/fonts/dm-serif-text.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/source-sans-3.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/styles.css">
@@ -75,7 +75,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   ${preview ? '<aside class="preview-notice" aria-label="Development preview">Private design preview · Sample content for layout review</aside>' : ''}
   <header class="site-header">
     <div class="container header-inner">
-      <a class="wordmark" href="/"><img src="/favicon.svg?v=2" width="38" height="38" alt=""><span>${escape(data.name)}</span></a>
+      <a class="wordmark" href="/"><img src="/favicon.svg?v=3" width="38" height="38" alt=""><span>${escape(data.name)}</span></a>
       ${navigation.length > 1 ? `<button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span aria-hidden="true" class="menu-mark"></span></button><nav class="nav" id="navigation" aria-label="Primary">${links}</nav>` : ''}
     </div>
   </header>

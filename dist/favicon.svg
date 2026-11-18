@@ -1,5 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-  <rect width="48" height="48" rx="10" fill="#263d35"/>
-  <path fill="#f0dfca" d="M7 33V15h4.5l5 8.3 5-8.3H26v18h-4.2V22l-4.1 6.6h-2.4L11.2 22v11Z"/>
-  <path fill="#ecc3bc" d="M35.4 14.7c2.6 0 4.6.8 6.1 2.3l-2.3 2.9a5.8 5.8 0 0 0-3.9-1.5c-1.5 0-2.4.6-2.4 1.6 0 1.1 1 1.6 3.2 2.2 3.6 1 5.6 2.3 5.6 5.5 0 3.6-2.9 5.6-6.6 5.6a10 10 0 0 1-7-2.6l2.4-3a7.2 7.2 0 0 0 4.8 1.9c1.5 0 2.4-.6 2.4-1.6 0-1.1-1-1.5-3.2-2.2-3.4-.9-5.6-2.3-5.6-5.5 0-3.4 2.7-5.6 6.5-5.6Z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Swept fin in brushed champagne metal</title>
+  <defs>
+    <radialGradient id="enamel" cx=".26" cy=".12" r="1.1">
+      <stop stop-color="#39534b"/><stop offset=".64" stop-color="#233932"/><stop offset="1" stop-color="#14251f"/>
+    </radialGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2=".75" gradientUnits="objectBoundingBox">
+      <stop stop-color="#ac8356"/><stop offset=".33" stop-color="#f9e7be"/><stop offset=".55" stop-color="#e4c698"/><stop offset="1" stop-color="#95724f"/>
+    </linearGradient>
+    <linearGradient id="edge" x2=".85" y2="1">
+      <stop stop-color="#fff5dc"/><stop offset="1" stop-color="#b69972"/>
+    </linearGradient>
+  </defs>
+  <rect x=".5" y=".5" width="63" height="63" rx="13" fill="url(#enamel)" stroke="#22372f"/>
+  <!-- The curved root and swept leading edge follow an aircraft tail in profile. -->
+  <path d="M7 49c8-2 13-7 18-14L43 12l10-2-6 32 10 3-9 5-35 3Z" fill="#10251e"/>
+  <path d="M6 48c8-2 13-7 18-14L42 11l10-2-7 31-16 6-16 5Z" fill="url(#metal)"/>
+  <path d="m6 48 18-11 19-24 9-4-10 2-18 23C18 42 14 45 6 48Z" fill="url(#edge)"/>
+  <path d="m49 14-6 24-9 4Z" fill="#826746"/>
+  <path d="m47 20-5 17-6 3Z" fill="#b39871"/>
+  <!-- A separate horizontal stabiliser catches the light along its machined edge. -->
+  <path d="m12 51 25-10 19 2-14 4Z" fill="#f0d7a9"/>
+  <path d="m12 51 30-4 14-4-9 6-33 4Z" fill="#a28460"/>
 </svg>

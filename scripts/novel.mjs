@@ -178,7 +178,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
   <meta name="twitter:card" content="summary_large_image">
   ${origin ? `<meta property="og:url" content="${escape(origin + page.path)}">` : ''}
   ${origin ? `<link rel="canonical" href="${escape(origin + page.path)}"><meta property="og:image" content="${escape(origin)}${cover}">` : ''}
-  <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
+  <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
   <link rel="preload" href="/fonts/welcome-editorial.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/novel.css">
   <link rel="stylesheet" href="/navigation-motion.css">

@@ -1,15 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <title>Muhammad Subhan — MS signature</title>
-  <defs>
-    <linearGradient id="ink" x2="0.8" y2="1">
-      <stop stop-color="#34473e"/><stop offset="1" stop-color="#182923"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="12" fill="url(#ink)"/>
-  <g fill="#f6e7cd">
-    <!-- Sloped capital M, with a fine entry stroke and two broad pen strokes. -->
-    <path d="M5 44Q8 46 11 39L18 20Q19 17 16 18Q12 19 9 24Q10 17 17 15Q22 13 24 16L24 34L36 16Q38 13 41 14L34 38Q32 45 38 42Q35 47 31 46Q27 45 29 38L34 22L21 43L19 44L19 21L13 40Q10 50 5 47Z"/>
-    <!-- Capital S, tapering into the long return stroke beneath the M. -->
-    <path d="M57 21Q59 16 55 16C51 15 45 19 44 23C42 27 49 29 52 32C59 39 51 47 45 50C37 54 28 52 21 49Q16 47 12 50Q15 44 23 47C34 51 43 51 48 44Q54 38 46 34C40 31 37 28 39 23C42 16 50 11 56 13Q63 15 57 21Z"/>
-  </g>
+  <title>Muhammad Subhan</title>
+  <rect width="64" height="64" rx="6" fill="#302e2d"/>
+  <path fill="#f5f0e9" d="M8 48v-2l5-1V19l-5-2v-2h13l12 23 11-23h12v2l-5 2v26l5 1v2H38v-2l5-1V23L31 48h-2L16 23v22l5 1v2Z"/>
 </svg>

@@ -1039,3 +1039,17 @@ details p { padding: .2rem 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+.wordmark > span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .38em;
+  color: #302e2d;
+  font-size: clamp(1.5rem, 2.7vw, 2rem);
+  letter-spacing: -.05em;
+}
+.wordmark small {
+  font: 600 .44em/1 var(--sans, sans-serif);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}

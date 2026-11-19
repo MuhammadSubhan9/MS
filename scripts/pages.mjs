@@ -36,8 +36,8 @@ function homePage(data, { hasAbout, hasContact, selected }) {
   const work = featuredWork ? `<section class="home-section home-work" id="selected-work" aria-labelledby="home-work-title" tabindex="-1" data-header-surface>
     <div class="container">
       <div class="home-section-heading" data-reveal>
-        <h2 id="home-work-title">Selected work &amp; experience</h2>
-        ${action('/work/', 'See all work')}
+        <h2 id="home-work-title">Selected experiences</h2>
+        ${action('/work/', 'Browse experiences')}
       </div>
       ${projectEntry({ ...featuredWork, image: featuredWork.homeImage ?? featuredWork.image }, { heading: 'h3', featured: true, actionLabel: 'Read more' })}
       ${selected.length > 1 ? `<div class="home-work-list">
@@ -159,7 +159,7 @@ function workEvent(item) {
   </article>`;
 }
 
-function workIndex(items, introduction, evidence) {
+function workIndex(items, label, introduction, evidence) {
   const feature = items.find(item => item.selected && item.image)
     || items.find(item => item.selected)
     || items[0];
@@ -178,7 +178,7 @@ function workIndex(items, introduction, evidence) {
   return `<div class="work-page">
     <header class="work-heading">
       <div class="work-heading-copy">
-        <h1>Work &amp; experience</h1>
+        <h1>${escape(label)}</h1>
         ${introduction ? `<p class="lead">${escape(introduction)}</p>` : ''}
       </div>
       ${jumps.length ? `<nav class="work-jumps" aria-label="On this page">${jumps.map(([id, title]) =>
@@ -224,7 +224,7 @@ function collectionPages(add, data, items, path, label, evidence = '') {
       [detailed[index + 1], 'Next article'],
     ].filter(([entry]) => entry) : [];
     add(`/${path}/${item.slug}/`, item.title, item.description, `
-      <p class="breadcrumb"><a href="/${path}/${isWorkEvent && !featuredReport ? '#events' : ''}">${icon('arrow-left', 'arrow arrow-left')}<span>${isWriting ? 'All writing' : isWorkEvent && !featuredReport ? 'All events' : 'All work'}</span></a></p>
+      <p class="breadcrumb"><a href="/${path}/${isWorkEvent && !featuredReport ? '#events' : ''}">${icon('arrow-left', 'arrow arrow-left')}<span>${isWriting ? 'All writing' : isWorkEvent && !featuredReport ? 'All events' : 'All experiences'}</span></a></p>
       <article class="detail${hasCover ? ' detail-with-cover' : ''}${isWriting ? '' : ' work-detail'}${featuredReport ? ' work-feature-report' : ''}" data-motion-route="/${path}/${item.slug}/">
         <header class="page-heading article-heading${mark ? ' work-event-heading' : ''}"${mark ? ` data-event="${escape(item.slug)}"` : ''}>
           <div>
@@ -246,7 +246,7 @@ function collectionPages(add, data, items, path, label, evidence = '') {
   const introduction = data[`${path}Introduction`];
   const description = data.seo[path] || `${label} by ${data.name}.`;
   if (!isWriting) {
-    add('/work/', label, description, workIndex(items, introduction, evidence));
+    add('/work/', label, description, workIndex(items, label, introduction, evidence));
     return;
   }
 
@@ -291,7 +291,7 @@ export function createPages(data) {
     add('/about/', 'About', data.seo.about || `Background, education and interests of ${data.name}.`, aboutPage(data, background));
   }
   if (journey) add('/journey/', 'Journey', `Education, work and milestones in ${data.name}’s journey.`, journey);
-  collectionPages(add, data, data.projects, 'work', 'Work', evidenceMap(records));
+  collectionPages(add, data, data.projects, 'work', 'Experiences', evidenceMap(records));
   if (novel) {
     pages.push({
       path: novelPath, label: novel.title, description: novel.description,

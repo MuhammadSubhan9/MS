@@ -1,5 +1,5 @@
 body { --blended-header-height: 78px; }
-@media (max-width: 800px) {
+@media (max-width: 880px) {
   body { --blended-header-height: 65px; }
 }
 
@@ -60,7 +60,7 @@ body { --blended-header-height: 78px; }
   box-shadow: inset 0 0 0 1px var(--header-rule);
 }
 .site-header[data-blended-header] :focus-visible { outline-color: var(--header-ink); }
-@media (max-width: 800px) {
+@media (max-width: 880px) {
   .site-header[data-blended-header] .nav { background-color: var(--header-menu); }
 }
 @media (prefers-reduced-motion: no-preference) {

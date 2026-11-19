@@ -28,7 +28,7 @@ export function toggleIcon(closed, open, className = '') {
 
 export const pageIcons = {
   '/': 'house-line', '/about/': 'user-circle', '/journey/': 'path',
-  '/work/': 'briefcase', '/writing/': 'pen-nib', '/contact/': 'envelope-simple',
+  '/work/': 'notebook', '/writing/': 'pen-nib', '/contact/': 'envelope-simple',
 };
 
 export const headerAssets = `<link rel="stylesheet" href="/header-surface.css">

@@ -4,6 +4,8 @@ import { formatDate } from '../../scripts/components.mjs';
 import { nowLimit, nowParagraphs } from '../../scripts/now.mjs';
 
 const encoder = new TextEncoder();
+const publishingCodePattern = /^[!-~]{8,128}$/;
+const sessionSecretPattern = /^[!-~]{24,128}$/;
 const toolCookie = '__Host-portfolio-tools';
 const toolSessionSeconds = 30 * 60;
 
@@ -12,8 +14,8 @@ function json(payload, status = 200) {
 }
 
 async function validCode(request, expected) {
-  const supplied = request.headers.get('Authorization')?.match(/^Bearer ([!-~]{24,128})$/)?.[1];
-  if (!supplied) return false;
+  const supplied = request.headers.get('Authorization')?.match(/^Bearer (.+)$/)?.[1];
+  if (!publishingCodePattern.test(supplied ?? '')) return false;
   const hashes = await Promise.all([supplied, expected].map(value => crypto.subtle.digest('SHA-256', encoder.encode(value))));
   const [left, right] = hashes.map(hash => new Uint8Array(hash));
   let difference = 0;
@@ -25,26 +27,36 @@ function sessionCookie(value, maxAge) {
   return toolCookie + '=' + value + '; Path=/; Max-Age=' + maxAge + '; HttpOnly; Secure; SameSite=Strict';
 }
 
-async function sessionKey(code) {
-  return crypto.subtle.importKey('raw', encoder.encode(code), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']);
+function sessionSecret(env) {
+  if (sessionSecretPattern.test(env.NOVEL_SIGNUP_SECRET ?? '') &&
+      env.NOVEL_SIGNUP_SECRET !== env.NOW_EDITOR_CODE) return env.NOVEL_SIGNUP_SECRET;
+  return sessionSecretPattern.test(env.NOW_EDITOR_CODE ?? '') ? env.NOW_EDITOR_CODE : null;
 }
 
-async function createToolSession(code) {
+function sessionKey(secret) {
+  return crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']);
+}
+
+function sessionMessage(code, content) {
+  return encoder.encode(JSON.stringify([toolCookie, code, content]));
+}
+
+async function createToolSession(code, secret) {
   const expires = Math.floor(Date.now() / 1000) + toolSessionSeconds;
   const content = expires + '.' + crypto.randomUUID();
-  const signature = await crypto.subtle.sign('HMAC', await sessionKey(code), encoder.encode(toolCookie + ':' + content));
+  const signature = await crypto.subtle.sign('HMAC', await sessionKey(secret), sessionMessage(code, content));
   const hex = Array.from(new Uint8Array(signature), byte => byte.toString(16).padStart(2, '0')).join('');
   return { expiresAt: expires * 1000, cookie: sessionCookie(content + '.' + hex, toolSessionSeconds) };
 }
 
-async function hasToolSession(request, code) {
+async function hasToolSession(request, code, secret) {
   const cookie = request.headers.get('Cookie')?.split(';').map(part => part.trim())
     .find(part => part.startsWith(toolCookie + '='));
   const match = cookie?.slice(toolCookie.length + 1).match(/^(\d{10})\.([a-f0-9-]{36})\.([a-f0-9]{64})$/);
   if (!match || Number(match[1]) <= Date.now() / 1000) return false;
   const [, expires, nonce, hex] = match;
   const signature = Uint8Array.from(hex.match(/../g), byte => Number.parseInt(byte, 16));
-  return crypto.subtle.verify('HMAC', await sessionKey(code), signature, encoder.encode(toolCookie + ':' + expires + '.' + nonce));
+  return crypto.subtle.verify('HMAC', await sessionKey(secret), signature, sessionMessage(code, expires + '.' + nonce));
 }
 
 export async function onRequestPost({ request, env }) {
@@ -60,7 +72,8 @@ export async function onRequestPost({ request, env }) {
     return response;
   }
   const code = env.NOW_EDITOR_CODE;
-  if (!env.NOW_DB || !/^[!-~]{24,128}$/.test(code ?? '')) {
+  const secret = sessionSecret(env);
+  if (!env.NOW_DB || !publishingCodePattern.test(code ?? '') || !secret) {
     return json({ error: 'The owner tools are unavailable.' }, 503);
   }
   try {
@@ -72,12 +85,12 @@ export async function onRequestPost({ request, env }) {
         return response;
       }
       if (!await validCode(request, code)) return json({ error: 'That publishing code did not match.' }, 401);
-      const session = await createToolSession(code);
+      const session = await createToolSession(code, secret);
       const response = json({ expiresAt: session.expiresAt });
       response.headers.set('Set-Cookie', session.cookie);
       return response;
     }
-    if (!await hasToolSession(request, code)) return json({ error: 'Unlock Ctrl+K again in the Now editor.' }, 401);
+    if (!await hasToolSession(request, code, secret)) return json({ error: 'Unlock Ctrl+K again in the Now editor.' }, 401);
     if (command === 'now status') {
       const latest = await env.NOW_DB.prepare('SELECT revision, date FROM now_page WHERE id = 1').first();
       return json(latest ? { revision: latest.revision, date: formatDate(latest.date) } : { revision: 0 });
@@ -106,7 +119,7 @@ export async function onRequestPut({ request, env }) {
   if (request.headers.get('Origin') !== new URL(request.url).origin) {
     return json({ error: 'Publish from your portfolio to continue.' }, 403);
   }
-  if (!env.NOW_DB || !/^[!-~]{24,128}$/.test(env.NOW_EDITOR_CODE ?? '')) {
+  if (!env.NOW_DB || !publishingCodePattern.test(env.NOW_EDITOR_CODE ?? '')) {
     return json({ error: 'Publishing has not been set up yet. Your draft is still here.' }, 503);
   }
   try {

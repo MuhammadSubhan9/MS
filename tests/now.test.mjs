@@ -98,6 +98,17 @@ test('Now requires the shared code and rejects stale writes without replacing ne
     assert.match(rendered, /data-now-revision="2"/);
     assert.match(rendered, /&lt;treat this as text&gt;/);
     assert.doesNotMatch(rendered, /Static fallback|Stale update/);
+
+    const shortCode = 'z102938y';
+    env.NOW_EDITOR_CODE = shortCode;
+    assert.equal((await tool('unlock', { code: shortCode })).status, 503);
+    env.NOVEL_SIGNUP_SECRET = 'test-only-independent-session-signing-secret';
+    assert.equal((await tool('unlock', { code: editorCode })).status, 401);
+    assert.equal((await tool('now status', { cookie })).status, 401);
+    const shortLogin = await tool('unlock', { code: shortCode });
+    assert.equal(shortLogin.status, 200);
+    assert.equal((await tool('now status', { cookie: shortLogin.headers.get('Set-Cookie').split(';')[0] })).status, 200);
+    assert.equal((await put({ code: shortCode, revision: 2 })).status, 200);
   } finally {
     database.close();
   }

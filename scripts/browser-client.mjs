@@ -21,8 +21,8 @@ export async function browser() {
     ? 'C:/Program Files/Google/Chrome/Application/chrome.exe' : 'google-chrome');
   const child = spawn(binary, [
     '--headless', '--no-first-run', '--remote-debugging-port=0', '--user-data-dir=' + profile, 'about:blank',
-  ], { windowsHide: true, stdio: 'ignore' });
-  const port = await waitFor(() => readFile(join(profile, 'DevToolsActivePort'), 'utf8').then(value => value.split('\n')[0]).catch(() => null), 'browser launch');
+  ], { windowsHide: true, stdio: ['ignore', 'ignore', process.env.CI ? 'inherit' : 'ignore'] });
+  const port = await waitFor(() => readFile(join(profile, 'DevToolsActivePort'), 'utf8').then(value => value.split('\n')[0]).catch(() => null), 'browser launch', 30000);
   const targets = await fetch('http://127.0.0.1:' + port + '/json/list').then(response => response.json());
   const socket = new WebSocket(targets.find(target => target.type === 'page').webSocketDebuggerUrl);
   await once(socket, 'open');

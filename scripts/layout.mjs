@@ -1,18 +1,32 @@
-import { action, escape, headerAssets, icon, pageIcons, safeLink, toggleIcon } from './components.mjs';
+import { action, escape, headerAssets, icon, image, pageIcons, safeLink, toggleIcon } from './components.mjs';
 import { renderNovelPage } from './novel.mjs';
 import { commandAssets, commandPalette } from './commands.mjs';
 import { clarityTag, googleAnalytics } from './analytics.mjs';
 import { journeyAssets, portfolioAssets, sectionLinkDialog } from './portfolio-features.mjs';
 
-const welcome = `<dialog class="opening" aria-label="Welcome to Muhammad Subhan’s portfolio">
-    <div class="opening-top"><span><img src="/favicon.svg?v=5" width="32" height="32" alt="">A developing perspective</span><button type="button" autofocus>Skip intro</button></div>
-    <div class="opening-content">
-      <p class="eyebrow">The story so far</p>
-      <h2 class="opening-name"><span><i>Muhammad</i></span> <span><i>Subhan.</i></span></h2>
-      <p class="opening-caption">A future in law.<br>Built one step at a time.</p>
+function welcome(data) {
+  const nameLines = data.name.trim().split(/\s+(?=\S+$)/);
+  const portrait = data.aboutPortrait || data.portrait;
+  return `<dialog class="opening" aria-labelledby="opening-name" aria-describedby="opening-caption">
+    <div class="opening-sheet">
+      <div class="opening-top">
+        <p class="opening-label">Personal portfolio</p>
+        <button class="opening-skip" type="button" autofocus>Skip intro ${icon('arrow-right')}</button>
+      </div>
+      <div class="opening-spread${portrait ? ' opening-with-portrait' : ''}">
+        <div class="opening-copy">
+          <h2 class="opening-name" id="opening-name">${nameLines.map(line => `<span><span>${escape(line)}</span></span>`).join(' ')}</h2>
+          <p class="opening-caption" id="opening-caption">A Level studies, experiences beyond the classroom, and fiction.</p>
+        </div>
+        ${portrait ? `<div class="opening-portrait" aria-hidden="true">${image(portrait, { sizes: '(max-width: 700px) 90vw, 480px' })}</div>` : ''}
+      </div>
+      <div class="opening-bottom">
+        <p>Riyadh, Saudi Arabia</p>
+        <div class="opening-track" aria-hidden="true"></div>
+      </div>
     </div>
-    <div class="opening-bottom"><span>Riyadh, Saudi Arabia</span><div class="opening-track" aria-hidden="true"></div><span>Personal portfolio / ${new Date().getFullYear()}</span></div>
   </dialog>`;
+}
 
 export function renderPage({ data, page, navigation, origin, ready, preview }) {
   if (page.layout === 'novel') return renderNovelPage({ data, page, origin, ready });
@@ -79,7 +93,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   ${google.head}
 </head>
 <body${contact ? ' class="contact-document"' : journey ? ' class="journey-document"' : ''}>
-  ${home ? welcome : ''}
+  ${home ? welcome(data) : ''}
   <a class="skip" href="#main">Skip to content</a>
   ${preview ? '<aside class="preview-notice" aria-label="Development preview">Private design preview · Sample content for layout review</aside>' : ''}
   <header class="site-header" data-blended-header>

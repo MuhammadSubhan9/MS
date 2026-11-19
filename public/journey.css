@@ -1,6 +1,6 @@
 .journey-main { padding-block-start: 0; background-color: var(--journey-paper); }
 .journey-document {
-  --journey-paper: #f2e8d9;
+  --journey-paper: #f0e8f7;
   --journey-fade: clamp(48rem, 94svh, 68rem);
   --journey-paper-tail: 4rem;
   --journey-wash:
@@ -11,12 +11,13 @@
       #563d54 calc(100% - var(--journey-fade) + 2rem),
       #7e5d77 calc(100% - var(--journey-fade) * .72),
       #ad8d9c calc(100% - var(--journey-fade) * .51),
-      #d2bcb8 calc(100% - var(--journey-fade) * .33),
-      #e7d8d0 calc(100% - var(--journey-fade) * .19),
-      #efe3d7 calc(100% - var(--journey-fade) * .08),
+      #cdb8cc calc(100% - var(--journey-fade) * .33),
+      #e1d3e7 calc(100% - var(--journey-fade) * .19),
+      #ebe1f0 calc(100% - var(--journey-fade) * .08),
       var(--journey-paper)
     );
 }
+.journey-document .site-header:not([data-header-dark]) { --header-menu: var(--journey-paper); }
 .journey-document:not(:has(.journey-history)) { --journey-fade: clamp(11rem, 24svh, 16rem); }
 .journey-page {
   isolation: isolate;

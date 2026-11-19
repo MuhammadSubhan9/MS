@@ -15,7 +15,7 @@ const welcome = `<dialog class="opening" aria-label="Welcome to Muhammad Subhanâ
   </dialog>`;
 
 export function renderPage({ data, page, navigation, origin, ready, preview }) {
-  if (page.layout === 'novel') return renderNovelPage({ data, page, navigation, origin, ready });
+  if (page.layout === 'novel') return renderNovelPage({ data, page, origin, ready });
   if (page.redirect) {
     const destination = safeLink(page.redirect);
     return `<!doctype html>
@@ -71,7 +71,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   ${journey ? journeyAssets : ''}
   ${home ? '<link rel="stylesheet" href="/intro.css">\n  <script src="/intro.js" defer blocking="render"></script>' : ''}
   ${contact ? '<link rel="stylesheet" href="/contact.css">\n  <script src="/contact.js" defer></script>\n  <script src="/contact-card.js" type="module"></script>' : ''}
-  ${commandAssets}
+  ${data.now ? commandAssets : ''}
   ${home && data.now ? '<script src="/now-editor.js" defer></script>' : ''}
   <script src="/site.js" defer></script>
   ${headerAssets}
@@ -103,7 +103,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
     </nav>` : ''}
   </div></footer>
   ${portfolioFeatures ? sectionLinkDialog : ''}
-  ${commandPalette(data, navigation)}
+  ${data.now ? commandPalette : ''}
 </body>
 </html>`;
 }

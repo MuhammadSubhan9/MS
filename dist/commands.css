@@ -49,57 +49,22 @@
 }
 .command-submit:hover { background: #324b41; }
 .command-submit:disabled { opacity: .65; cursor: progress; }
-.command-results {
-  max-height: min(43dvh, 23rem);
-  overflow: auto;
-  overscroll-behavior: contain;
-  margin: 0;
-  padding: .2rem;
-  border: 1px solid #c8b9a3;
-  border-radius: .55rem;
-  background: #f8f1e5;
-  list-style: none;
-}
-.command-results:empty { display: none; }
 .command-result:not([hidden]) {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  display: flex;
   align-items: center;
-  gap: .75rem;
-  width: 100%;
+  justify-content: space-between;
+  gap: 1rem;
   min-height: 44px;
-  padding: .52rem .68rem;
-  border: 0;
-  border-radius: .36rem;
-  background: transparent;
-  color: #322820;
-  font: inherit;
-  text-align: start;
+  padding: .55rem .8rem;
+  border-radius: .5rem;
+  background: #263d35;
+  color: #f2ede3;
   text-decoration: none;
-  cursor: pointer;
 }
-.command-result-copy { display: grid; line-height: 1.28; }
-.command-result small { margin-top: .12rem; color: #5e5346; font-size: .76em; }
-.command-result > .site-icon:first-child { color: #285547; }
-.command-result .command-result-arrow { color: #6d5b48; }
-.command-result:is(:hover, [data-command-selected]) { background: #dce3d5; }
-.command-result[data-edit-command]:not([hidden]) { grid-template-columns: 1fr auto; }
+.command-result:hover { background: #324b41; }
 .command-palette :focus-visible { outline: 2px solid #285547; outline-offset: 3px; }
-.command-results .command-result:focus-visible { outline-offset: -2px; }
 .command-feedback { margin: 0; color: #62594f; }
 .command-feedback:empty { margin-block-start: -.85rem; }
-.command-palette:not(.now-editor) .command-feedback:empty { display: none; }
-.command-keys { margin: 0; color: #5e5346; font-size: .79rem; }
-.command-keys kbd {
-  display: inline-block;
-  padding: .05rem .25rem;
-  margin-inline-end: .18rem;
-  border: 1px solid #bdad94;
-  border-radius: .2rem;
-  background: #f8f1e5;
-  font: inherit;
-}
-.command-keys kbd:last-of-type { margin-inline-start: .7rem; }
 @media (prefers-reduced-motion: no-preference) {
   .command-palette[open] { animation: command-in 180ms ease-out both; }
 }

@@ -166,7 +166,7 @@ export function novelContent(book, author) {
     </dialog>`;
 }
 
-export function renderNovelPage({ data, page, navigation, origin, ready }) {
+export function renderNovelPage({ data, page, origin, ready }) {
   const title = `${page.label} · ${data.name}`;
   const cover = safeLink(page.cover);
   const google = googleAnalytics(data, origin, ready);
@@ -195,7 +195,7 @@ export function renderNovelPage({ data, page, navigation, origin, ready }) {
   <script src="/novel.js" defer blocking="render"></script>
   ${headerAssets}
   <script src="/novel-subscription.js" defer></script>
-  ${commandAssets}
+  ${data.now ? commandAssets : ''}
   ${clarityTag(data, origin, ready)}
   ${google.head}
 </head>
@@ -231,7 +231,7 @@ export function renderNovelPage({ data, page, navigation, origin, ready }) {
     </div>
   </footer>
   ${sectionLinkDialog}
-  ${commandPalette(data, navigation)}
+  ${data.now ? commandPalette : ''}
 </body>
 </html>`;
 }

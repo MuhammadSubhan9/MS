@@ -25,14 +25,6 @@ if (opener && typeof dialog?.showModal === 'function') {
     save.disabled = saving || !note.value.trim();
     dialog.showModal();
   });
-  function openFromCommand() {
-    if (location.hash !== '#save-contact' || document.querySelector('dialog[open]')) return;
-    opener.click();
-    history.replaceState(history.state, '', location.pathname + location.search + '#contact-email-title');
-  }
-  addEventListener('hashchange', openFromCommand);
-  openFromCommand();
-
   dialog.querySelector('[data-close-contact-card]').addEventListener('click', () => dialog.close());
   dialog.addEventListener('close', () => {
     clearTimeout(closeTimer);

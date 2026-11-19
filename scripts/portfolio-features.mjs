@@ -119,12 +119,12 @@ export function capabilitiesMatrix(capabilities = [], records) {
   }).join('');
 }
 
-function journeyMilestone({ record, date, logo }, index) {
+function journeyMilestone({ record, date, logo }) {
   const id = `milestone-${record.id}`;
   const mark = logo || record.eventLogo;
   const category = { education: 'Education', course: 'Course' }[record.type]
     || (record.kind === 'event' ? 'Event' : record.category?.split(' · ')[0] || 'Experience');
-  return `<li class="journey-milestone" id="${id}" data-side="${index % 2 ? 'right' : 'left'}" data-share-section tabindex="-1">
+  return `<li class="journey-milestone" id="${id}" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -151,14 +151,16 @@ function journeyMilestone({ record, date, logo }, index) {
 }
 
 function journeyTimeline(milestones, hasCurrentWork) {
-  let previousYear;
+  const displayedYears = new Set();
   return `<div class="journey-timeline" data-journey-timeline>
     <div class="journey-rail" aria-hidden="true"><span></span></div>
-    <ol class="journey-list">${milestones.map((entry, index) => {
-      const year = entry.date.match(/\b\d{4}\b/g)?.at(-1);
-      const divider = year && year !== previousYear ? `<li class="journey-year" aria-hidden="true"><span>${year}</span></li>` : '';
-      previousYear = year;
-      return divider + journeyMilestone(entry, index);
+    <ol class="journey-list">${milestones.map(entry => {
+      const { year } = entry;
+      const divider = year && !displayedYears.has(year) ? `<li class="journey-year" id="journey-year-${year}">
+        <h3>${year}</h3><span class="journey-point" aria-hidden="true"></span>
+      </li>` : '';
+      displayedYears.add(year);
+      return divider + journeyMilestone(entry);
     }).join('')}</ol>
     <div class="journey-end">
       ${hasCurrentWork ? action('#in-progress', 'Present', 'journey-end-link', '– see what I’m working on') : '<span>Latest milestone</span>'}
@@ -171,12 +173,16 @@ export function journeyPage(data, records) {
   const current = data.journey.current.map(key => records.get(key)).filter(Boolean);
   const milestones = data.journey.milestones
     .filter(entry => records.has(entry.record))
-    .map(({ record: key, date, logo }) => {
+    .map(({ record: key, date: milestoneDate, logo }) => {
       const record = records.get(key);
-      return { record, date: date || record.date || '', logo };
+      const date = milestoneDate || record.date || '';
+      return { record, date, logo, year: date.match(/\b\d{4}\b/g)?.at(-1) };
     });
   if (!current.length && !milestones.length) return '';
 
+  const years = [...new Set(milestones.map(entry => entry.year).filter(Boolean))];
+  const period = years.length > 1 ? `${years[0]}–${years.at(-1)}` : years[0];
+  const feature = milestones.findLast(entry => entry.record.image);
   const sections = [
     ['milestones', 'Milestones', milestones.length],
     ['in-progress', 'In progress', current.length],
@@ -184,40 +190,51 @@ export function journeyPage(data, records) {
   ].filter(([, , show]) => show);
   return `<div class="journey-page">
     <header class="journey-hero" data-header-surface="journey">
-      <div class="container journey-hero-inner">
-        <div>
+      <div class="container journey-hero-inner${feature ? ' journey-hero-with-image' : ''}">
+        <div class="journey-intro">
+          ${period ? `<p class="journey-period">${icon('calendar-blank')}${period}</p>` : ''}
           <h1>Journey</h1>
-          <p class="lead">What I’ve worked on, what I’m studying and where I hope to go next.</p>
+          <p class="lead">What I’ve studied, the events I’ve taken part in and what I’m working on now.</p>
+          <nav class="journey-jumps" aria-label="On this page">
+            ${sections.map(([id, title]) => `<a href="#${id}">${icon(sectionIcons[id])}<span>${escape(title)}</span>${icon('arrow-down', 'journey-jump-arrow')}</a>`).join('')}
+          </nav>
         </div>
-        <nav class="journey-jumps" aria-label="On this page">
-          ${sections.map(([id, title]) => `<a href="#${id}">
-            <span class="journey-jump-icon">${icon(sectionIcons[id])}</span>
-            <span class="journey-jump-label">${escape(title)}</span>
-            ${icon('arrow-down', 'journey-jump-arrow')}
-          </a>`).join('')}
-        </nav>
+        ${feature ? `<div class="journey-feature">
+          ${image(feature.record.image, { eager: true, sizes: '(max-width: 740px) 90vw, 520px' })}
+          ${action(`#milestone-${feature.record.id}`, feature.record.label, 'action-link journey-feature-link')}
+        </div>` : ''}
       </div>
     </header>
-    <div class="container journey-content">
-      ${milestones.length ? `<section class="journey-history" id="milestones" aria-labelledby="milestones-title" tabindex="-1" data-share-section>
+    ${milestones.length ? `<section class="container journey-history" id="milestones" aria-labelledby="milestones-title" tabindex="-1" data-share-section>
+      <div class="journey-history-heading">
         ${sharedHeading('milestones', 'Milestones')}
-        ${journeyTimeline(milestones, current.length > 0)}
-      </section>` : ''}
-      ${current.length ? `<section class="journey-current" id="in-progress" aria-labelledby="in-progress-title" tabindex="-1" data-share-section>
-        ${sharedHeading('in-progress', 'In progress')}
-        <div class="journey-current-grid">${current.map(record => `<article>
-          <h3>${glossary(record.title)}</h3>
-          ${record.date ? `<p class="meta">${publicationDate(record.date)}</p>` : ''}
-          ${record.description ? paragraphs([record.description], glossary) : ''}
-          ${recordLink(record)}
-        </article>`).join('')}</div>
-      </section>` : ''}
-      ${data.futureDirection ? `<section class="journey-future" id="looking-ahead" aria-labelledby="looking-ahead-title" tabindex="-1" data-share-section>
-        ${sharedHeading('looking-ahead', 'Looking ahead')}
-        ${data.journey.lookingAheadTitle ? `<h3>${escape(data.journey.lookingAheadTitle)}</h3>` : ''}
-        <p>${glossary(data.futureDirection)}</p>
-      </section>` : ''}
-    </div>
+        ${years.length > 1 ? `<nav class="journey-years" aria-label="Jump to a year">
+          ${years.map(year => `<a href="#journey-year-${year}">${year}</a>`).join('')}
+        </nav>` : ''}
+      </div>
+      ${journeyTimeline(milestones, current.length > 0)}
+    </section>` : ''}
+    ${current.length || data.futureDirection ? `<div class="journey-next" data-header-surface>
+      <div class="container journey-next-inner${current.length && data.futureDirection ? ' journey-next-split' : ''}">
+        ${current.length ? `<section class="journey-current" id="in-progress" aria-labelledby="in-progress-title" tabindex="-1" data-share-section>
+          ${sharedHeading('in-progress', 'In progress')}
+          <div class="journey-current-entries">${current.map(record => `<article>
+            <div>
+              <h3>${glossary(record.title)}</h3>
+              ${record.date ? `<p class="meta">${publicationDate(record.date)}</p>` : ''}
+              ${record.description ? paragraphs([record.description], glossary) : ''}
+              ${recordLink(record)}
+            </div>
+            ${record.type === 'writing' && record.image ? image(record.image, { sizes: '80px' }) : ''}
+          </article>`).join('')}</div>
+        </section>` : ''}
+        ${data.futureDirection ? `<section class="journey-future" id="looking-ahead" aria-labelledby="looking-ahead-title" tabindex="-1" data-share-section>
+          ${sharedHeading('looking-ahead', 'Looking ahead')}
+          ${data.journey.lookingAheadTitle ? `<h3>${escape(data.journey.lookingAheadTitle)}</h3>` : ''}
+          <p>${glossary(data.futureDirection)}</p>
+        </section>` : ''}
+      </div>
+    </div>` : ''}
   </div>`;
 }
 

@@ -14,10 +14,10 @@
   function paint() {
     if (surfaces.some(section => !section.isConnected)) surfaces = [...document.querySelectorAll(selector)];
     const bar = header.getBoundingClientRect();
-    const region = journey || surfaces.find(section => {
+    const region = surfaces.find(section => {
       const { top, bottom } = section.getBoundingClientRect();
       return top <= bar.bottom + 1 && bottom > bar.bottom + 1;
-    }) || body;
+    }) || journey || body;
     const bounds = region.getBoundingClientRect();
     const kind = region.dataset.headerSurface;
     const pseudo = kind === 'about' || kind === 'journey';
@@ -26,8 +26,7 @@
       const style = getComputedStyle(region, pseudo ? '::before' : null);
       const tint = style.getPropertyValue('--header-colour').trim();
       const top = pseudo ? parseFloat(style.top) : kind === 'opening' ? -height : 0;
-      const tail = kind === 'journey' ? parseFloat(style.paddingBottom) : 0;
-      const fade = kind === 'journey' ? -parseFloat(style.bottom) - tail
+      const fade = kind === 'journey' ? -parseFloat(style.bottom)
         : kind === 'about' ? parseFloat(getComputedStyle(region).paddingBottom) : 0;
       const length = bounds.height - top + (kind === 'journey' ? fade : 0);
       const mirrored = !tint && style.backgroundImage.includes('gradient(') && !style.backgroundImage.includes('url(');
@@ -47,8 +46,8 @@
       header.style.setProperty('--header-wash-offset', `${-offset}px`);
       current.offset = offset;
     }
-    const darkUntil = current.length - current.fade * (kind === 'journey' ? .65 : .5);
-    header.toggleAttribute('data-header-dark', kind === 'dark' || (pseudo && offset + inkPoint < darkUntil));
+    const darkUntil = current.length - current.fade * .5;
+    header.toggleAttribute('data-header-dark', kind === 'dark' || (kind === 'about' && offset + inkPoint < darkUntil));
   }
 
   function measure() {

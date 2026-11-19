@@ -11,7 +11,7 @@
 
   function updateTimeline() {
     frame = undefined;
-    const revealLine = innerHeight * .84;
+    const revealLine = innerHeight * .92;
     const bounds = rail.getBoundingClientRect();
     const progress = Math.max(0, Math.min(1, (revealLine - bounds.top) / bounds.height));
     timeline.style.setProperty('--journey-progress', progress.toFixed(4));

@@ -77,7 +77,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   ${clarityTag(data, origin, ready)}
   ${google.head}
 </head>
-<body${contact ? ' class="contact-document"' : ''}>
+<body${contact ? ' class="contact-document"' : journey ? ' class="journey-document"' : ''}>
   ${home ? welcome : ''}
   <a class="skip" href="#main">Skip to content</a>
   ${preview ? '<aside class="preview-notice" aria-label="Development preview">Private design preview · Sample content for layout review</aside>' : ''}

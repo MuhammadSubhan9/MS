@@ -10,7 +10,7 @@ export function nowParagraphs(text) {
 
 export function renderNowContent({ date, text, revision = 0 }) {
   return `${nowStart}
-    <section class="home-section home-now" id="now" aria-labelledby="now-title" tabindex="-1" data-now-revision="${revision}">
+    <section class="home-section home-now" id="now" aria-labelledby="now-title" tabindex="-1" data-now-revision="${revision}" data-header-surface>
       <div class="container now-panel">
         <header class="now-heading">
           <h2 id="now-title">Now</h2>

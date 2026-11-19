@@ -22,6 +22,8 @@
   <link rel="stylesheet" href="/portfolio-features.css">
   <script src="/portfolio-features.js" defer></script>
   <script src="/novel.js" defer blocking="render"></script>
+  <link rel="stylesheet" href="/header-surface.css">
+  <script src="/header-surface.js" defer blocking="render"></script>
   <script src="/novel-subscription.js" defer></script>
   <link rel="stylesheet" href="/commands.css">
   <script src="/commands.js" defer></script>
@@ -31,7 +33,7 @@
 </head>
 <body class="novel-page">
   <a class="novel-skip" href="#main">Skip to content</a>
-  <header class="novel-header">
+  <header class="novel-header" data-blended-header>
     <div class="novel-header-inner novel-wrap">
       <a class="novel-back" href="/"><span class="novel-back-arrow" aria-hidden="true"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-left"></use></svg></span> Portfolio</a>
       <a class="novel-imprint" href="#main" aria-label="The Eleventh Rehearsal, back to top">
@@ -46,7 +48,7 @@
     </div>
   </header>
   <main id="main" tabindex="-1" class="novel-main">
-    <section class="novel-hero" aria-labelledby="novel-title">
+    <section class="novel-hero" aria-labelledby="novel-title" data-header-surface="dark">
       <div class="novel-hero-copy">
         <p class="novel-label">A psychological thriller</p>
         <h1 id="novel-title"><span>The Eleventh</span> <em>Rehearsal</em></h1>
@@ -81,7 +83,7 @@
       </div>
     </section>
 
-    <section class="novel-synopsis" id="synopsis" aria-labelledby="synopsis-title" tabindex="-1" data-share-section>
+    <section class="novel-synopsis" id="synopsis" aria-labelledby="synopsis-title" tabindex="-1" data-share-section data-header-surface="dark">
       <div class="synopsis-still">
         <img src="/images/rehearsal-conservatory-1280.webp"
           srcset="/images/rehearsal-conservatory-768.webp 768w, /images/rehearsal-conservatory-1280.webp 1280w"
@@ -107,7 +109,7 @@
       </div>
     </section>
 
-    <section class="novel-excerpt" id="excerpt" aria-labelledby="excerpt-title" tabindex="-1" data-share-section>
+    <section class="novel-excerpt" id="excerpt" aria-labelledby="excerpt-title" tabindex="-1" data-share-section data-header-surface="dark">
       <div class="novel-wrap excerpt-wrap">
         <header class="excerpt-heading">
           <div>
@@ -184,7 +186,7 @@
     </div></div>
       </div>
     </section>
-    <section class="novel-release" id="release-updates" aria-labelledby="release-title" tabindex="-1">
+    <section class="novel-release" id="release-updates" aria-labelledby="release-title" tabindex="-1" data-header-surface="dark">
       <div class="novel-wrap release-layout">
         <div class="release-copy">
           <p class="novel-label">The release announcement</p>

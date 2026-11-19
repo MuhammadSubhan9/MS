@@ -30,6 +30,8 @@
   <script src="/commands.js" defer></script>
 
   <script src="/site.js" defer></script>
+  <link rel="stylesheet" href="/header-surface.css">
+  <script src="/header-surface.js" defer blocking="render"></script>
   <script src="/clarity.js" data-clarity-project="yu3io6wskv" data-analytics-origin="https://muhammadsubhan.pages.dev" defer></script>
   <link rel="stylesheet" href="/analytics.css">
   <script src="/google-analytics.js" data-ga4-id="G-DGF6537VDH" data-analytics-origin="https://muhammadsubhan.pages.dev" defer></script>
@@ -38,7 +40,7 @@
 
   <a class="skip" href="#main">Skip to content</a>
 
-  <header class="site-header">
+  <header class="site-header" data-blended-header>
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
       <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span class="toggle-icon" aria-hidden="true"><svg class="site-icon icon-closed" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#list"></use></svg><svg class="site-icon icon-open" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#x"></use></svg></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#house-line"></use></svg>Home</a><a href="/about/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#user-circle"></use></svg>About</a><a href="/journey/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#path"></use></svg>Journey</a><a href="/work/" aria-current="page"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#briefcase"></use></svg>Work</a><a href="/writing/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#pen-nib"></use></svg>Writing</a><a class="nav-contact" href="/contact/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg>Contact</a></nav>
@@ -52,7 +54,7 @@
       </div>
       <nav class="work-jumps" aria-label="On this page"><a class="action-link" href="#evidence"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#tree-structure"></use></svg><span class="link-label">Evidence map</span></a><a class="action-link" href="#experiences"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#briefcase"></use></svg><span class="link-label">Selected experiences</span></a><a class="action-link" href="#events"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#calendar-blank"></use></svg><span class="link-label">Events &amp; conferences</span></a></nav>
     </header>
-    <div class="work-lead" id="event-unesco">
+    <div class="work-lead" data-header-surface id="event-unesco">
       <article class="project-entry featured-project featured-with-image" data-motion-route="/work/unesco-ai-forum/">
       <div class="feature-copy">
         <p class="meta">Event · September 2026</p>
@@ -66,7 +68,7 @@
     <figcaption>Forum delegates in Riyadh. Photo by the Saudi Press Agency.</figcaption></figure>
     </article>
     </div>
-    <section class="evidence-section" id="evidence" aria-labelledby="evidence-title" tabindex="-1" data-share-section>
+    <section class="evidence-section" id="evidence" aria-labelledby="evidence-title" tabindex="-1" data-share-section data-header-surface>
     <div class="share-heading"><h2 id="evidence-title" class="icon-heading"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#tree-structure"></use></svg><span>Evidence map</span></h2><button class="section-copy" type="button" data-copy-section="evidence" aria-label="Copy link to Evidence map" hidden>
     <svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#link-simple"></use></svg><span data-section-copy-label>Copy link</span>
   </button></div>
@@ -193,7 +195,7 @@
       <a class="action-link" href="https://alison.com/certification/check/2y10MjgCMik9bOBpRxHAjte8mp7VozAs2192PrAxkYWLGKyTYqa62"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#certificate"></use></svg><span class="link-label">View certificate<span class="visually-hidden"> for Crew Management in Multi-Pilot Aircraft</span></span></a>
     </div></template>
   </section>
-    <section class="work-section work-experiences" id="experiences" aria-labelledby="work-experiences-title" tabindex="-1" data-share-section>
+    <section class="work-section work-experiences" id="experiences" aria-labelledby="work-experiences-title" tabindex="-1" data-share-section data-header-surface>
       <div class="share-heading"><h2 id="work-experiences-title" class="icon-heading"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#briefcase"></use></svg><span>Selected experiences</span></h2><button class="section-copy" type="button" data-copy-section="experiences" aria-label="Copy link to Selected experiences" hidden>
     <svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#link-simple"></use></svg><span data-section-copy-label>Copy link</span>
   </button></div>
@@ -216,7 +218,7 @@
       <a class="action-link project-action" href="/work/graduation-volunteering/"><span class="link-label">Read more<span class="visually-hidden"> about Graduation ceremony volunteering</span></span><svg class="site-icon arrow" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a>
     </div>
   </article></div>
-    </section><section class="work-section work-events" id="events" aria-labelledby="work-events-title" tabindex="-1" data-share-section>
+    </section><section class="work-section work-events" id="events" aria-labelledby="work-events-title" tabindex="-1" data-share-section data-header-surface>
       <div class="share-heading"><h2 id="work-events-title" class="icon-heading"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#calendar-blank"></use></svg><span>Events &amp; conferences</span></h2><button class="section-copy" type="button" data-copy-section="events" aria-label="Copy link to Events &amp; conferences" hidden>
     <svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#link-simple"></use></svg><span data-section-copy-label>Copy link</span>
   </button></div>

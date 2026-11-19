@@ -31,6 +31,8 @@
   <script src="/commands.js" defer></script>
   <script src="/now-editor.js" defer></script>
   <script src="/site.js" defer></script>
+  <link rel="stylesheet" href="/header-surface.css">
+  <script src="/header-surface.js" defer blocking="render"></script>
   <script src="/clarity.js" data-clarity-project="yu3io6wskv" data-analytics-origin="https://muhammadsubhan.pages.dev" defer></script>
   <link rel="stylesheet" href="/analytics.css">
   <script src="/google-analytics.js" data-ga4-id="G-DGF6537VDH" data-analytics-origin="https://muhammadsubhan.pages.dev" defer></script>
@@ -47,7 +49,7 @@
   </dialog>
   <a class="skip" href="#main">Skip to content</a>
 
-  <header class="site-header">
+  <header class="site-header" data-blended-header>
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
       <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span class="toggle-icon" aria-hidden="true"><svg class="site-icon icon-closed" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#list"></use></svg><svg class="site-icon icon-open" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#x"></use></svg></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/" aria-current="page"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#house-line"></use></svg>Home</a><a href="/about/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#user-circle"></use></svg>About</a><a href="/journey/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#path"></use></svg>Journey</a><a href="/work/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#briefcase"></use></svg>Work</a><a href="/writing/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#pen-nib"></use></svg>Writing</a><a class="nav-contact" href="/contact/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg>Contact</a></nav>
@@ -66,7 +68,7 @@
       <button class="site-update-dismiss" type="button" data-dismiss-site-update hidden>Dismiss</button>
     </div>
   </aside>
-    <section class="home-opening" aria-labelledby="home-title">
+    <section class="home-opening" aria-labelledby="home-title" data-header-surface="opening">
     <div class="container home-masthead home-masthead-portrait">
       <div class="home-intro">
         <div class="home-title">
@@ -100,7 +102,7 @@
       <div><dt class="icon-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#signpost"></use></svg>Looking ahead</dt><dd>I plan to study law and am especially interested in corporate transactions and private equity.</dd></div>
     </dl>
   </section><!-- now:content -->
-    <section class="home-section home-now" id="now" aria-labelledby="now-title" tabindex="-1" data-now-revision="0">
+    <section class="home-section home-now" id="now" aria-labelledby="now-title" tabindex="-1" data-now-revision="0" data-header-surface>
       <div class="container now-panel">
         <header class="now-heading">
           <h2 id="now-title">Now</h2>
@@ -124,7 +126,7 @@
         <button class="command-submit" type="submit">Publish update</button>
         <p class="command-feedback" role="status" data-editor-status></p>
       </form>
-    </dialog><section class="home-section home-work" id="selected-work" aria-labelledby="home-work-title" tabindex="-1">
+    </dialog><section class="home-section home-work" id="selected-work" aria-labelledby="home-work-title" tabindex="-1" data-header-surface>
     <div class="container">
       <div class="home-section-heading" data-reveal>
         <h2 id="home-work-title">Selected work &amp; experience</h2>
@@ -160,7 +162,7 @@
   </article>
       </div>
     </div>
-  </section><section class="home-section home-writing home-writing-novel" id="writing" aria-labelledby="home-writing-title" tabindex="-1">
+  </section><section class="home-section home-writing home-writing-novel" id="writing" aria-labelledby="home-writing-title" tabindex="-1" data-header-surface="dark">
     <div class="container home-writing-layout">
       <div class="home-writing-copy" data-reveal>
         <p class="eyebrow">Writing</p>

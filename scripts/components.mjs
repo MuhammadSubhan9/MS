@@ -31,6 +31,9 @@ export const pageIcons = {
   '/work/': 'briefcase', '/writing/': 'pen-nib', '/contact/': 'envelope-simple',
 };
 
+export const headerAssets = `<link rel="stylesheet" href="/header-surface.css">
+  <script src="/header-surface.js" defer blocking="render"></script>`;
+
 export const sectionIcons = {
   education: 'graduation-cap', experience: 'briefcase', languages: 'translate',
   capabilities: 'list-checks', courses: 'notebook', achievements: 'trophy', interests: 'compass',

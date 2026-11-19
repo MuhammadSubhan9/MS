@@ -33,7 +33,7 @@ function homePage(data, { hasAbout, hasContact, selected }) {
     </dl>` : ''}
   </section>` : '';
   const featuredWork = selected[0] || projects[0];
-  const work = featuredWork ? `<section class="home-section home-work" id="selected-work" aria-labelledby="home-work-title" tabindex="-1">
+  const work = featuredWork ? `<section class="home-section home-work" id="selected-work" aria-labelledby="home-work-title" tabindex="-1" data-header-surface>
     <div class="container">
       <div class="home-section-heading" data-reveal>
         <h2 id="home-work-title">Selected work &amp; experience</h2>
@@ -48,7 +48,7 @@ function homePage(data, { hasAbout, hasContact, selected }) {
   const book = writing.find(item => item.selected) || writing[0];
   const featuredNovel = findNovel(writing);
   const bookRoute = featuredNovel ? novelPath : book && hasDetail(book) ? safeLink(`/writing/${book.slug}/`) : '';
-  const writingFeature = book ? `<section class="home-section home-writing${featuredNovel ? ' home-writing-novel' : ''}" id="writing" aria-labelledby="home-writing-title" tabindex="-1">
+  const writingFeature = book ? `<section class="home-section home-writing${featuredNovel ? ' home-writing-novel' : ''}" id="writing" aria-labelledby="home-writing-title" tabindex="-1" data-header-surface="dark">
     <div class="container home-writing-layout"${bookRoute && !featuredNovel ? ` data-motion-route="${bookRoute}"` : ''}>
       <div class="home-writing-copy" data-reveal>
         <p class="eyebrow">Writing</p>
@@ -85,7 +85,7 @@ function homePage(data, { hasAbout, hasContact, selected }) {
   const nameLines = data.name.trim().split(/\s+(?=\S+$)/);
   return `
     ${siteUpdateBrief(data.siteUpdate)}
-    <section class="home-opening" aria-labelledby="home-title">
+    <section class="home-opening" aria-labelledby="home-title" data-header-surface="opening">
     <div class="container home-masthead${portraitMarkup ? ' home-masthead-portrait' : ''}">
       <div class="home-intro">
         <div class="home-title">
@@ -105,7 +105,7 @@ function homePage(data, { hasAbout, hasContact, selected }) {
 function aboutPage(data, background) {
   const portrait = image(data.aboutPortrait || data.portrait, { eager: true, sizes: '(max-width: 700px) 92vw, 55vw' });
   return `<div class="profile-page">
-    <div class="about-opening${portrait ? ' about-opening-with-portrait' : ''}">
+    <div class="about-opening${portrait ? ' about-opening-with-portrait" data-header-surface="about' : ''}">
       <header class="about-hero container${portrait ? ' about-hero-with-portrait' : ''}">
         <div class="about-hero-copy">
           <div class="about-hero-heading">
@@ -184,11 +184,11 @@ function workIndex(items, introduction, evidence) {
       ${jumps.length ? `<nav class="work-jumps" aria-label="On this page">${jumps.map(([id, title]) =>
         action('#' + id, title, 'action-link', '', sectionIcons[id])).join('')}</nav>` : ''}
     </header>
-    <div class="work-lead"${feature.slug === 'unesco-ai-forum' ? ' id="event-unesco"' : ''}>
+    <div class="work-lead" data-header-surface${feature.slug === 'unesco-ai-forum' ? ' id="event-unesco"' : ''}>
       ${projectEntry(feature, { featured: true, eagerImage: true, actionLabel: 'Read more' })}
     </div>
     ${evidence}
-    ${sections.map(([id, title, entries]) => `<section class="work-section work-${id}" id="${id}" aria-labelledby="work-${id}-title" tabindex="-1" data-share-section>
+    ${sections.map(([id, title, entries]) => `<section class="work-section work-${id}" id="${id}" aria-labelledby="work-${id}-title" tabindex="-1" data-share-section data-header-surface>
       ${sharedHeading(id, title, { headingId: `work-${id}-title` })}
       <div class="work-entries">${entries.map(item => id === 'events' ? workEvent(item) : projectEntry(item, {
         heading: 'h3', featured: Boolean(item.image), showSummary: true, actionLabel: 'Read more',

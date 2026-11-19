@@ -1,4 +1,4 @@
-import { copySectionButton, escape, icon, image, paragraphs, safeLink } from './components.mjs';
+import { copySectionButton, escape, headerAssets, icon, image, paragraphs, safeLink } from './components.mjs';
 import { commandAssets, commandPalette } from './commands.mjs';
 import { clarityTag, googleAnalytics } from './analytics.mjs';
 import excerpt from '../content/eleventh-rehearsal.json' with { type: 'json' };
@@ -58,7 +58,7 @@ function reader(book, author) {
 
 export function novelContent(book, author) {
   return `
-    <section class="novel-hero" aria-labelledby="novel-title">
+    <section class="novel-hero" aria-labelledby="novel-title" data-header-surface="dark">
       <div class="novel-hero-copy">
         <p class="novel-label">A psychological thriller</p>
         <h1 id="novel-title"><span>The Eleventh</span> <em>Rehearsal</em></h1>
@@ -90,7 +90,7 @@ export function novelContent(book, author) {
       </div>
     </section>
 
-    <section class="novel-synopsis" id="synopsis" aria-labelledby="synopsis-title" tabindex="-1" data-share-section>
+    <section class="novel-synopsis" id="synopsis" aria-labelledby="synopsis-title" tabindex="-1" data-share-section data-header-surface="dark">
       <div class="synopsis-still">
         <img src="/images/rehearsal-conservatory-1280.webp"
           srcset="/images/rehearsal-conservatory-768.webp 768w, /images/rehearsal-conservatory-1280.webp 1280w"
@@ -114,7 +114,7 @@ export function novelContent(book, author) {
       </div>
     </section>
 
-    <section class="novel-excerpt" id="excerpt" aria-labelledby="excerpt-title" tabindex="-1" data-share-section>
+    <section class="novel-excerpt" id="excerpt" aria-labelledby="excerpt-title" tabindex="-1" data-share-section data-header-surface="dark">
       <div class="novel-wrap excerpt-wrap">
         <header class="excerpt-heading">
           <div>
@@ -129,7 +129,7 @@ export function novelContent(book, author) {
         <div data-inline-reader>${reader(book, author)}</div>
       </div>
     </section>
-    <section class="novel-release" id="release-updates" aria-labelledby="release-title" tabindex="-1">
+    <section class="novel-release" id="release-updates" aria-labelledby="release-title" tabindex="-1" data-header-surface="dark">
       <div class="novel-wrap release-layout">
         <div class="release-copy">
           <p class="novel-label">The release announcement</p>
@@ -193,6 +193,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
   <script src="/navigation-motion.js" blocking="render"></script>
   ${portfolioAssets}
   <script src="/novel.js" defer blocking="render"></script>
+  ${headerAssets}
   <script src="/novel-subscription.js" defer></script>
   ${data.now ? commandAssets : ''}
   ${clarityTag(data, origin, ready)}
@@ -200,7 +201,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
 </head>
 <body class="novel-page">
   <a class="novel-skip" href="#main">Skip to content</a>
-  <header class="novel-header">
+  <header class="novel-header" data-blended-header>
     <div class="novel-header-inner novel-wrap">
       <a class="novel-back" href="/"><span class="novel-back-arrow" aria-hidden="true">${icon('arrow-left')}</span> Portfolio</a>
       <a class="novel-imprint" href="#main" aria-label="${escape(page.label)}, back to top">

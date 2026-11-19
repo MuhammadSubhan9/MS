@@ -1,4 +1,4 @@
-import { action, escape, icon, pageIcons, safeLink, toggleIcon } from './components.mjs';
+import { action, escape, headerAssets, icon, pageIcons, safeLink, toggleIcon } from './components.mjs';
 import { renderNovelPage } from './novel.mjs';
 import { commandAssets, commandPalette } from './commands.mjs';
 import { clarityTag, googleAnalytics } from './analytics.mjs';
@@ -74,6 +74,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   ${data.now ? commandAssets : ''}
   ${home && data.now ? '<script src="/now-editor.js" defer></script>' : ''}
   <script src="/site.js" defer></script>
+  ${headerAssets}
   ${clarityTag(data, origin, ready)}
   ${google.head}
 </head>
@@ -81,7 +82,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   ${home ? welcome : ''}
   <a class="skip" href="#main">Skip to content</a>
   ${preview ? '<aside class="preview-notice" aria-label="Development preview">Private design preview · Sample content for layout review</aside>' : ''}
-  <header class="site-header">
+  <header class="site-header" data-blended-header>
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>${escape(data.name)}</span></a>
       ${navigation.length > 1 ? `<button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu${toggleIcon('list', 'x')}</button><nav class="nav" id="navigation" aria-label="Primary">${links}</nav>` : ''}

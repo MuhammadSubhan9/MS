@@ -304,7 +304,7 @@ body:has(.profile-page) .nav a[aria-current="page"] { background: #e1d2bb; color
 .about-opening-with-portrait::before {
   position: absolute;
   z-index: -1;
-  inset: 0;
+  inset: calc(-1 * var(--blended-header-height, 0px)) 0 0;
   background: radial-gradient(ellipse at 95% 52%, #69462c, transparent 68%), var(--portrait-brown);
   mask-image: linear-gradient(to bottom,
     #000 calc(100% - var(--portrait-fade)),

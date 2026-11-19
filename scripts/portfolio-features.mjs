@@ -79,7 +79,7 @@ export function evidenceMap(records) {
   const first = items[0];
   const available = topics.filter(([topic]) => items.some(item => item.evidence.topics.includes(topic)));
   const button = ([topic, label, symbol]) => `<button class="icon-label" type="button" data-evidence-filter="${topic}" aria-pressed="${topic === 'all'}">${icon(symbol)}${label}</button>`;
-  return `<section class="evidence-section" id="evidence" aria-labelledby="evidence-title" tabindex="-1" data-share-section>
+  return `<section class="evidence-section" id="evidence" aria-labelledby="evidence-title" tabindex="-1" data-share-section data-header-surface>
     ${sharedHeading('evidence', 'Evidence map')}
     <div class="evidence-filters" data-evidence-filters role="group" aria-label="Filter by subject" hidden>
       ${[['all', 'All subjects', 'squares-four'], ...available].map(button).join('')}
@@ -183,7 +183,7 @@ export function journeyPage(data, records) {
     ['looking-ahead', 'Looking ahead', data.futureDirection],
   ].filter(([, , show]) => show);
   return `<div class="journey-page">
-    <header class="journey-hero">
+    <header class="journey-hero" data-header-surface="journey">
       <div class="container journey-hero-inner">
         <div>
           <h1>Journey</h1>

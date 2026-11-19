@@ -1,0 +1,94 @@
+body { --blended-header-height: 78px; }
+@media (max-width: 800px) {
+  body { --blended-header-height: 65px; }
+}
+
+[data-blended-header] {
+  isolation: isolate;
+  border-bottom: 0;
+  padding-block-end: 1px;
+  background: var(--header-ground, var(--paper, var(--room)));
+  box-shadow: none;
+  backdrop-filter: none;
+}
+[data-blended-header]::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-color: var(--header-wash-color, transparent);
+  background-image: var(--header-wash-image, none);
+  background-size: 100% var(--header-wash-height, 0px);
+  background-position-y: var(--header-wash-offset, 0px);
+  background-repeat: no-repeat;
+  mask-image: var(--header-wash-mask, none);
+  mask-size: 100% var(--header-wash-height, 0px);
+  mask-position: 0 var(--header-wash-offset, 0px);
+  mask-repeat: no-repeat;
+  content: '';
+  pointer-events: none;
+}
+
+.site-header[data-blended-header] {
+  --header-ink: #090604;
+  --header-rule: #432d2345;
+  --header-control: #f8f0e42e;
+  --header-hover: #f8f0e489;
+  --header-current: #41333214;
+  --header-menu: #f2e8da;
+}
+.site-header[data-header-dark] {
+  --header-ink: #fffdfa;
+  --header-rule: #eed6b65c;
+  --header-control: #20162426;
+  --header-hover: #2417224a;
+  --header-current: #20162473;
+  --header-menu: #332632;
+}
+.site-header[data-blended-header] :is(.nav, .menu) {
+  border-color: var(--header-rule);
+  background-color: var(--header-control);
+}
+.site-header[data-blended-header] :is(.wordmark, .menu, .nav a:not(.nav-contact)) {
+  color: var(--header-ink);
+  transition-property: background-color, border-color;
+}
+.site-header[data-blended-header] .nav a:not(.nav-contact):is(:hover, :focus-visible) {
+  background-color: var(--header-hover);
+}
+.site-header[data-blended-header] .nav a[aria-current]:not(.nav-contact) {
+  background-color: var(--header-current);
+  box-shadow: inset 0 0 0 1px var(--header-rule);
+}
+.site-header[data-blended-header] :focus-visible { outline-color: var(--header-ink); }
+@media (max-width: 800px) {
+  .site-header[data-blended-header] .nav { background-color: var(--header-menu); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  body:has(.work-page) .site-header[data-blended-header],
+  .novel-header[data-blended-header] { transition: background-color 180ms ease-out; }
+}
+
+.home-opening {
+  background-origin: border-box;
+  background-size: 100% calc(100% + var(--blended-header-height));
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+.home-writing { --header-colour: #241b16; }
+.work-lead { --header-colour: #e5e7df; }
+.evidence-section { --header-colour: #e7e7dd; }
+.work-experiences { --header-colour: #f7f2e9; }
+.work-events { --header-colour: #ebe2d5; }
+.novel-hero { --header-colour: #17110d; }
+.novel-hero::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0 0 auto;
+  height: clamp(2rem, 5vw, 4.5rem);
+  background: linear-gradient(var(--header-colour), transparent);
+  content: '';
+  pointer-events: none;
+}
+.novel-synopsis { --header-colour: #181a15; }
+.novel-excerpt { --header-colour: #281b13; }
+.novel-release { --header-colour: #211a13; }

@@ -73,7 +73,7 @@ export function contactPage(contact, name) {
           <h2 class="eyebrow icon-label" id="contact-email-title">${icon('envelope-simple')}Email</h2>
           <a class="contact-address" href="${mail}">${escape(email)}</a>
           <div class="contact-actions">
-            ${vcard ? `<a class="contact-save" href="${safeLink(vcard)}" download>${icon('identification-card', 'contact-card-icon')}Save contact card</a>` : ''}
+            ${vcard ? `<a class="contact-save" id="save-contact" href="${safeLink(vcard)}" download>${icon('identification-card', 'contact-card-icon')}Save contact card</a>` : ''}
             <button class="contact-copy" type="button" aria-label="Copy address" data-copy-email="${escape(email)}" hidden>
               <span class="contact-copy-icon" aria-hidden="true">${icon('copy-simple', 'contact-copy-sheets')}${icon('check', 'contact-copy-check')}</span>
               <span class="contact-copy-labels" aria-hidden="true"><span>Copy address</span><span>Copied!</span></span>

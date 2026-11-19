@@ -38,9 +38,11 @@ export function nowSection(content) {
         <label for="now-editor-text">What are you doing now?</label>
         <textarea id="now-editor-text" rows="8" maxlength="${nowLimit}" aria-describedby="now-editor-help" required autofocus></textarea>
         <p class="command-feedback" id="now-editor-help">Separate paragraphs with a blank line.</p>
+        <div class="now-draft-preview now-copy" hidden></div>
         <label for="now-editor-code">Publishing code</label>
         <input id="now-editor-code" type="password" maxlength="128" autocomplete="off" required>
         <button class="command-submit" type="submit">Publish update</button>
+        <button class="command-unlock" type="button">Unlock Ctrl+K</button>
         <p class="command-feedback" role="status" data-editor-status></p>
       </form>
     </dialog>`;

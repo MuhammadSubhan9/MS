@@ -161,8 +161,48 @@ try {
   await chrome.evaluate("document.querySelector('.contact-form').reset()");
   assert.equal(await chrome.evaluate("document.querySelector('#contact-message').placeholder"), '');
 
+  const commandShortcut = () => chrome.key('k', 'KeyK', 75, 2);
+  const paletteOpen = () => chrome.evaluate("document.querySelector('[aria-labelledby=command-title]').open");
+  async function command(value) {
+    await commandShortcut();
+    assert.equal(await paletteOpen(), true);
+    await chrome.evaluate('document.querySelector("#command-input").value = ' + JSON.stringify(value));
+    await chrome.key('Enter', 'Enter', 13);
+  }
+
+  await commandShortcut();
+  assert.equal(await paletteOpen(), false);
+  await chrome.navigate(origin + '/#edit', 390);
+  await chrome.evaluate("document.querySelector('#now-editor-code').value = 'browser-test-code-only-1234'");
+  await chrome.evaluate(`
+    window.fetch = async (_url, options) => {
+      if (JSON.parse(options.body).command !== 'unlock') throw new Error('Unexpected request');
+      return Response.json({ expiresAt: Date.now() + 30000 });
+    };
+    document.querySelector('.command-unlock').click();
+  `);
+  await waitFor(() => chrome.evaluate("document.querySelector('[data-editor-status]').textContent.includes('unlocked')"), 'owner unlock');
+  assert.equal(await chrome.evaluate("document.querySelector('#now-editor-code').value"), '');
+  await chrome.key('Escape', 'Escape', 27);
+  await waitFor(() => chrome.evaluate("location.hash === '#now'"), 'closing editor after unlock');
+  await chrome.navigate(origin + '/writing/', 390);
+  await command('preview now');
+  await waitFor(() => chrome.evaluate("document.querySelector('.now-editor[data-preview]')?.open"), 'private draft preview');
+  assert.match(await chrome.evaluate("document.querySelector('.now-draft-preview').textContent"), /Browser test draft/);
+  await chrome.key('Escape', 'Escape', 27);
+  await waitFor(() => chrome.evaluate("location.hash === '#now'"), 'closing draft preview');
+  await chrome.evaluate("window.fetch = async () => Response.json({ pending: 2, confirmed: 1, notified: 0 })");
+  await command('novel signups');
+  await waitFor(() => chrome.evaluate("document.querySelector('[aria-labelledby=command-title] .command-feedback').textContent.includes('2 awaiting confirmation')"), 'novel signup totals');
+  await chrome.key('Escape', 'Escape', 27);
+  await waitFor(async () => !await paletteOpen(), 'closing owner commands');
+  await command('lock tools');
+  await waitFor(async () => !await paletteOpen(), 'locking owner commands');
+  await commandShortcut();
+  assert.equal(await paletteOpen(), false);
+
   assert.deepEqual(errors, []);
-  console.log('Browser checks passed for mobile layout, the contact form and card, draft recovery, the reader, evidence, credentials, sharing, glossary, Journey and site updates.');
+  console.log('Browser checks passed for mobile layout, the contact form and card, draft recovery, the reader, evidence, credentials, sharing, glossary, Journey, site updates and owner commands.');
 } finally {
   try { await chrome?.close(); } finally { server.closeAllConnections(); server.close(); }
 }

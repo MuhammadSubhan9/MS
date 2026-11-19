@@ -89,7 +89,7 @@
       <button class="button-link" type="submit">Done</button>
     </form>
   </dialog>
-  <dialog class="command-palette" aria-labelledby="command-title">
+  <dialog class="command-palette" aria-labelledby="command-title" data-clarity-mask="true">
     <form class="command-form">
       <div class="command-heading">
         <h2 id="command-title">Commands</h2>
@@ -97,7 +97,6 @@
       </div>
       <label class="command-label" for="command-input">Type a command</label>
       <input id="command-input" type="text" placeholder="Type a command…" autocomplete="off" autocapitalize="none" spellcheck="false" autofocus>
-      <a class="command-result" href="/#edit" hidden>Edit Now <svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a>
       <p class="command-feedback" role="status"></p>
     </form>
   </dialog>

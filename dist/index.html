@@ -121,9 +121,11 @@
         <label for="now-editor-text">What are you doing now?</label>
         <textarea id="now-editor-text" rows="8" maxlength="4000" aria-describedby="now-editor-help" required autofocus></textarea>
         <p class="command-feedback" id="now-editor-help">Separate paragraphs with a blank line.</p>
+        <div class="now-draft-preview now-copy" hidden></div>
         <label for="now-editor-code">Publishing code</label>
         <input id="now-editor-code" type="password" maxlength="128" autocomplete="off" required>
         <button class="command-submit" type="submit">Publish update</button>
+        <button class="command-unlock" type="button">Unlock Ctrl+K</button>
         <p class="command-feedback" role="status" data-editor-status></p>
       </form>
     </dialog><section class="home-section home-work" id="selected-work" aria-labelledby="home-work-title" tabindex="-1" data-header-surface>
@@ -215,7 +217,7 @@
       <button class="button-link" type="submit">Done</button>
     </form>
   </dialog>
-  <dialog class="command-palette" aria-labelledby="command-title">
+  <dialog class="command-palette" aria-labelledby="command-title" data-clarity-mask="true">
     <form class="command-form">
       <div class="command-heading">
         <h2 id="command-title">Commands</h2>
@@ -223,7 +225,6 @@
       </div>
       <label class="command-label" for="command-input">Type a command</label>
       <input id="command-input" type="text" placeholder="Type a command…" autocomplete="off" autocapitalize="none" spellcheck="false" autofocus>
-      <a class="command-result" href="/#edit" hidden>Edit Now <svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></a>
       <p class="command-feedback" role="status"></p>
     </form>
   </dialog>

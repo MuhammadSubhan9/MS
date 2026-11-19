@@ -48,8 +48,9 @@ test('public build excludes fixture data and includes production SEO', async () 
   const [nowDate] = sourceNow.trim().split(/\r?\n/, 1);
   assert.ok(html.includes(`<time datetime="${nowDate}">${formatDate(nowDate)}</time>`));
   assert.match(html, /class="reading now-copy"><p>\S/);
-  assert.match(html, /class="command-result" href="\/#edit"/);
+  assert.doesNotMatch(html, /class="command-result"/);
   assert.match(html, /id="now-editor-code" type="password"/);
+  assert.match(html, /class="command-unlock" type="button">Unlock Ctrl\+K/);
   assert.ok(!html.includes('Private design preview'));
   const contact = await readFile(`${output}/contact/index.html`, 'utf8');
   assert.ok(contact.includes('href="mailto:ms@ahmadbaqa.com"'));

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { DatabaseSync } from 'node:sqlite';
-import { onRequestPut } from '../functions/api/now.js';
+import { onRequestPost, onRequestPut } from '../functions/api/now.js';
 import { onRequestGet } from '../functions/index.js';
 import { renderNowContent } from '../scripts/now.mjs';
 
@@ -47,6 +47,40 @@ test('Now requires the shared code and rejects stale writes without replacing ne
     assert.equal(saved.status, 200);
     assert.deepEqual((await saved.json()).paragraphs, ['Writing update.', '<treat this as text>']);
     assert.equal((await put({ revision: 1, text: 'Stale update.' })).status, 409);
+
+    function tool(command, { code, cookie, from = origin } = {}) {
+      const headers = { Origin: from, 'Content-Type': 'application/json' };
+      if (code) headers.Authorization = 'Bearer ' + code;
+      if (cookie) headers.Cookie = cookie;
+      const request = new Request(origin + '/api/now', { method: 'POST', headers, body: JSON.stringify({ command }) });
+      return onRequestPost({ request, env });
+    }
+
+    assert.equal((await tool('novel signups')).status, 401);
+    assert.equal((await tool('now status', { code: editorCode })).status, 401);
+    assert.equal((await tool('unlock', { code: 'invalid-publishing-code-000' })).status, 401);
+    assert.equal((await tool('unlock', { code: editorCode, from: 'https://other.example' })).status, 403);
+    const login = await tool('unlock', { code: editorCode });
+    assert.equal(login.status, 200);
+    assert.equal(login.headers.get('Cache-Control'), 'no-store');
+    assert.ok((await login.json()).expiresAt > Date.now());
+    const cookieHeader = login.headers.get('Set-Cookie');
+    assert.match(cookieHeader, /^__Host-portfolio-tools=.+; Path=\/; Max-Age=1800; HttpOnly; Secure; SameSite=Strict$/);
+    const cookie = cookieHeader.split(';')[0];
+    const tampered = cookie.slice(0, -1) + (cookie.endsWith('1') ? '0' : '1');
+    assert.equal((await tool('novel signups', { cookie: tampered })).status, 401);
+    assert.equal((await tool('now status', { cookie: cookie.replace(/=\d+/, '=1000000000') })).status, 401);
+
+    const live = await tool('now status', { cookie });
+    assert.equal(live.status, 200);
+    assert.equal((await live.json()).revision, 2);
+    const insert = database.prepare('INSERT INTO novel_subscribers (id, email, unsubscribe_token, consent_version, notified_at) VALUES (?, ?, ?, ?, ?)');
+    insert.run('a', 'pending@example.test', 'a-token', 'novel-release-v1', null);
+    insert.run('b', 'confirmed@example.test', 'b-token', 'novel-release-confirmed-v1', null);
+    insert.run('c', 'notified@example.test', 'c-token', 'novel-release-confirmed-v1', '2026-11-19');
+    assert.deepEqual(await (await tool('novel signups', { cookie })).json(), { pending: 1, confirmed: 2, notified: 1 });
+    assert.equal((await tool('unknown command', { cookie })).status, 400);
+    assert.match((await tool('lock', { cookie })).headers.get('Set-Cookie'), /^__Host-portfolio-tools=; Path=\/; Max-Age=0;/);
 
     const request = new Request(origin + '/', { headers: { 'If-None-Match': 'old-asset-tag' } });
     const html = renderNowContent({ date: '2026-11-17', text: 'Static fallback.' });

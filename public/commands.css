@@ -49,19 +49,26 @@
 }
 .command-submit:hover { background: #324b41; }
 .command-submit:disabled { opacity: .65; cursor: progress; }
-.command-result:not([hidden]) {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+.command-unlock {
   min-height: 44px;
-  padding: .55rem .8rem;
-  border-radius: .5rem;
-  background: #263d35;
-  color: #f2ede3;
-  text-decoration: none;
+  padding: .35rem .75rem;
+  border: 1px solid #a99880;
+  border-radius: .45rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
 }
-.command-result:hover { background: #324b41; }
+.command-unlock:disabled { opacity: .65; cursor: progress; }
+.now-draft-preview:not([hidden]) {
+  display: block;
+  padding: 1rem;
+  border-inline-start: 2px solid #365448;
+  background: #fbf5e9;
+  overflow-wrap: anywhere;
+}
+.now-draft-preview p:last-child { margin-bottom: 0; }
+.now-editor[data-preview] .command-form > :not(.command-heading, .now-draft-preview) { display: none; }
 .command-palette :focus-visible { outline: 2px solid #285547; outline-offset: 3px; }
 .command-feedback { margin: 0; color: #62594f; }
 .command-feedback:empty { margin-block-start: -.85rem; }

@@ -12,6 +12,7 @@
   --opening-bronze: #806047;
   --opening-rule: #b6a18a;
   --opening-ease: cubic-bezier(.22, .82, .26, 1);
+  --opening-slide-duration: 620ms;
   position: fixed;
   inset: 0;
   display: block;
@@ -23,6 +24,7 @@
   margin: 0;
   padding: 0;
   border: 0;
+  border-block-start: 4px solid var(--emerald);
   overflow-y: auto;
   overscroll-behavior: contain;
   color: var(--opening-ink);
@@ -31,10 +33,16 @@
     linear-gradient(114deg, #f8f1e6 12%, #f0e5d4 60%, #e2cfb5);
   clip-path: inset(0);
   font: 1rem/1.45 var(--sans);
+  animation: opening-slide var(--opening-slide-duration) cubic-bezier(.36, 0, .22, 1) both;
   transition: opacity var(--opening-exit) ease, clip-path var(--opening-exit) var(--opening-ease);
 }
 
-.opening::backdrop { background: transparent; }
+.opening::backdrop {
+  background-color: var(--emerald, #263d35);
+  animation: opening-stage var(--opening-slide-duration, 620ms) step-end both;
+  transition: background-color var(--opening-exit, 180ms) ease;
+}
+.opening.leaving::backdrop { background-color: transparent; }
 
 .opening-sheet {
   --opening-gutter: clamp(1.15rem, 5.6vw, 5.25rem);
@@ -71,7 +79,7 @@
   background: var(--opening-rule);
   content: '';
   transform-origin: left;
-  animation: opening-rule 850ms var(--opening-ease) both;
+  animation: opening-rule 850ms var(--opening-ease) .32s both;
 }
 
 .opening-label, .opening-bottom p {
@@ -86,7 +94,7 @@
 .opening-label::before {
   width: 1.2rem;
   height: 2px;
-  background: #33574b;
+  background: var(--emerald);
   content: '';
 }
 
@@ -97,15 +105,15 @@
   gap: .65rem;
   min-height: 44px;
   padding: .42rem .78rem;
-  border: 1px solid #a18a72;
+  border: 1px solid var(--emerald);
   border-radius: .2rem;
-  color: var(--opening-ink);
-  background: #f8f1e658;
+  color: #f8f1e6;
+  background: var(--emerald);
   font: 600 .92rem/1.2 var(--sans);
   cursor: pointer;
 }
 
-.opening-skip:hover { background: #fff9ed; }
+.opening-skip:hover { background: var(--accent); }
 .opening-skip .site-icon { width: .9rem; height: .9rem; }
 
 .opening-spread {
@@ -131,7 +139,7 @@
   background: linear-gradient(var(--opening-bronze), var(--opening-rule) 75%, transparent);
   content: '';
   transform-origin: top;
-  animation: opening-vertical 1100ms var(--opening-ease) .15s both;
+  animation: opening-vertical 1100ms var(--opening-ease) .42s both;
 }
 
 .opening-name {
@@ -150,7 +158,7 @@
 
 .opening-name > span > span {
   display: block;
-  animation: opening-name 930ms var(--opening-ease) .12s both;
+  animation: opening-name 930ms var(--opening-ease) .5s both;
 }
 
 .opening-name > span:nth-child(2) {
@@ -158,7 +166,7 @@
   color: #674b37;
   font-style: italic;
 }
-.opening-name > span:nth-child(2) > span { animation-delay: .26s; }
+.opening-name > span:nth-child(2) > span { animation-delay: .64s; }
 
 .opening-caption {
   max-width: 32ch;
@@ -167,7 +175,7 @@
   font-size: clamp(1.08rem, 1.75vw, 1.45rem);
   line-height: 1.36;
   text-wrap: pretty;
-  animation: opening-rise 690ms var(--opening-ease) .58s both;
+  animation: opening-rise 690ms var(--opening-ease) .92s both;
 }
 
 .opening-portrait {
@@ -181,9 +189,9 @@
 .opening-portrait::before {
   position: absolute;
   inset: -.58rem .58rem .58rem -.58rem;
-  border: 1px solid #95795d;
+  border: 1px solid #587063;
   content: '';
-  animation: opening-frame 1150ms var(--opening-ease) .14s both;
+  animation: opening-frame 1150ms var(--opening-ease) .46s both;
 }
 
 .opening-portrait figure {
@@ -192,7 +200,7 @@
   margin: 0;
   overflow: hidden;
   background: linear-gradient(128deg, #c69a68, #593c2d 76%);
-  animation: opening-aperture 1080ms var(--opening-ease) .22s both;
+  animation: opening-aperture 1080ms var(--opening-ease) .54s both;
 }
 
 .opening-portrait .media-window { height: 100%; }
@@ -201,7 +209,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center 35%;
-  animation: opening-portrait 1800ms var(--opening-ease) .22s both;
+  animation: opening-portrait 1800ms var(--opening-ease) .54s both;
 }
 
 .opening-portrait figure::after {
@@ -217,16 +225,16 @@
 .opening-track {
   position: relative;
   flex: 1;
-  height: 1px;
+  height: 2px;
   background: var(--opening-rule);
 }
 .opening-track::before {
   position: absolute;
   inset: 0;
-  background: #33574b;
+  background: var(--emerald);
   content: '';
   transform-origin: left;
-  animation: opening-rule var(--opening-duration) linear both;
+  animation: opening-rule calc(var(--opening-duration) - var(--opening-slide-duration)) linear var(--opening-slide-duration) both;
 }
 
 .opening[open].leaving {
@@ -239,8 +247,16 @@
   animation-play-state: paused;
 }
 
+@keyframes opening-slide {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes opening-stage {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
 @keyframes opening-name {
-  from { transform: translateY(115%); }
+  from { opacity: 0; transform: translateY(115%); }
 }
 @keyframes opening-rise {
   from { opacity: 0; transform: translateY(12px); }

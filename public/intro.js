@@ -3,7 +3,7 @@
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const navigation = performance.getEntriesByType('navigation')[0];
   const storageKey = 'subhan-intro-seen';
-  const openingDuration = 2950;
+  const openingDuration = 3200;
   if (document.documentElement.classList.contains('page-transitioning')) return;
   if (!intro?.showModal || reducedMotion.matches || location.hash || navigation?.type === 'back_forward') return;
 

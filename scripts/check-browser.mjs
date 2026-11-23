@@ -217,6 +217,8 @@ try {
   `);
   await waitFor(() => chrome.evaluate("document.querySelector('[data-editor-status]').textContent.includes('unlocked')"), 'owner unlock');
   assert.equal(await chrome.evaluate("document.querySelector('#now-editor-code').value"), '');
+  assert.ok(await chrome.evaluate("Number(localStorage.getItem('portfolio-tools-expires')) > Date.now()"));
+  await chrome.evaluate("sessionStorage.removeItem('portfolio-tools-expires')");
   await chrome.key('Escape', 'Escape', 27);
   await waitFor(() => chrome.evaluate("location.hash === '#now'"), 'closing editor after unlock');
   await chrome.navigate(origin + '/writing/', 390);
@@ -232,8 +234,12 @@ try {
   await waitFor(async () => !await paletteOpen(), 'closing owner commands');
   await command('lock tools');
   await waitFor(async () => !await paletteOpen(), 'locking owner commands');
+  assert.equal(await chrome.evaluate("Number(localStorage.getItem('portfolio-tools-expires'))"), 0);
   await commandShortcut();
   assert.equal(await paletteOpen(), false);
+  await chrome.evaluate("localStorage.setItem('portfolio-tools-expires', String(Date.now() - 1000))");
+  await commandShortcut();
+  await waitFor(() => chrome.evaluate("location.hash === '#edit' && document.querySelector('.now-editor')?.open"), 'returning to the unlock prompt after expiry');
 
   assert.deepEqual(errors, []);
   console.log('Browser checks passed for mobile layout, the contact form and card, draft recovery, the reader, evidence, credentials, sharing, glossary, Journey, site updates and owner commands.');

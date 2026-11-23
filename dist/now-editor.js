@@ -11,17 +11,12 @@ const preview = form.querySelector('.now-draft-preview');
 const copy = snapshot?.querySelector('.now-copy');
 const date = snapshot?.querySelector('time');
 const draftKey = () => 'portfolio-now-draft-' + snapshot.dataset.nowRevision;
-const sessionKey = 'portfolio-tools-expires';
 
 function openEditor() {
   if (!snapshot || editor.open || typeof editor.showModal !== 'function') return;
   const previewing = location.hash === '#preview-now';
   if (location.hash !== '#edit' && !previewing) return;
-  if (previewing) {
-    try {
-      if (!(Number(sessionStorage.getItem(sessionKey)) > Date.now())) return;
-    } catch { return; }
-  }
+  if (previewing && !(readCommandExpiry() > Date.now())) return;
   if (!text.value) {
     try { text.value = sessionStorage.getItem(draftKey()) || ''; } catch { /* Storage is optional. */ }
     if (!text.value) text.value = [...copy.querySelectorAll('p')].map(p => p.textContent).join('\n\n');
@@ -85,9 +80,9 @@ unlock.addEventListener('click', async () => {
       message.textContent = result.error || 'Ctrl+K could not be unlocked.';
       return;
     }
-    sessionStorage.setItem(sessionKey, String(result.expiresAt));
+    rememberCommandExpiry(result.expiresAt);
     code.value = '';
-    message.textContent = 'Ctrl+K unlocked for 30 minutes in this tab. Close the editor to use it.';
+    message.textContent = 'Ctrl+K unlocked for 30 minutes in this browser. Close the editor to use it.';
   } catch {
     message.textContent = 'Ctrl+K could not be unlocked. Try again in a moment.';
   } finally {

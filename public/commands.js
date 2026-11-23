@@ -1,34 +1,58 @@
 const palette = document.querySelector('#command-title')?.closest('dialog');
+const commandSessionKey = 'portfolio-tools-expires';
+
+function readCommandExpiry() {
+  try {
+    const saved = localStorage.getItem(commandSessionKey);
+    if (saved !== null) return Number(saved);
+    const previous = sessionStorage.getItem(commandSessionKey);
+    if (previous !== null) localStorage.setItem(commandSessionKey, previous);
+    return Number(previous);
+  } catch {
+    try { return Number(sessionStorage.getItem(commandSessionKey)); }
+    catch { return 0; }
+  }
+}
+
+function rememberCommandExpiry(expiresAt) {
+  try { localStorage.setItem(commandSessionKey, String(expiresAt)); }
+  catch { sessionStorage.setItem(commandSessionKey, String(expiresAt)); }
+}
 
 if (typeof palette?.showModal === 'function') {
   const form = palette.querySelector('form');
   const input = palette.querySelector('input');
   const feedback = palette.querySelector('.command-feedback');
-  const sessionKey = 'portfolio-tools-expires';
   const destinations = new Map([
     ['edit now', '/#edit'],
     ['clg upd', '/#edit'],
     ['preview now', '/#preview-now'],
   ]);
 
-  function unlocked() {
-    try { return Number(sessionStorage.getItem(sessionKey)) > Date.now(); }
-    catch { return false; }
+  function openUnlock() {
+    palette.close();
+    location.assign('/#edit');
   }
 
   function lock() {
-    sessionStorage.removeItem(sessionKey);
+    rememberCommandExpiry(0);
     palette.close();
   }
 
   document.addEventListener('keydown', event => {
-    if (!unlocked() || event.defaultPrevented || event.repeat || event.isComposing ||
+    if (event.defaultPrevented || event.repeat || event.isComposing ||
         event.ctrlKey === event.metaKey || event.altKey || event.shiftKey ||
-        event.key.toLowerCase() !== 'k' ||
+        (event.code !== 'KeyK' && event.key.toLowerCase() !== 'k') ||
         event.target.closest?.('input, textarea, select, [contenteditable]:not([contenteditable="false"])') ||
         document.querySelector('dialog[open]')) return;
 
+    const expiry = readCommandExpiry();
+    if (!expiry) return;
     event.preventDefault();
+    if (expiry <= Date.now()) {
+      openUnlock();
+      return;
+    }
     form.reset();
     feedback.textContent = '';
     palette.showModal();
@@ -40,8 +64,10 @@ if (typeof palette?.showModal === 'function') {
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (running) return;
-    if (!unlocked()) {
-      palette.close();
+    const expiry = readCommandExpiry();
+    if (!expiry || expiry <= Date.now()) {
+      if (expiry) openUnlock();
+      else palette.close();
       return;
     }
     const command = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -67,7 +93,7 @@ if (typeof palette?.showModal === 'function') {
       });
       const result = await response.json();
       if (!palette.open) return;
-      if (response.status === 401) sessionStorage.removeItem(sessionKey);
+      if (response.status === 401 && readCommandExpiry() === expiry) rememberCommandExpiry(Date.now());
       if (!response.ok) {
         feedback.textContent = result.error || 'The command could not run.';
       } else if (command === 'novel signups') {

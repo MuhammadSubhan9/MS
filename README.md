@@ -35,7 +35,7 @@ Warm ivory, stone beige and charcoal form the base palette. Forest emerald (#285
 
 Cloudflare Pages serves the committed `dist/` directory from the `main` branch. Run `node --test`, then include the rebuilt `dist/` alongside the source changes in each release commit. The repository contains the public portfolio copy and reading excerpt. Keep supporting documents, drafts and credentials out of it. Use `public/_redirects` to keep legacy URLs working.
 
-To update the Now section on the homepage, go to `/#edit`. Edit the text, enter the publishing code and select **Publish update**. Saving updates the date in Riyadh time. The same publishing code can unlock the owner's keyboard tools for 30 minutes in the current tab.
+To update the Now section on the homepage, go to `/#edit`. Edit the text, enter the publishing code and select **Publish update**. Saving updates the date in Riyadh time. The same publishing code unlocks Ctrl+K for 30 minutes across tabs in that browser. After the session expires, Ctrl+K opens the Now editor so the owner can unlock again.
 
 The production Pages project needs a D1 binding named `NOW_DB` provisioned with `scripts/now-schema.sql`, and an encrypted secret named `NOW_EDITOR_CODE`. The editor accepts 8 to 128 printable ASCII characters without whitespace. Prefer a long random code and keep it out of the repository. Short codes also require a separate `NOVEL_SIGNUP_SECRET` of at least 24 characters to sign Ctrl+K sessions. The build uses `content/now.txt` for the initial page. The deployed editor stores later updates in D1.
 

@@ -43,8 +43,9 @@ if (typeof palette?.showModal === 'function') {
     if (event.defaultPrevented || event.repeat || event.isComposing ||
         event.ctrlKey === event.metaKey || event.altKey || event.shiftKey ||
         (event.code !== 'KeyK' && event.key.toLowerCase() !== 'k') ||
-        event.target.closest?.('input, textarea, select, [contenteditable]:not([contenteditable="false"])') ||
         document.querySelector('dialog[open]')) return;
+    if (!palette.contains(event.target) &&
+        event.target.closest?.('input, textarea, select, [contenteditable]:not([contenteditable="false"])')) return;
 
     const expiry = readCommandExpiry();
     if (!expiry) return;

@@ -237,6 +237,10 @@ try {
   assert.equal(await chrome.evaluate("Number(localStorage.getItem('portfolio-tools-expires'))"), 0);
   await commandShortcut();
   assert.equal(await paletteOpen(), false);
+  await chrome.evaluate("localStorage.setItem('portfolio-tools-expires', String(Date.now() + 30000))");
+  await commandShortcut();
+  assert.equal(await paletteOpen(), true);
+  await chrome.key('Escape', 'Escape', 27);
   await chrome.evaluate("localStorage.setItem('portfolio-tools-expires', String(Date.now() - 1000))");
   await commandShortcut();
   await waitFor(() => chrome.evaluate("location.hash === '#edit' && document.querySelector('.now-editor')?.open"), 'returning to the unlock prompt after expiry');

@@ -108,7 +108,6 @@ export function novelContent(book, author) {
           </div>
           <div class="novel-section-actions">
             <a class="novel-text-link" href="#excerpt" data-open-reader>Start reading ${icon('book-open-text')}</a>
-            ${copySectionButton('synopsis', 'the synopsis')}
           </div>
         </div>
       </div>

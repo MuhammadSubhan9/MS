@@ -1,5 +1,5 @@
 import {
-  action, copySectionButton, escape, glossary, hasDetail, icon, image, paragraphs,
+  action, escape, glossary, hasDetail, icon, image, paragraphs,
   publicationDate, safeLink, sectionIcons, sharedHeading, toggleIcon,
 } from './components.mjs';
 
@@ -80,7 +80,7 @@ export function evidenceMap(records) {
   const available = topics.filter(([topic]) => items.some(item => item.evidence.topics.includes(topic)));
   const button = ([topic, label, symbol]) => `<button class="icon-label" type="button" data-evidence-filter="${topic}" aria-pressed="${topic === 'all'}">${icon(symbol)}${label}</button>`;
   return `<section class="evidence-section" id="evidence" aria-labelledby="evidence-title" tabindex="-1" data-share-section data-header-surface>
-    ${sharedHeading('evidence', 'Evidence map')}
+    ${sharedHeading('evidence', 'Evidence map', { share: true })}
     <div class="evidence-filters" data-evidence-filters role="group" aria-label="Filter by subject" hidden>
       ${[['all', 'All subjects', 'squares-four'], ...available].map(button).join('')}
     </div>
@@ -147,7 +147,7 @@ function journeyMilestone({ record, date, logo, preview, icon: milestoneIcon }) 
             ${record.context && record.context !== category ? `<p class="meta">${escape(record.context)}</p>` : ''}
             ${record.description ? paragraphs([record.description], glossary) : ''}
             ${record.subjects?.length ? `<p>Subjects included ${escape(new Intl.ListFormat('en-GB').format(record.subjects))}.</p>` : ''}
-            <div class="journey-record-links">${recordLink(record)}${copySectionButton(id, record.title)}</div>
+            <div class="journey-record-links">${recordLink(record)}</div>
           </div>
         </div>
       </div>
@@ -238,7 +238,7 @@ export function journeyPage(data, records) {
     </header>
     ${milestones.length ? `<section class="container journey-history" id="milestones" aria-labelledby="milestones-title" tabindex="-1" data-share-section>
       <div class="journey-history-heading">
-        ${sharedHeading('milestones', 'Milestones')}
+        ${sharedHeading('milestones', 'Milestones', { share: true })}
       </div>
       ${journeyTimeline(milestones, current.length > 0)}
     </section>` : ''}

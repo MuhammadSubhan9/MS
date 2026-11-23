@@ -19,9 +19,9 @@
 .toggle-icon { display: inline-grid; place-items: center; flex: none; }
 .toggle-icon > .site-icon { grid-area: 1 / 1; }
 .toggle-icon > .icon-open { opacity: 0; scale: .78; }
-:is([aria-expanded="true"], details[open]:not([data-journey-state="closing"]) > summary)
+:is([aria-expanded="true"], details[open]:not([data-disclosure-state="closing"]) > summary)
   > .toggle-icon > .icon-closed { opacity: 0; scale: .78; }
-:is([aria-expanded="true"], details[open]:not([data-journey-state="closing"]) > summary)
+:is([aria-expanded="true"], details[open]:not([data-disclosure-state="closing"]) > summary)
   > .toggle-icon > .icon-open { opacity: 1; scale: 1; }
 details[open] > summary .disclosure-caret { rotate: 180deg; }
 

@@ -64,14 +64,15 @@ export function glossary(text) {
 
 export function copySectionButton(id, title) {
   return `<button class="section-copy" type="button" data-copy-section="${escape(id)}" aria-label="Copy link to ${escape(title)}" hidden>
-    ${icon('link-simple')}<span data-section-copy-label>Copy link</span>
+    <span class="section-copy-icon">${icon('link-simple', 'section-copy-link')}${icon('check', 'section-copy-check')}</span>
+    <span data-section-copy-label>Copy link</span>
   </button>`;
 }
 
-export function sharedHeading(id, title, { level = 2, headingId = `${id}-title`, renderText = escape } = {}) {
+export function sharedHeading(id, title, { level = 2, headingId = `${id}-title`, renderText = escape, share = false } = {}) {
   const symbol = sectionIcons[id];
   const label = renderText(title);
-  return `<div class="share-heading"><h${level} id="${escape(headingId)}"${symbol ? ' class="icon-heading"' : ''}>${symbol ? `${icon(symbol)}<span>${label}</span>` : label}</h${level}>${copySectionButton(id, title)}</div>`;
+  return `<div class="share-heading"><h${level} id="${escape(headingId)}"${symbol ? ' class="icon-heading"' : ''}>${symbol ? `${icon(symbol)}<span>${label}</span>` : label}</h${level}>${share ? copySectionButton(id, title) : ''}</div>`;
 }
 
 export function action(href, label, className = 'action-link', context = '', symbol = '') {
@@ -93,9 +94,9 @@ export function formatDate(value) {
   return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(date);
 }
 
-export function section(id, title, body) {
+export function section(id, title, body, options) {
   return body ? `<section class="section" id="${id}" aria-labelledby="${id}-title" tabindex="-1" data-share-section>
-    ${sharedHeading(id, title)}<div class="section-content">${body}</div>
+    ${sharedHeading(id, title, options)}<div class="section-content">${body}</div>
   </section>` : '';
 }
 
@@ -126,10 +127,12 @@ export function chronology(items, { detailLabel, renderText = escape } = {}) {
       ${item.description ? `<p>${renderText(item.description)}</p>` : ''}
       ${item.subjects?.length ? `<ul class="entry-subjects" aria-label="Subjects">${item.subjects.map(subject => `<li>${escape(subject)}</li>`).join('')}</ul>` : ''}
       ${item.outcome ? `<p>${renderText(item.outcome)}</p>` : ''}
-      ${item.details?.length ? `<details${detailLabel ? ' class="entry-details" data-open-for-section-link' : ''}><summary>${escape(detailLabel || 'Details')}<span class="visually-hidden"> for ${escape(item.title)}</span></summary><div class="entry-detail-copy">${paragraphs(item.details, renderText)}</div></details>` : ''}
-      ${item.certificateUrl || item.id ? `<div class="entry-actions">
-        ${item.certificateUrl ? action(item.certificateUrl, 'View certificate', 'action-link entry-certificate', `for ${item.title}`, 'certificate') : ''}
-        ${item.id ? copySectionButton(item.id, item.title) : ''}
+      ${item.details?.length ? `<details${detailLabel ? ' class="entry-details" data-open-for-section-link' : ''}>
+        <summary>${detailLabel ? icon('caret-down', 'entry-detail-caret') : ''}<span>${escape(detailLabel || 'Details')}<span class="visually-hidden"> for ${escape(item.title)}</span></span></summary>
+        <div class="entry-detail-panel"><div class="entry-detail-copy">${paragraphs(item.details, renderText)}</div></div>
+      </details>` : ''}
+      ${item.certificateUrl ? `<div class="entry-actions">
+        ${action(item.certificateUrl, 'View certificate', 'action-link entry-certificate', `for ${item.title}`, 'certificate')}
       </div>` : ''}
     </div>
   </article>`).join('');

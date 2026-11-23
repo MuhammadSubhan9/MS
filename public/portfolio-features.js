@@ -61,11 +61,16 @@
     const label = button.querySelector('[data-section-copy-label]');
     let pending = false;
     let reset;
+    function clearCopyState() {
+      delete button.dataset.copyState;
+      label.textContent = 'Copy link';
+    }
     button.hidden = false;
     button.addEventListener('click', async () => {
       if (pending) return;
       pending = true;
       clearTimeout(reset);
+      clearCopyState();
       announcer.textContent = '';
       const url = new URL(location.href);
       url.search = '';
@@ -73,10 +78,10 @@
       try {
         await navigator.clipboard.writeText(url.href);
         label.textContent = 'Copied';
+        button.dataset.copyState = 'copied';
         announcer.textContent = 'Section link copied.';
-        reset = setTimeout(() => { label.textContent = 'Copy link'; }, 2400);
+        reset = setTimeout(clearCopyState, 2400);
       } catch {
-        label.textContent = 'Copy link';
         copyAddress.value = url.href;
         if (!copyDialog.open) copyDialog.showModal();
         copyAddress.focus();
@@ -87,6 +92,56 @@
     });
   }
 
+  const moving = new Map();
+
+  function settle(card, panel, open) {
+    const motion = moving.get(card);
+    moving.delete(card);
+    card.open = open;
+    motion?.animation.cancel();
+    panel.inert = false;
+    delete card.dataset.disclosureState;
+  }
+
+  for (const card of document.querySelectorAll('.entry-details, .journey-card')) {
+    const summary = card.firstElementChild;
+    const panel = summary.nextElementSibling;
+    summary.addEventListener('click', event => {
+      if (event.defaultPrevented || reducedMotion.matches || typeof panel.animate !== 'function') return;
+      event.preventDefault();
+
+      const previous = moving.get(card);
+      const open = !(previous?.open ?? card.open);
+      const start = card.open ? panel.getBoundingClientRect().height : 0;
+      previous?.animation.cancel();
+      if (open) card.open = true;
+      const end = open ? panel.getBoundingClientRect().height : 0;
+      if (Math.abs(end - start) < 1) {
+        settle(card, panel, open);
+        return;
+      }
+
+      if (!open && panel.contains(document.activeElement)) summary.focus({ preventScroll: true });
+      panel.inert = !open;
+      card.dataset.disclosureState = open ? 'opening' : 'closing';
+      const animation = panel.animate([{ height: start + 'px' }, { height: end + 'px' }], {
+        duration: open ? 560 : 385,
+        easing: open ? 'cubic-bezier(.23,.74,.2,1)' : 'cubic-bezier(.32,0,.25,1)',
+        fill: 'both',
+      });
+      moving.set(card, { animation, open, panel });
+      animation.finished.then(() => {
+        if (moving.get(card)?.animation === animation) settle(card, panel, open);
+      }, () => {});
+    });
+  }
+
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches) {
+      for (const [card, { panel, open }] of moving) settle(card, panel, open);
+    }
+  });
+
   let highlighted;
   let clearHighlight;
   function showSharedSection() {
@@ -95,8 +150,10 @@
     const target = document.getElementById(id);
     if (!target?.hasAttribute('data-share-section')) return;
     const disclosure = target.querySelector('[data-open-for-section-link]');
-    if (disclosure && !disclosure.open) {
-      disclosure.open = true;
+    const motion = moving.get(disclosure);
+    if (disclosure?.closest('[data-share-section]') === target && (!disclosure.open || motion)) {
+      if (motion) settle(disclosure, motion.panel, true);
+      else disclosure.open = true;
       target.scrollIntoView({ block: 'start', behavior: 'instant' });
     }
     clearTimeout(clearHighlight);
@@ -105,10 +162,8 @@
     target.setAttribute('data-section-arrival', '');
     clearHighlight = setTimeout(() => target.removeAttribute('data-section-arrival'), 1900);
   }
-  if (copyButtons.length) {
-    addEventListener('hashchange', showSharedSection);
-    showSharedSection();
-  }
+  addEventListener('hashchange', showSharedSection);
+  showSharedSection();
 
   const terms = document.querySelectorAll('abbr[data-glossary]');
   if (terms.length) {

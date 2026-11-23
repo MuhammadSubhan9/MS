@@ -16,9 +16,15 @@ try {
   });
   await chrome.call('Runtime.enable');
   await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
-  for (const route of ['/', '/about/', '/journey/', '/work/', '/writing/', '/contact/']) {
+  for (const [route, shareButtons] of Object.entries({ '/': 0, '/about/': 1, '/journey/': 1, '/work/': 2, '/writing/': 1, '/contact/': 0 })) {
     await chrome.navigate(origin + route, 320);
     assert.equal(await chrome.evaluate('document.documentElement.scrollWidth <= innerWidth'), true, route);
+    assert.equal(await chrome.evaluate("document.querySelectorAll('[data-copy-section]').length"), shareButtons, route);
+    if (route === '/') {
+      assert.deepEqual(await chrome.evaluate(`Array.from(document.querySelectorAll('.home-contact-links a'), link => [
+        link.textContent.trim(), link.getAttribute('href'), link.classList.contains('button-link'),
+      ])`), [['Contact me', '/contact/', true]]);
+    }
   }
   await chrome.call('Browser.setDownloadBehavior', { behavior: 'deny', eventsEnabled: true });
   let downloads = 0;
@@ -72,21 +78,43 @@ try {
   await chrome.evaluate("document.querySelector('[data-evidence-selection] a').click()");
   await waitFor(() => chrome.evaluate("location.hash === '#course-aircraft-design' && document.querySelector('#course-aircraft-design details')?.open"), 'opening course details from the map');
   assert.equal(await chrome.evaluate("!!document.querySelector('#course-aircraft-design a.entry-certificate[href^=\"https://\"]')"), true);
+  await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
   await chrome.evaluate(`
     Object.defineProperty(navigator, 'clipboard', {
       configurable: true, value: { writeText: async value => { window.sectionShared = value; } },
     });
-    document.querySelector('[data-copy-section=course-aircraft-design]').click();
+    document.querySelector('[data-copy-section=courses]').click();
   `);
-  await waitFor(() => chrome.evaluate("document.querySelector('[data-copy-section=course-aircraft-design] [data-section-copy-label]').textContent === 'Copied'"), 'copy confirmation');
-  assert.equal(await chrome.evaluate('window.sectionShared'), origin + '/about/#course-aircraft-design');
+  await waitFor(() => chrome.evaluate("document.querySelector('[data-copy-section=courses][data-copy-state=copied] [data-section-copy-label]')?.textContent === 'Copied'"), 'copy confirmation');
+  assert.equal(await chrome.evaluate("getComputedStyle(document.querySelector('[data-copy-section=courses] .section-copy-check')).animationName"), 'section-copy-check-in');
+  assert.equal(await chrome.evaluate('window.sectionShared'), origin + '/about/#courses');
   await chrome.evaluate(`
     navigator.clipboard.writeText = async () => { throw new Error('Clipboard blocked'); };
-    document.querySelector('[data-copy-section=course-aircraft-design]').click();
+    document.querySelector('[data-copy-section=courses]').click();
   `);
   await waitFor(() => chrome.evaluate("document.querySelector('.section-link-dialog').open"), 'manual section link');
-  assert.equal(await chrome.evaluate("document.querySelector('#section-link-url').value"), origin + '/about/#course-aircraft-design');
+  assert.equal(await chrome.evaluate("document.querySelector('#section-link-url').value"), origin + '/about/#courses');
   await chrome.key('Escape', 'Escape', 27);
+
+  await chrome.evaluate("document.querySelector('#course-crew-management summary').focus()");
+  await chrome.key('Enter', 'Enter', 13);
+  const courseMotion = await chrome.evaluate(`
+    (() => {
+      const details = document.querySelector('#course-crew-management details');
+      const panel = details.querySelector('.entry-detail-panel');
+      const [sizing] = panel.getAnimations();
+      sizing.pause();
+      sizing.currentTime = 150;
+      return { state: details.dataset.disclosureState, height: panel.getBoundingClientRect().height, fullHeight: panel.scrollHeight };
+    })()
+  `);
+  assert.equal(courseMotion.state, 'opening');
+  assert.ok(courseMotion.height > 0 && courseMotion.height < courseMotion.fullHeight);
+  await chrome.key('Enter', 'Enter', 13);
+  await waitFor(() => chrome.evaluate("!document.querySelector('#course-crew-management details').open"), 'reversing the course animation');
+  await chrome.evaluate("document.querySelector('#course-crew-management summary').click()");
+  await waitFor(() => chrome.evaluate("document.querySelector('#course-crew-management details[open]:not([data-disclosure-state])') !== null"), 'course settles open');
+  await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
 
   await chrome.navigate(origin + '/about/#capabilities', 390);
   assert.doesNotMatch(await chrome.evaluate("document.querySelector('#capabilities').textContent"), /web development/i);
@@ -122,7 +150,7 @@ try {
       sizing.pause();
       sizing.currentTime = 190;
       return {
-        state: card.dataset.journeyState,
+        state: card.dataset.disclosureState,
         height: panel.getBoundingClientRect().height,
         logoAnimation: getComputedStyle(card.querySelector('.journey-mark')).animationName,
       };

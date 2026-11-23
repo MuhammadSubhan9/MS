@@ -73,8 +73,7 @@ function homePage(data, { hasAbout, hasContact, selected }) {
       ${contact.introduction ? `<p>${escape(contact.introduction)}</p>` : ''}
     </div>
     <div class="home-contact-links" data-reveal>
-      ${contact.email ? `<a class="button-link" href="mailto:${escape(contact.email)}">${icon('envelope-simple')}${escape(contact.email)}</a>` : ''}
-      ${action('/contact/', 'Contact details')}
+      ${action('/contact/', 'Contact me', 'button-link', '', 'envelope-simple')}
     </div>
   </section>` : '';
   const actions = [
@@ -120,7 +119,7 @@ function aboutPage(data, background) {
     ${background.length ? `<div class="container"><nav class="about-jumps" aria-label="On this page"><ul>
       ${background.map(([id, title]) => `<li>${action('#' + id, title, 'action-link', '', sectionIcons[id])}</li>`).join('')}
     </ul></nav>
-    <div class="about-records">${background.map(([id, title, body]) => section(id, title, body)).join('')}</div></div>` : ''}
+    <div class="about-records">${background.map(([id, title, body]) => section(id, title, body, { share: id === 'courses' })).join('')}</div></div>` : ''}
   </div>`;
 }
 
@@ -189,7 +188,7 @@ function workIndex(items, label, introduction, evidence) {
     </div>
     ${evidence}
     ${sections.map(([id, title, entries]) => `<section class="work-section work-${id}" id="${id}" aria-labelledby="work-${id}-title" tabindex="-1" data-share-section data-header-surface>
-      ${sharedHeading(id, title, { headingId: `work-${id}-title` })}
+      ${sharedHeading(id, title, { headingId: `work-${id}-title`, share: id === 'events' })}
       <div class="work-entries">${entries.map(item => id === 'events' ? workEvent(item) : projectEntry(item, {
         heading: 'h3', featured: Boolean(item.image), showSummary: true, actionLabel: 'Read more',
       })).join('')}</div>

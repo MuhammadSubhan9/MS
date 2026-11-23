@@ -193,8 +193,8 @@
 .journey-history-heading { padding-block-end: .85rem; border-block-end: 1px solid var(--journey-rule); }
 .journey-page .share-heading h2 { font-size: clamp(1.75rem, 3.4vw, 2.85rem); }
 .journey-page .share-heading h2 .site-icon { color: var(--journey-accent); }
-.journey-page .section-copy { color: var(--journey-muted); }
-.journey-page .section-copy:hover { border-color: var(--journey-rule); background: #fffaf070; }
+.journey-page .section-copy:not([data-copy-state]) { color: var(--journey-muted); }
+.journey-page .section-copy:not([data-copy-state]):hover { border-color: var(--journey-rule); background: #fffaf070; }
 .journey-history[data-section-arrival] { animation: none; box-shadow: none; }
 
 .journey-timeline {
@@ -401,12 +401,12 @@
   font-size: .88rem;
 }
 .journey-card > summary:hover .journey-switch,
-.journey-card[open]:not([data-journey-state="closing"]) .journey-switch {
+.journey-card[open]:not([data-disclosure-state="closing"]) .journey-switch {
   border-color: var(--milestone-accent);
   background: var(--milestone-accent);
   color: #fff8ec;
 }
-.journey-card[open]:not([data-journey-state="closing"]) .journey-switch > .site-icon {
+.journey-card[open]:not([data-disclosure-state="closing"]) .journey-switch > .site-icon {
   rotate: 180deg;
 }
 .journey-panel { position: relative; overflow: clip; }
@@ -561,17 +561,17 @@
     background: var(--journey-paper);
     box-shadow: 0 0 0 4px var(--journey-paper);
   }
-  .journey-card[data-journey-state="opening"] .journey-brief::before {
+  .journey-card[data-disclosure-state="opening"] .journey-brief::before {
     animation: journey-rule-draw 430ms 40ms cubic-bezier(.23,.75,.2,1) both;
   }
-  .journey-card[data-journey-state="opening"] .journey-brief-text > :not(.journey-mark) {
+  .journey-card[data-disclosure-state="opening"] .journey-brief-text > :not(.journey-mark) {
     animation: journey-copy-enter 370ms 85ms cubic-bezier(.2,.65,.25,1) both;
   }
-  .journey-card[data-journey-state="opening"] .journey-brief-text > .journey-record-links { animation-delay: 140ms; }
-  .journey-card[data-journey-state="opening"] .journey-mark {
+  .journey-card[data-disclosure-state="opening"] .journey-brief-text > .journey-record-links { animation-delay: 140ms; }
+  .journey-card[data-disclosure-state="opening"] .journey-mark {
     animation: journey-mark-enter 425ms 95ms cubic-bezier(.2,.7,.22,1) both;
   }
-  .journey-card[data-journey-state="closing"] .journey-brief-text {
+  .journey-card[data-disclosure-state="closing"] .journey-brief-text {
     animation: journey-brief-exit 260ms ease-in both;
   }
   @keyframes journey-marker-enter { from { opacity: 0; transform: translateY(.26rem) scaleY(.8); } to { opacity: 1; transform: none; } }

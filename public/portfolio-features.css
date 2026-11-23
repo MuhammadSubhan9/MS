@@ -25,7 +25,34 @@
 }
 .section-copy:hover { border-color: #b8a994; background: #3830290a; }
 .section-copy[hidden] { display: none; }
-.section-copy [data-section-copy-label] { min-width: 3.1rem; text-align: start; }
+.section-copy [data-section-copy-label] { min-inline-size: 3.4rem; text-align: start; }
+.section-copy-icon { display: grid; place-items: center; }
+.section-copy-icon > .site-icon { grid-area: 1 / 1; }
+.section-copy-icon > .section-copy-check,
+.section-copy[data-copy-state="copied"] .section-copy-link { visibility: hidden; }
+.section-copy[data-copy-state="copied"] .section-copy-check { visibility: visible; }
+.section-copy[data-copy-state="copied"] {
+  color: #275347;
+  background: #e3ebdf;
+  border-color: #9db5a1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .section-copy[data-copy-state="copied"] .section-copy-check {
+    animation: section-copy-check-in 360ms cubic-bezier(.2,.75,.25,1.28) both;
+  }
+  .section-copy[data-copy-state="copied"] [data-section-copy-label] {
+    animation: section-copy-text-in 250ms ease-out both;
+  }
+  .section-link-dialog[open] { animation: section-copy-text-in 220ms ease-out both; }
+}
+@keyframes section-copy-check-in {
+  from { opacity: 0; transform: scale(.45) rotate(-24deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+@keyframes section-copy-text-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 .section-copy-announcer {
   position: absolute;
   clip-path: inset(50%);
@@ -72,8 +99,9 @@
   font: inherit;
   cursor: pointer;
 }
-.novel-page .section-copy { color: #e3c29d; }
-.novel-page .section-copy:hover { border-color: #b39573; background: #e3c29d12; }
+.novel-page .section-copy:not([data-copy-state]) { color: #e3c29d; }
+.novel-page .section-copy:not([data-copy-state]):hover { border-color: #b39573; background: #e3c29d12; }
+.novel-page .section-copy[data-copy-state="copied"] { color: #f6e5cd; background: #4a3826; border-color: #af8c63; }
 .novel-page .excerpt-heading .section-copy { margin-top: .5rem; }
 
 .glossary-term {
@@ -110,15 +138,37 @@
 #courses .section-content { align-items: start; }
 .entry-details { margin-top: .55rem; width: 100%; }
 .entry-details > summary {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
   width: fit-content;
+  max-width: 100%;
   padding-block: .28rem;
+  list-style: none;
+  text-decoration: none;
   color: #6d3f46;
   font-size: .96rem;
   font-weight: 650;
   cursor: pointer;
 }
+.entry-details > summary::-webkit-details-marker { display: none; }
+.entry-details > summary > span { text-decoration: underline; text-underline-offset: .23em; }
+.entry-detail-caret { rotate: -90deg; }
+.entry-details[open]:not([data-disclosure-state="closing"]) .entry-detail-caret { rotate: 0deg; }
+.entry-details[data-disclosure-state] .entry-detail-panel { overflow: clip; }
 .entry-detail-copy { margin: .35rem 0 .5rem; color: var(--muted); }
+.entry-details .entry-detail-copy { margin: 0; padding-block: .35rem .5rem; }
 .entry-detail-copy p + p { margin-top: .58rem; }
+@media (prefers-reduced-motion: no-preference) {
+  .entry-detail-caret { transition: rotate 300ms cubic-bezier(.23,.74,.2,1); }
+  .entry-details[data-disclosure-state="opening"] .entry-detail-copy {
+    animation: entry-detail-enter 400ms cubic-bezier(.23,.74,.2,1) both;
+  }
+}
+@keyframes entry-detail-enter {
+  from { opacity: .45; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 .about-records #courses .entry-actions .entry-certificate { margin-top: 0; padding-top: 0; }
 .capability { border-top: 1px solid #c7ae9a; background: #f8efe3; }
 .capability:last-child { border-bottom: 1px solid #c7ae9a; }

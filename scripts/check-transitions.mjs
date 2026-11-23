@@ -28,9 +28,9 @@ try {
         Object.assign(window.motionResult, {
           ready: true,
           kind: document.documentElement.dataset.routeMotion,
-          names: [...document.querySelectorAll('[style]')].map(node => node.style.viewTransitionName).filter(Boolean),
-          destinationOpacity: getComputedStyle(document.documentElement, '::view-transition-new(root)').opacity,
-          destinationDelay: getComputedStyle(document.documentElement, '::view-transition-new(root)').animationDelay,
+          names: [...document.querySelectorAll('[style]')].map(node => node.style.viewTransitionName || node.style.getPropertyValue('--route-panel-name')).filter(Boolean),
+          outgoingOpacity: getComputedStyle(document.documentElement, '::view-transition-old(root)').opacity,
+          outgoingDelay: getComputedStyle(document.documentElement, '::view-transition-old(root)').animationDelay,
           handoverDuration: Math.max(...['route-event', 'route-book', 'route-contact', 'route-card'].map(name => {
             return parseFloat(getComputedStyle(document.documentElement, '::view-transition-group(' + name + ')').animationDuration) || 0;
           })),
@@ -41,31 +41,49 @@ try {
     });
   ` });
 
+  async function press(selector, touch = false) {
+    const point = await chrome.evaluate(`(() => {
+      const box = document.querySelector(${JSON.stringify(selector)}).getBoundingClientRect();
+      return { x: box.left + box.width / 2, y: box.top + box.height / 2 };
+    })()`);
+    if (touch) {
+      await chrome.call('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
+      await chrome.call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    } else {
+      for (const type of ['mousePressed', 'mouseReleased']) {
+        await chrome.call('Input.dispatchMouseEvent', { type, ...point, button: 'left', clickCount: 1 });
+      }
+    }
+  }
+
   async function clickRoute(selector, path, type, shared, width) {
     if (selector.startsWith('.nav ')) {
       await chrome.evaluate("const menu=document.querySelector('.menu');if(menu?.getBoundingClientRect().width && menu.getAttribute('aria-expanded')!=='true') menu.click()");
     }
     await chrome.evaluate(`document.querySelector(${JSON.stringify(selector)}).scrollIntoView({block:'center',behavior:'instant'})`);
     await pause(100);
-    const lineOnClick = await chrome.evaluate(`document.querySelector(${JSON.stringify(selector)}).click(); !!document.querySelector('.route-line')`);
-    assert.equal(lineOnClick, false, 'clicking does not draw a line');
+    await press(selector, width <= 390);
     await waitFor(() => chrome.evaluate(`location.pathname===${JSON.stringify(path)} && window.motionResult?.ready`), 'transition to ' + path);
     const result = await chrome.evaluate('window.motionResult');
     assert.equal(result.kind, type, path);
     assert.ok(!result.names.includes('route-author'), 'the name does not carry between pages');
     if (shared) assert.ok(result.names.includes(shared), path + ' shared element');
-    assert.equal(result.inert, true, path + ' hidden destination is not interactive');
+    assert.equal(result.inert, false, path + ' destination accepts input during handover');
     assert.equal(result.hasLine, false, 'destination has no navigation line');
     if (type === 'fade') {
-      assert.equal(parseFloat(result.destinationDelay), 0, path + ' fade starts immediately');
+      assert.equal(parseFloat(result.outgoingDelay), 0, path + ' fade starts immediately');
     } else {
-      assert.equal(result.destinationOpacity, '0', path + ' destination waits for handover');
-      assert.ok(parseFloat(result.destinationDelay) >= result.handoverDuration, path + ' destination follows completed handover');
+      assert.equal(result.outgoingOpacity, '1', path + ' outgoing snapshot covers the handover');
+      assert.ok(parseFloat(result.outgoingDelay) >= result.handoverDuration, path + ' destination follows completed handover');
     }
     if (capture && shared) {
       await mkdir(capture, { recursive: true });
       const shot = await chrome.call('Page.captureScreenshot', { format: 'png' });
       await writeFile(resolve(capture, type + '-' + width + '.png'), Buffer.from(shot.data, 'base64'));
+    }
+    if (type === 'contact' && shared) {
+      await press('#contact-name', width === 390);
+      assert.equal(await chrome.evaluate('document.activeElement.id'), 'contact-name', 'first press focuses the arriving form');
     }
     await waitFor(() => chrome.evaluate("!document.documentElement.dataset.routeMotion && !document.querySelector('.route-line')"), 'transition cleanup');
     assert.equal(await chrome.evaluate('document.body.inert'), false, 'interaction resumes');
@@ -101,7 +119,8 @@ try {
   }
 
   await chrome.navigate(origin + '/contact/', 390);
-  await chrome.evaluate("Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async()=>{}}});document.querySelector('[data-copy-email]').click()");
+  await chrome.evaluate("Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async()=>{}}});document.querySelector('[data-copy-email]').scrollIntoView({block:'center',behavior:'instant'})");
+  await press('[data-copy-email]', true);
   await waitFor(() => chrome.evaluate("document.querySelector('[data-copy-email]').dataset.copyState==='copied'"), 'copy confirmation');
   await chrome.evaluate(`
     window.fetch = async () => Response.json({ ok: true });
@@ -117,7 +136,8 @@ try {
 
   for (const width of [390, 1440]) {
     await chrome.navigate(origin + '/writing/', width);
-    await chrome.evaluate("document.querySelector('.shelf-book').scrollIntoView({block:'center',behavior:'instant'});document.querySelector('.shelf-book').click()");
+    await chrome.evaluate("document.querySelector('.shelf-book').scrollIntoView({block:'center',behavior:'instant'})");
+    await press('.shelf-book', width === 390);
     await waitFor(() => chrome.evaluate("document.querySelector('.novel-reader-dialog').open && !document.querySelector('[data-reader]').classList.contains('reader-opening')"), 'cover opening');
     const originalStatus = await chrome.evaluate("document.querySelector('[data-page-status]').textContent");
     const originalPages = await chrome.evaluate("[...document.querySelectorAll('[data-spread] > [data-leaf]')].filter(n=>!n.hidden).map(n=>n.dataset.leaf)");
@@ -135,12 +155,18 @@ try {
     await waitFor(() => chrome.evaluate("!document.querySelector('.novel-reader-dialog').open && !document.querySelector('[data-moving-copy]') && !document.body.classList.contains('novel-scroll-locked')"), 'interrupted reader cleanup');
   }
 
-  await chrome.navigate(origin + '/about/', 390);
-  await chrome.evaluate("document.querySelector('.wordmark').click()");
-  await waitFor(() => chrome.evaluate("location.pathname==='/' && window.motionResult?.ready"), 'first rapid navigation');
-  await chrome.evaluate("document.querySelector('.text-actions a[href=\"/about/\"]').click()");
-  await waitFor(() => chrome.evaluate("location.pathname==='/about/' && window.motionResult?.ready"), 'second rapid navigation');
-  await waitFor(() => chrome.evaluate("!document.documentElement.dataset.routeMotion && !document.querySelector('.route-line')"), 'rapid navigation cleanup');
+  for (const width of [390, 1440]) {
+    await chrome.navigate(origin + '/about/', width);
+    await press('.wordmark', width === 390);
+    await waitFor(() => chrome.evaluate("location.pathname==='/' && window.motionResult?.ready"), 'first rapid navigation');
+    if (width === 390) {
+      await press('.menu', true);
+      assert.equal(await chrome.evaluate("document.querySelector('.menu').getAttribute('aria-expanded')"), 'true', 'one tap opens the arriving menu');
+    }
+    await press('.nav a[href="/about/"]', width === 390);
+    await waitFor(() => chrome.evaluate("location.pathname==='/about/' && window.motionResult?.ready"), 'second rapid navigation');
+    await waitFor(() => chrome.evaluate("!document.documentElement.dataset.routeMotion"), 'rapid navigation cleanup');
+  }
 
   // Turning off the source opt-in exercises the ordinary-navigation fallback.
   await chrome.evaluate(`

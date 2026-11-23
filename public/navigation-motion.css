@@ -10,12 +10,13 @@
   main { view-transition-name: none; }
   .route-shared-settled, .route-shared-settled .media-window { animation: none !important; }
   .site-header, .novel-header { view-transition-name: route-header; }
-  ::view-transition { pointer-events: auto; }
+  html[data-route-arriving], html[data-route-arriving] :is(.site-header, .novel-header) { view-transition-name: none; }
+  .contact-form-panel::before, .contact-feature::before { view-transition-name: var(--route-panel-name, none); }
+  ::view-transition { pointer-events: none; }
   ::view-transition-group(*) { animation-duration: var(--route-duration); animation-timing-function: var(--route-ease); }
-  ::view-transition-old(root) { animation: none; mix-blend-mode: normal; }
-  ::view-transition-new(root) { animation: route-destination 90ms var(--route-duration) ease-out both; mix-blend-mode: normal; }
+  ::view-transition-old(root) { animation: route-release 90ms var(--route-duration) ease-out both; mix-blend-mode: normal; }
   html[data-route-motion="fade"] { --route-duration: 150ms; }
-  html[data-route-motion="fade"]::view-transition-new(root) { animation: route-destination var(--route-duration) ease-out both; }
+  html[data-route-motion="fade"]::view-transition-old(root) { animation: route-release var(--route-duration) ease-out both; }
   ::view-transition-group(route-header) { z-index: 2; }
   ::view-transition-group(route-event) { z-index: 4; }
   ::view-transition-old(route-event) { opacity: 0; animation: none; }

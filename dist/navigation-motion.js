@@ -4,7 +4,7 @@
   const key = 'portfolio-route-transition';
   const prefetched = new Set();
   let selected = null;
-  let interactionHeld = false;
+  let arrival = null;
   let sequence = 0;
   const assigned = new Set();
 
@@ -74,14 +74,26 @@
   }
   document.addEventListener('pointerover', prefetch, { passive: true });
   document.addEventListener('focusin', prefetch);
+  function finishArrival() { arrival?.skipTransition(); }
+  addEventListener('pointerdown', finishArrival, { capture: true, passive: true });
+  addEventListener('keydown', finishArrival, true);
+
+  function clearNames() {
+    for (const element of assigned) {
+      element.style.removeProperty('view-transition-name');
+      element.style.removeProperty('--route-panel-name');
+    }
+    assigned.clear();
+  }
 
   function prepare(transition, from, to, incoming, pending) {
     const revision = ++sequence;
-    for (const previous of assigned) previous.style.removeProperty('view-transition-name');
-    assigned.clear();
+    clearNames();
+    arrival = incoming ? transition : null;
     let type = pending?.kind === 'contact-card' ? 'contact-card' : kind(from, to);
     if (!incoming && type === 'contact' && selected?.matches('.nav-contact')) type = 'contact-card';
     root.dataset.routeMotion = type;
+    root.toggleAttribute('data-route-arriving', incoming);
     root.classList.add('page-transitioning');
     const element = sharedElement(type, from, to, incoming);
     // A travelling cover must arrive in the visible shelf, including on phones.
@@ -102,20 +114,20 @@
     const shared = visible(element) && (!incoming || pending?.shared || type === 'book');
     const name = { book: 'route-book', contact: 'route-contact', 'contact-card': 'route-card', event: 'route-event' }[type];
     if (shared && name) {
-      element.style.viewTransitionName = name;
+      if (incoming && (type === 'contact' || type === 'contact-card')) {
+        // Animate the panel decoration so its links and fields stay clickable.
+        element.style.setProperty('--route-panel-name', name);
+      } else {
+        element.style.viewTransitionName = name;
+      }
       assigned.add(element);
-    }
-    if (incoming) {
-      document.body.inert = true;
-      interactionHeld = true;
     }
     function clean() {
       if (revision !== sequence) return;
-      for (const previous of assigned) previous.style.removeProperty('view-transition-name');
-      assigned.clear();
+      clearNames();
+      arrival = null;
       delete root.dataset.routeMotion;
-      if (interactionHeld) document.body.inert = false;
-      interactionHeld = false;
+      root.removeAttribute('data-route-arriving');
     }
     transition.ready.catch(() => {});
     transition.finished.then(clean, clean);

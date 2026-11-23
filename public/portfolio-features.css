@@ -300,8 +300,7 @@
 .evidence-record-links { display: flex; flex-wrap: wrap; gap: 0 1.05rem; margin-top: .65rem; }
 .evidence-record-links a { color: var(--accent); }
 
-.site-update { display: none; margin-block: .85rem; }
-.site-update:is(:target, [data-new-release]) { display: block; }
+.site-update { margin-block: .85rem; }
 .site-update-inner {
   position: relative;
   padding-inline: .9rem;

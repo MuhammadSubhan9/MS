@@ -24,6 +24,7 @@ try {
       assert.deepEqual(await chrome.evaluate(`Array.from(document.querySelectorAll('.home-contact-links a'), link => [
         link.textContent.trim(), link.getAttribute('href'), link.classList.contains('button-link'),
       ])`), [['Contact me', '/contact/', true]]);
+      assert.equal(await chrome.evaluate("document.querySelector('#site-updates summary').getBoundingClientRect().height > 0"), true);
     }
   }
   await chrome.call('Browser.setDownloadBehavior', { behavior: 'deny', eventsEnabled: true });
@@ -172,10 +173,15 @@ try {
   await chrome.navigate(origin + '/', 390);
   assert.equal(await chrome.evaluate("document.querySelector('[data-site-update]').hasAttribute('data-new-release')"), true);
   await chrome.evaluate("document.querySelector('[data-dismiss-site-update]').click()");
+  await chrome.navigate(origin + '/about/', 390);
   await chrome.navigate(origin + '/?return=1', 390);
   assert.equal(await chrome.evaluate("document.querySelector('[data-site-update]').hasAttribute('data-new-release')"), false);
+  assert.equal(await chrome.evaluate("document.querySelector('#site-updates summary').getBoundingClientRect().height > 0"), true);
+  assert.equal(await chrome.evaluate("document.querySelector('#site-updates details').open"), false);
   await chrome.evaluate("document.querySelector('footer a[href=\"#site-updates\"]').click()");
   await waitFor(() => chrome.evaluate("document.querySelector('#site-updates details').open"), 'latest updates still available after dismissal');
+  await chrome.navigate(origin + '/?direct=1#site-updates', 390);
+  assert.equal(await chrome.evaluate("document.querySelector('#site-updates details').open"), true);
 
   await chrome.navigate(origin + '/contact/', 390);
   await chrome.evaluate(`

@@ -127,7 +127,6 @@
       clearNames();
       arrival = null;
       delete root.dataset.routeMotion;
-      root.removeAttribute('data-route-arriving');
     }
     transition.ready.catch(() => {});
     transition.finished.then(clean, clean);

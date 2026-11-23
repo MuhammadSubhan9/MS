@@ -952,8 +952,9 @@ details p { padding: .2rem 0; }
     animation: 670ms var(--motion-ease) 105ms both rise-in;
   }
   html:not(.page-transitioning) .text-actions {
-    animation: 620ms var(--motion-ease) 195ms both rise-in;
+    animation: 300ms ease-out link-group-appear;
   }
+  @keyframes link-group-appear { from { opacity: .75; } to { opacity: 1; } }
   html:not(.page-transitioning) .home-masthead-portrait > figure {
     animation: 900ms var(--motion-cut) 90ms both portrait-reveal;
   }
@@ -968,12 +969,12 @@ details p { padding: .2rem 0; }
   .scroll-reveal {
     transition: opacity 600ms var(--motion-ease), transform 680ms var(--motion-ease);
   }
-  .reveal-pending:not(:focus-within):not(:target) { opacity: .16; transform: translateY(22px); }
+  .reveal-pending:not(:focus-within):not(:target) { opacity: .16; }
+  .reveal-pending:not(:focus-within):not(:target):not(:has(a[href])) { transform: translateY(22px); }
   .scroll-reveal:focus-within { transition: none; }
   .scroll-reveal:not(.reveal-pending):is(figure, .featured-project) .media-window {
     animation: 850ms var(--motion-cut) both image-unmask;
   }
-  .text-actions:focus-within { animation-duration: 1ms !important; animation-delay: 0ms !important; }
   .arrow { transition: translate 360ms var(--motion-cut); }
   a:is(:hover, :focus-visible) .arrow { translate: 5px 0; }
   a:is(:hover, :focus-visible) .arrow-left { translate: -5px 0; }
@@ -994,7 +995,7 @@ details p { padding: .2rem 0; }
   }
 
   @media (max-width: 880px) {
-    .js .nav:not([hidden]) { animation: 240ms var(--motion-ease) both rise-in; }
+    .js .nav:not([hidden]) { animation: link-group-appear 150ms ease-out; }
   }
 
   @supports (animation-timeline: scroll(root block)) {

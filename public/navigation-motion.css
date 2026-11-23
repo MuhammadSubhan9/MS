@@ -3,21 +3,19 @@
 @keyframes route-release { to { opacity: 0; } }
 @keyframes route-book-appear { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: no-preference) {
-  :root { view-transition-name: root; --route-ease: cubic-bezier(.22,.68,.2,1); --route-duration: 280ms; }
+  :root { view-transition-name: none; --route-ease: cubic-bezier(.22,.68,.2,1); --route-duration: 280ms; }
   html[data-route-motion="event"] { --route-duration: 380ms; }
   html[data-route-motion="contact"], html[data-route-motion="contact-card"] { --route-duration: 420ms; }
   html[data-route-motion="book"] { --route-duration: 540ms; }
   main { view-transition-name: none; }
   .route-shared-settled, .route-shared-settled .media-window { animation: none !important; }
-  .site-header, .novel-header { view-transition-name: route-header; }
-  html[data-route-arriving], html[data-route-arriving] :is(.site-header, .novel-header) { view-transition-name: none; }
+  /* Keep the real links on screen. Only the travelling artwork gets a snapshot. */
+  html[data-route-arriving] main { animation: route-content-in 150ms ease-out; }
+  @keyframes route-content-in { from { opacity: .82; } to { opacity: 1; } }
   .contact-form-panel::before, .contact-feature::before { view-transition-name: var(--route-panel-name, none); }
   ::view-transition { pointer-events: none; }
   ::view-transition-group(*) { animation-duration: var(--route-duration); animation-timing-function: var(--route-ease); }
-  ::view-transition-old(root) { animation: route-release 90ms var(--route-duration) ease-out both; mix-blend-mode: normal; }
   html[data-route-motion="fade"] { --route-duration: 150ms; }
-  html[data-route-motion="fade"]::view-transition-old(root) { animation: route-release var(--route-duration) ease-out both; }
-  ::view-transition-group(route-header) { z-index: 2; }
   ::view-transition-group(route-event) { z-index: 4; }
   ::view-transition-old(route-event) { opacity: 0; animation: none; }
   ::view-transition-new(route-event) { animation: none; mix-blend-mode: normal; }

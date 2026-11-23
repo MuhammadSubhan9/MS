@@ -29,11 +29,8 @@ try {
           ready: true,
           kind: document.documentElement.dataset.routeMotion,
           names: [...document.querySelectorAll('[style]')].map(node => node.style.viewTransitionName || node.style.getPropertyValue('--route-panel-name')).filter(Boolean),
-          outgoingOpacity: getComputedStyle(document.documentElement, '::view-transition-old(root)').opacity,
-          outgoingDelay: getComputedStyle(document.documentElement, '::view-transition-old(root)').animationDelay,
-          handoverDuration: Math.max(...['route-event', 'route-book', 'route-contact', 'route-card'].map(name => {
-            return parseFloat(getComputedStyle(document.documentElement, '::view-transition-group(' + name + ')').animationDuration) || 0;
-          })),
+          rootCapture: getComputedStyle(document.documentElement).viewTransitionName,
+          headerCapture: getComputedStyle(document.querySelector('.site-header, .novel-header')).viewTransitionName,
           inert: document.body.inert,
           hasLine: !!document.querySelector('.route-line'),
         });
@@ -58,7 +55,8 @@ try {
 
   async function clickRoute(selector, path, type, shared, width) {
     if (selector.startsWith('.nav ')) {
-      await chrome.evaluate("const menu=document.querySelector('.menu');if(menu?.getBoundingClientRect().width && menu.getAttribute('aria-expanded')!=='true') menu.click()");
+      const menuClosed = await chrome.evaluate("const menu=document.querySelector('.menu');menu?.offsetWidth > 0 && menu.getAttribute('aria-expanded') !== 'true'");
+      if (menuClosed) await press('.menu', width <= 390);
     }
     await chrome.evaluate(`document.querySelector(${JSON.stringify(selector)}).scrollIntoView({block:'center',behavior:'instant'})`);
     await pause(100);
@@ -70,12 +68,8 @@ try {
     if (shared) assert.ok(result.names.includes(shared), path + ' shared element');
     assert.equal(result.inert, false, path + ' destination accepts input during handover');
     assert.equal(result.hasLine, false, 'destination has no navigation line');
-    if (type === 'fade') {
-      assert.equal(parseFloat(result.outgoingDelay), 0, path + ' fade starts immediately');
-    } else {
-      assert.equal(result.outgoingOpacity, '1', path + ' outgoing snapshot covers the handover');
-      assert.ok(parseFloat(result.outgoingDelay) >= result.handoverDuration, path + ' destination follows completed handover');
-    }
+    assert.equal(result.rootCapture, 'none', 'the old page cannot cover the destination links');
+    assert.equal(result.headerCapture, 'none', 'navigation always displays the live links');
     if (capture && shared) {
       await mkdir(capture, { recursive: true });
       const shot = await chrome.call('Page.captureScreenshot', { format: 'png' });
@@ -141,7 +135,7 @@ try {
     await waitFor(() => chrome.evaluate("document.querySelector('.novel-reader-dialog').open && !document.querySelector('[data-reader]').classList.contains('reader-opening')"), 'cover opening');
     const originalStatus = await chrome.evaluate("document.querySelector('[data-page-status]').textContent");
     const originalPages = await chrome.evaluate("[...document.querySelectorAll('[data-spread] > [data-leaf]')].filter(n=>!n.hidden).map(n=>n.dataset.leaf)");
-    await chrome.key('ArrowRight', 'ArrowRight', 39);
+    await press('[data-page-step="1"]', width === 390);
     await waitFor(() => chrome.evaluate("!!document.querySelector('.reader-turn.next')"), 'forward page turn');
     assert.equal(await chrome.evaluate("document.querySelector('[data-page-status]').textContent"), originalStatus, 'page number waits for the turn');
     assert.deepEqual(await chrome.evaluate("[...document.querySelectorAll('[data-spread] > [data-leaf]')].filter(n=>!n.hidden).map(n=>n.dataset.leaf)"), originalPages, 'destination text stays hidden during the turn');

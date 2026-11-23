@@ -119,12 +119,15 @@ export function capabilitiesMatrix(capabilities = [], records) {
   }).join('');
 }
 
-function journeyMilestone({ record, date, logo }) {
+function journeyMilestone({ record, date, logo, preview, icon: milestoneIcon }) {
   const id = `milestone-${record.id}`;
   const mark = logo || record.eventLogo;
   const category = { education: 'Education', course: 'Course' }[record.type]
     || (record.kind === 'event' ? 'Event' : record.category?.split(' · ')[0] || 'Experience');
-  return `<li class="journey-milestone" id="${id}" data-share-section tabindex="-1">
+  const topic = topics.find(([id]) => id === record.evidence?.topics?.[0]);
+  const theme = topic?.[0] || record.type;
+  const symbol = milestoneIcon || topic?.[2] || (record.type === 'education' ? 'graduation-cap' : 'notebook');
+  return `<li class="journey-milestone" id="${id}" data-topic="${theme}" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -133,7 +136,9 @@ function journeyMilestone({ record, date, logo }) {
           <span class="journey-kind">${escape(category)}</span>
         </span>
         <span class="journey-title">${escape(record.title)}</span>
-        ${toggleIcon('plus', 'minus', 'journey-switch')}
+        ${preview ? `<span class="journey-preview">${escape(preview)}</span>` : ''}
+        <span class="journey-emblem" aria-hidden="true">${icon(symbol)}</span>
+        <span class="journey-switch" aria-hidden="true">${icon('caret-down')}</span>
       </summary>
       <div class="journey-panel">
         <div class="journey-brief">
@@ -203,10 +208,10 @@ export function journeyPage(data, records) {
   const current = data.journey.current.map(key => records.get(key)).filter(Boolean);
   const milestones = data.journey.milestones
     .filter(entry => records.has(entry.record))
-    .map(({ record: key, date: milestoneDate, logo }) => {
+    .map(({ record: key, date: milestoneDate, logo, preview, icon: milestoneIcon }) => {
       const record = records.get(key);
       const date = milestoneDate || record.date || '';
-      return { record, date, logo, year: date.match(/\b\d{4}\b/g)?.at(-1) };
+      return { record, date, logo, preview, icon: milestoneIcon, year: date.match(/\b\d{4}\b/g)?.at(-1) };
     });
   if (!current.length && !milestones.length) return '';
 

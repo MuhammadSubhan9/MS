@@ -183,20 +183,63 @@
   "journey": {
     "current": ["education:international-a-levels", "writing:the-eleventh-rehearsal"],
     "milestones": [
-      { "record": "course:course-crew-management" },
-      { "record": "course:course-aviation-management" },
-      { "record": "course:course-business-administration" },
-      { "record": "course:course-aircraft-design" },
-      { "record": "work:graduation-volunteering" },
-      { "record": "course:course-business-finance" },
-      { "record": "work:black-hat-mea", "date": "2–4 December 2025" },
-      { "record": "work:global-airports-forum", "date": "16–17 December 2025" },
-      { "record": "education:igcses", "date": "May–June 2026" },
-      { "record": "course:course-sales-fundamentals" },
-      { "record": "work:money2020-middle-east", "date": "14–16 September 2026" },
+      {
+        "record": "course:course-crew-management",
+        "preview": "How pilots share responsibilities and make decisions under pressure.",
+        "icon": "chats-circle"
+      },
+      {
+        "record": "course:course-aviation-management",
+        "preview": "How teams on the ground coordinate the work that happens before boarding."
+      },
+      {
+        "record": "course:course-business-administration",
+        "preview": "How teams, daily operations and customer service fit together in a business.",
+        "icon": "tree-structure"
+      },
+      {
+        "record": "course:course-aircraft-design",
+        "preview": "How aircraft design choices affect performance and airworthiness."
+      },
+      {
+        "record": "work:graduation-volunteering",
+        "preview": "Preparing the venue, seating guests and helping backstage.",
+        "icon": "graduation-cap"
+      },
+      {
+        "record": "course:course-business-finance",
+        "preview": "How companies compare investments and decide which risks to take."
+      },
+      {
+        "record": "work:black-hat-mea",
+        "date": "2–4 December 2025",
+        "preview": "Cybersecurity workshops in Riyadh and ten hours of professional development."
+      },
+      {
+        "record": "work:global-airports-forum",
+        "date": "16–17 December 2025",
+        "preview": "Conversations about airport operations and a collectible from a retired Emirates A380’s tail.",
+        "icon": "path"
+      },
+      {
+        "record": "education:igcses",
+        "date": "May–June 2026",
+        "preview": "I completed my IGCSEs at Al-Rowad International Schools."
+      },
+      {
+        "record": "course:course-sales-fundamentals",
+        "preview": "Finding customers, explaining an offer and responding to objections.",
+        "icon": "chats-circle"
+      },
+      {
+        "record": "work:money2020-middle-east",
+        "date": "14–16 September 2026",
+        "preview": "How an AI agent proves it has permission to make a purchase."
+      },
       {
         "record": "work:unesco-ai-forum",
         "date": "14–17 September 2026",
+        "preview": "Who is accountable when AI starts shaping real decisions?",
         "logo": {
           "src": "/images/event-unesco-ai-forum.webp",
           "alt": "Fourth UNESCO Global Forum on the Ethics of AI event logo",

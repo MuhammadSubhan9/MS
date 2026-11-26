@@ -257,10 +257,29 @@ body:has(.home-page) { --paper: #f4ebdf; }
   margin-top: 1.55rem;
 }
 .home-work-list .project-entry { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; gap: .55rem; border: 1px solid #c8ab95; padding: clamp(1rem, 2.8vw, 1.75rem); background: #f6eddf; }
+.home-work-list .project-entry:has(figure) { border-block-start: 2px solid #9f7650; }
+.home-work-list .project-entry:not(:has(figure)) { border-block-start: 2px solid #718371; background: linear-gradient(135deg, #e6e9dd, #f2ebdc); }
 .home-work-list .project-entry > div { display: flex; flex-direction: column; align-items: start; }
 .home-work-list .project-entry > div > p { flex: 1; }
+.home-work-list .project-entry > div:not(:has(figure)) > p { flex: none; }
+.home-work-list .project-entry > div:not(:has(figure)) > .project-summary { margin-block: .6rem 1rem; color: var(--muted); }
 .home-work-list .project-action { margin-top: .5rem; color: var(--home-wine); }
+.home-work-list .project-entry > div:not(:has(figure)) > .project-action { margin-top: auto; }
 .home-work-list h3 { margin-bottom: .45rem; }
+.home-work-list .project-entry figure { margin: .85rem 0 0; }
+.home-work-list figure img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 55% center; }
+.home-work-list figcaption { font-size: .78rem; line-height: 1.35; }
+@media (min-width: 560px) {
+  .home-work-list .project-entry > div:has(figure) {
+    display: grid;
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    grid-template-rows: auto 1fr auto;
+    align-items: start;
+    column-gap: clamp(.7rem, 1.5vw, 1.15rem);
+  }
+  .home-work-list .project-entry > div:has(figure) > :not(figure) { grid-column: 2; }
+  .home-work-list .project-entry figure { grid-column: 1; grid-row: 1 / 4; margin: 0; }
+}
 
 .home-writing { background: #2d2620; color: var(--paper); }
 .home-writing-novel {

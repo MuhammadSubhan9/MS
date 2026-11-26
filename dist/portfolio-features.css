@@ -169,42 +169,69 @@
   to { opacity: 1; transform: translateY(0); }
 }
 .about-records #courses .entry-actions .entry-certificate { margin-top: 0; padding-top: 0; }
-.capability { border-top: 1px solid #c7ae9a; background: #f8efe3; }
-.capability:last-child { border-bottom: 1px solid #c7ae9a; }
-.capability > summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: .95rem clamp(.85rem, 2.4vw, 1.65rem);
-  list-style: none;
-  text-decoration: none;
-  color: var(--ink);
-  font: 400 clamp(1.18rem, 2.55vw, 1.58rem)/1.22 var(--serif);
+.entry-preview {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--profile-heading);
+  font: 650 .95rem/1.35 var(--sans);
   cursor: pointer;
 }
-.capability > summary::-webkit-details-marker { display: none; }
-.capability > summary .toggle-icon { color: #785541; font-size: 1.13rem; }
-.capability > summary:hover { background: #efe0d1; }
-.capability[open] > summary { color: #682e42; }
-.capability-matrix {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: .85rem 1.15rem;
-  padding-inline: clamp(.85rem, 2.4vw, 1.65rem);
+.entry-preview[hidden] { display: none; }
+.certificate-dialog {
+  width: min(46rem, calc(100% - 1.5rem));
+  max-height: calc(100% - 1.5rem);
+  padding: clamp(1rem, 3.5vw, 1.85rem);
+  border: 1px solid #b49c82;
+  border-radius: .55rem;
+  background: #f6ede1;
+  color: var(--ink);
 }
-.capability-matrix > div { border-top: 1px solid #d7c1ac; padding-top: .55rem; }
-.capability-matrix dt { color: #765244; }
-.capability-matrix dd { margin-top: .2rem; }
+.certificate-dialog::backdrop { background: #201911a6; }
+.certificate-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.certificate-dialog-header button {
+  min-height: 42px;
+  padding-inline: .75rem;
+  border: 1px solid #aa967e;
+  border-radius: .25rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.certificate-course-title { margin-block-start: .85rem; font-weight: 650; }
+.certificate-dialog-content figure { margin-block: .9rem .55rem; border: 1px solid #c7b49a; border-block-end-width: 3px; background: #fff; }
+.certificate-dialog-content img { width: 100%; height: auto; max-height: 58svh; object-fit: contain; }
+.certificate-dialog-content a { width: fit-content; }
+
+.capability {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  align-items: center;
+  gap: .85rem clamp(1rem, 3vw, 2.4rem);
+  padding: clamp(1.05rem, 2.8vw, 1.75rem);
+  border: 1px solid #c7ae9a;
+  border-inline-start: 3px solid #976452;
+  background: #f8efe3;
+}
+.capability + .capability { margin-block-start: .75rem; }
+.capability h3 { margin-block-end: .45rem; color: var(--profile-heading); }
+.capability p { max-width: 58ch; }
+.capability-example { padding-inline-start: clamp(.85rem, 2vw, 1.5rem); border-inline-start: 1px solid #ccb197; }
+.capability-example > a { width: fit-content; }
 .capability-evidence {
   display: flex;
   flex-wrap: wrap;
-  gap: .05rem 1rem;
-  margin: .55rem clamp(.85rem, 2.4vw, 1.65rem) 0;
-  padding: 0 0 .75rem;
+  gap: .05rem .85rem;
+  margin: .4rem 0 0;
+  padding: 0;
   list-style: none;
 }
 .capability-evidence a { color: #6d3f46; font-size: .94rem; }
+@media (max-width: 660px) {
+  .capability { grid-template-columns: minmax(0, 1fr); }
+  .capability-example { padding-inline-start: 0; border-inline-start: 0; }
+}
 
 .evidence-section { margin-top: clamp(2.65rem, 5.7vw, 5.3rem); }
 .evidence-section > .share-heading h2 { font-size: clamp(1.9rem, 3.4vw, 3rem); }
@@ -305,7 +332,7 @@
 .evidence-record-links a { color: var(--accent); }
 
 @media (max-width: 760px) {
-  .evidence-board, .capability-matrix { grid-template-columns: minmax(0, 1fr); }
+  .evidence-board { grid-template-columns: minmax(0, 1fr); }
   .evidence-map { min-height: auto; }
   .evidence-branch a { min-height: 40px; }
 }

@@ -1,6 +1,6 @@
 import {
   action, escape, glossary, hasDetail, icon, image, paragraphs,
-  publicationDate, safeLink, sectionIcons, sharedHeading, toggleIcon,
+  publicationDate, safeLink, sectionIcons, sharedHeading,
 } from './components.mjs';
 
 const topics = [
@@ -103,20 +103,22 @@ export function evidenceMap(records) {
   </section>`;
 }
 
-export function capabilitiesMatrix(capabilities = [], records) {
-  return capabilities.map((capability, index) => {
+export function capabilitiesCards(capabilities = [], records) {
+  return capabilities.map(capability => {
     const evidence = capability.records.map(key => records.get(key)).filter(Boolean);
     if (!evidence.length) return '';
-    return `<details class="capability"${index === 0 ? ' open' : ''}>
-      <summary>${escape(capability.title)}${toggleIcon('plus', 'minus')}</summary>
-      <dl class="capability-matrix">
-        <div><dt>What I studied</dt><dd>${glossary(capability.learning)}</dd></div>
-        <div><dt>Where I used it</dt><dd>${glossary(capability.application)}</dd></div>
-        <div><dt>What I’m developing next</dt><dd>${glossary(capability.next)}</dd></div>
-      </dl>
-      <ul class="capability-evidence" aria-label="Related work and credentials">${evidence.map(record =>
-        `<li>${action(record.destination, record.label)}</li>`).join('')}</ul>
-    </details>`;
+    const [example, ...related] = evidence;
+    return `<article class="capability">
+      <div>
+        <h3>${escape(capability.title)}</h3>
+        <p>${glossary(capability.summary || capability.application)}</p>
+      </div>
+      <div class="capability-example">
+        ${action(example.destination, example.label, 'button-link')}
+        ${related.length ? `<ul class="capability-evidence" aria-label="Related work and credentials">${related.map(record =>
+          `<li>${action(record.destination, record.label)}</li>`).join('')}</ul>` : ''}
+      </div>
+    </article>`;
   }).join('');
 }
 

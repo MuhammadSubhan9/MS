@@ -5,7 +5,7 @@ import {
 import { findNovel, novelContent, novelPath, oldNovelPath } from './novel.mjs';
 import { contactPage } from './contact.mjs';
 import { nowSection, parseNow, renderNowPreview } from './now.mjs';
-import { capabilitiesMatrix, evidenceMap, journeyPage, portfolioRecords } from './portfolio-features.mjs';
+import { capabilitiesCards, evidenceMap, journeyPage, portfolioRecords } from './portfolio-features.mjs';
 
 function homePage(data, { hasAbout, hasContact, selected }) {
   const { education, projects, portrait, writing, contact } = data;
@@ -41,7 +41,7 @@ function homePage(data, { hasAbout, hasContact, selected }) {
       </div>
       ${projectEntry({ ...featuredWork, image: featuredWork.homeImage ?? featuredWork.image }, { heading: 'h3', featured: true, actionLabel: 'Read more' })}
       ${selected.length > 1 ? `<div class="home-work-list">
-        ${selected.slice(1).map(item => projectEntry(item, { heading: 'h3', showImage: false, actionLabel: 'Read more' })).join('')}
+        ${selected.slice(1).map(item => projectEntry(item, { heading: 'h3', showSummary: !item.image, actionLabel: 'Read more' })).join('')}
       </div>` : ''}
     </div>
   </section>` : '';
@@ -121,6 +121,14 @@ function aboutPage(data, background) {
       ${background.map(([id, title]) => `<li>${action('#' + id, title, 'action-link', '', sectionIcons[id])}</li>`).join('')}
     </ul></nav>
     <div class="about-records">${background.map(([id, title, body]) => section(id, title, body, { share: id === 'courses' })).join('')}</div></div>` : ''}
+    ${data.courses?.some(course => course.certificateUrl && course.certificatePreview) ? `<dialog class="certificate-dialog" aria-labelledby="certificate-dialog-title">
+      <div class="certificate-dialog-header">
+        <h2 id="certificate-dialog-title">Certificate preview</h2>
+        <form method="dialog"><button type="submit" autofocus>Close</button></form>
+      </div>
+      <p class="meta">Excerpt from the issuer’s document</p>
+      <div class="certificate-dialog-content"></div>
+    </dialog>` : ''}
   </div>`;
 }
 
@@ -327,7 +335,7 @@ export function createPages(data) {
     ['education', 'Education', education && education + (journey ? action('/journey/', 'Explore my journey', 'action-link education-journey') : '')],
     ['experience', 'Experience', chronology(data.experience)],
     ['languages', 'Languages', languageList(data.languages, data.duolingoScoresUpdated)],
-    ['capabilities', 'Capabilities', capabilitiesMatrix(data.capabilities, records)],
+    ['capabilities', 'Capabilities', capabilitiesCards(data.capabilities, records)],
     ['courses', 'Independent courses', chronology(data.courses || [], { detailLabel: 'Course details', renderText: glossary })],
     ['achievements', 'Achievements', chronology(data.achievements)],
     ['interests', 'Interests', paragraphs(data.interests, glossary)],

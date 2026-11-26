@@ -134,7 +134,16 @@ export function chronology(items, { detailLabel, renderText = escape, heading = 
         <div class="entry-detail-panel"><div class="entry-detail-copy">${paragraphs(item.details, renderText)}</div></div>
       </details>` : ''}
       ${item.certificateUrl ? `<div class="entry-actions">
-        ${action(item.certificateUrl, 'View certificate', 'action-link entry-certificate', `for ${item.title}`, 'certificate')}
+        ${item.certificatePreview ? `
+          <button class="entry-preview action-link" type="button" aria-haspopup="dialog" hidden>${icon('certificate')}<span>Preview certificate<span class="visually-hidden"> for ${escape(item.title)}</span></span></button>
+          <template data-certificate-preview>
+            <p class="certificate-course-title">${escape(item.title)}</p>
+            ${image(item.certificatePreview)}
+            ${action(item.certificateUrl, 'Verify with issuer')}
+          </template>` : ''}
+        ${item.certificatePreview
+          ? action(item.certificateUrl, 'Verify with issuer', 'action-link entry-certificate', `for ${item.title}`)
+          : action(item.certificateUrl, 'View certificate', 'action-link entry-certificate', `for ${item.title}`, 'certificate')}
       </div>` : ''}
     </div>
   </article>`;

@@ -96,7 +96,8 @@
         "The course introduced funding options, investment analysis and how organisations evaluate financial decisions.",
         "It gave me a starting point for understanding how companies compare investment choices and decide which risks to take on."
       ],
-      "certificateUrl": "https://alison.com/verify/640283d4a4"
+      "certificateUrl": "https://alison.com/verify/640283d4a4",
+      "certificatePreview": { "src": "/images/certificates/business-finance.png", "alt": "Alison verification excerpt confirming Muhammad Subhan completed Introduction to Business Finance.", "width": 920, "height": 150 }
     },
     {
       "id": "course-aircraft-design",
@@ -108,7 +109,8 @@
         "The course introduced aircraft configuration, component design and airworthiness.",
         "It helped me connect the shape and layout of an aircraft to the engineering choices behind its performance."
       ],
-      "certificateUrl": "https://alison.com/verify/f1e8c7db59"
+      "certificateUrl": "https://alison.com/verify/f1e8c7db59",
+      "certificatePreview": { "src": "/images/certificates/aircraft-design.png", "alt": "Alison verification excerpt confirming Muhammad Subhan completed Introduction to Aircraft Design.", "width": 920, "height": 150 }
     },
     {
       "id": "course-business-administration",
@@ -132,7 +134,8 @@
         "The course looked at how airports and airlines operate, with topics including airport security, risk management and the responsibilities of aviation managers.",
         "It helped me see how much coordination takes place on the ground before passengers board."
       ],
-      "certificateUrl": "https://alison.com/verify/cc4ec37d25"
+      "certificateUrl": "https://alison.com/verify/cc4ec37d25",
+      "certificatePreview": { "src": "/images/certificates/aviation-management.png", "alt": "Alison verification excerpt confirming Muhammad Subhan completed Basics of Aviation Management.", "width": 920, "height": 172 }
     },
     {
       "id": "course-crew-management",
@@ -144,7 +147,8 @@
         "The course covered how pilots share information and responsibilities, manage threats and errors, and make decisions in a multi-pilot cockpit.",
         "It introduced me to the role of clear communication and coordination when a team has to act under pressure."
       ],
-      "certificateUrl": "https://alison.com/certification/check/2y10MjgCMik9bOBpRxHAjte8mp7VozAs2192PrAxkYWLGKyTYqa62"
+      "certificateUrl": "https://alison.com/certification/check/2y10MjgCMik9bOBpRxHAjte8mp7VozAs2192PrAxkYWLGKyTYqa62",
+      "certificatePreview": { "src": "/images/certificates/crew-management.jpg", "alt": "Alison certificate excerpt awarded to Muhammad Subhan for completing Crew Management in Multi-Pilot Aircraft.", "width": 1300, "height": 550 }
     }
   ],
   "experience": [
@@ -160,6 +164,7 @@
   "capabilities": [
     {
       "title": "Negotiation and communication",
+      "summary": "In workshop simulations, I practised listening for the other side’s priorities and finding room to negotiate.",
       "learning": "Practised structuring a spoken argument, listening for the other side’s priorities and finding room to negotiate.",
       "application": "I used those skills in workshop simulations. I also helped with guest seating and backstage coordination during a school graduation.",
       "next": "Practise giving a short briefing that makes the main point clear and leaves room for questions.",
@@ -167,6 +172,7 @@
     },
     {
       "title": "Commercial and technology research",
+      "summary": "I used the UNESCO AI forum to examine who is accountable when AI starts shaping real decisions.",
       "learning": "Studied business finance and explored how digital identity and permissions work when software acts on someone’s behalf.",
       "application": "I wrote about accountability at the UNESCO AI forum and about the permissions that businesses have to check in agentic commerce.",
       "next": "Learn how companies allocate risk in transactions and in contracts for new technology.",

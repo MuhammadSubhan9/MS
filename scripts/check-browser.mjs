@@ -25,6 +25,7 @@ try {
         link.textContent.trim(), link.getAttribute('href'), link.classList.contains('button-link'),
       ])`), [['Contact me', '/contact/', true]]);
       assert.equal(await chrome.evaluate("document.querySelector('#site-updates, footer [href=\"#site-updates\"]')"), null);
+      assert.equal(await chrome.evaluate("!!document.querySelector('.home-work-list img[src=\"/images/coburn-palo-speaking.jpg\"]')"), true);
     }
     if (route === '/about/') {
       assert.deepEqual(await chrome.evaluate("Array.from(document.querySelectorAll('.language-group-learning dt'), node => node.textContent)"), ['German', 'Latin']);
@@ -160,8 +161,20 @@ try {
 
   await chrome.navigate(origin + '/about/#capabilities', 390);
   assert.doesNotMatch(await chrome.evaluate("document.querySelector('#capabilities').textContent"), /web development/i);
-  await chrome.evaluate("document.querySelectorAll('.capability > summary')[1].click()");
-  assert.equal(await chrome.evaluate("document.querySelectorAll('.capability[open] .capability-matrix > div').length >= 3"), true);
+  assert.equal(await chrome.evaluate("document.querySelector('.capability .capability-example > a').getAttribute('href')"), '/work/lead-influence-workshop/');
+  assert.match(await chrome.evaluate("document.querySelector('.capability p').textContent"), /workshop simulations/);
+  const previewPoint = await chrome.evaluate(`(() => {
+    const button = document.querySelector('#course-business-finance .entry-preview');
+    button.scrollIntoView({ block: 'center', behavior: 'instant' });
+    const box = button.getBoundingClientRect();
+    return { x: box.left + box.width / 2, y: box.top + box.height / 2 };
+  })()`);
+  await chrome.call('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [previewPoint] });
+  await chrome.call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await waitFor(() => chrome.evaluate("document.querySelector('.certificate-dialog').open && document.querySelector('.certificate-dialog img').naturalWidth === 920"), 'first tap opens the original certificate excerpt');
+  assert.equal(await chrome.evaluate("document.querySelector('.certificate-dialog-content a').getAttribute('href')"), 'https://alison.com/verify/640283d4a4');
+  await chrome.key('Escape', 'Escape', 27);
+  await waitFor(() => chrome.evaluate("!document.querySelector('.certificate-dialog').open"), 'closing the certificate preview');
   await chrome.navigate(origin + '/about/#igcses', 390);
   await chrome.evaluate("document.querySelector('#igcses .glossary-term').click()");
   assert.match(await chrome.evaluate("document.querySelector('#glossary-definition').textContent"), /International General Certificate/);

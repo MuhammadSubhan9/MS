@@ -31,6 +31,20 @@
     tablet.addEventListener('change', arrangeCourses);
   }
 
+  const certificateDialog = document.querySelector('.certificate-dialog');
+  if (typeof certificateDialog?.showModal === 'function') {
+    const preview = certificateDialog.querySelector('.certificate-dialog-content');
+    for (const button of document.querySelectorAll('.entry-preview')) {
+      const template = button.nextElementSibling;
+      button.hidden = false;
+      button.addEventListener('click', () => {
+        preview.replaceChildren(template.content.cloneNode(true));
+        certificateDialog.showModal();
+      });
+    }
+    certificateDialog.addEventListener('close', () => preview.replaceChildren());
+  }
+
   const evidence = document.querySelector('#evidence');
   if (evidence) {
     const filters = evidence.querySelector('[data-evidence-filters]');

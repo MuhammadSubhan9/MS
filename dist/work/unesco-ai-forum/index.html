@@ -28,6 +28,8 @@
 
   <link rel="stylesheet" href="/commands.css">
   <script src="/commands.js" defer></script>
+  <link rel="stylesheet" href="/search.css">
+  <script src="/search.js" type="module"></script>
 
   <script src="/site.js" defer></script>
   <link rel="stylesheet" href="/header-surface.css">
@@ -43,7 +45,8 @@
   <header class="site-header" data-blended-header>
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
-      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span class="toggle-icon" aria-hidden="true"><svg class="site-icon icon-closed" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#list"></use></svg><svg class="site-icon icon-open" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#x"></use></svg></span></button><nav class="nav" id="navigation" aria-label="Primary"><a href="/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#house-line"></use></svg>Home</a><a href="/about/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#user-circle"></use></svg>About</a><a href="/journey/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#path"></use></svg>Journey</a><a href="/work/" aria-current="page"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#notebook"></use></svg>Experiences</a><a href="/writing/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#pen-nib"></use></svg>Writing</a><a class="nav-contact" href="/contact/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg>Contact</a></nav>
+      <div class="header-search-tools"><a class="search-launch" href="/search/" data-search-open aria-label="Search the portfolio"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#magnifying-glass"></use></svg></a><button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span class="toggle-icon" aria-hidden="true"><svg class="site-icon icon-closed" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#list"></use></svg><svg class="site-icon icon-open" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#x"></use></svg></span></button></div>
+      <nav class="nav" id="navigation" aria-label="Primary"><a href="/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#house-line"></use></svg>Home</a><a href="/about/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#user-circle"></use></svg>About</a><a href="/journey/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#path"></use></svg>Journey</a><a href="/work/" aria-current="page"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#notebook"></use></svg>Experiences</a><a href="/writing/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#pen-nib"></use></svg>Writing</a><a class="nav-contact" href="/contact/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg>Contact</a></nav>
     </div>
   </header>
   <main class="container" id="main" tabindex="-1">
@@ -104,5 +107,19 @@
       <p class="command-feedback" role="status"></p>
     </form>
   </dialog>
+  <dialog class="search-dialog" id="portfolio-search-overlay" aria-labelledby="search-dialog-title" data-clarity-mask="true">
+  <div class="search-dialog-top"><h2 id="search-dialog-title">Search the portfolio</h2><button class="search-close" type="button" data-search-close aria-label="Close search"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#x"></use></svg></button></div>
+  <form class="search-form" action="/search/" role="search" data-search-form>
+    <label class="search-label" for="portfolio-search-dialog">Search the portfolio</label>
+    <div class="search-field">
+      <svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#magnifying-glass"></use></svg>
+      <input id="portfolio-search-dialog" type="search" placeholder="Search my profile, projects and interests…" maxlength="240" autocomplete="off" enterkeyhint="search" data-search-input>
+      <button class="search-clear" type="button" data-search-clear aria-label="Clear search" hidden><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#x"></use></svg></button>
+      <button class="search-submit" type="submit">Search <svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-right"></use></svg></button>
+    </div>
+  </form>
+  <div data-search-suggestions class="search-dialog-content"></div>
+  <div class="search-dialog-foot"><span>Use ↑ ↓ to move and Enter to select</span><a href="/search/">Open search page <svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#arrow-up-right"></use></svg></a></div>
+</dialog>
 </body>
 </html>

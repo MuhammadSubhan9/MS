@@ -25,6 +25,12 @@ The canonical domain is [muhammadsubhan.pages.dev](https://muhammadsubhan.pages.
 
 Google Analytics starts automatically on the configured public origin. The footer explains the analytics services. The site has no analytics preference buttons and ignores older saved site preferences. Local previews, direct editing links and browser privacy signals continue to be excluded.
 
+## Portfolio search
+
+The search page at `/search/` uses a public index generated at build time from the existing portfolio content. It searches titles, topics and passages in the browser, and links each excerpt to its source. Recent searches are stored on the device and can be cleared inside the search dialog. The live Now entry is fetched for current-work questions. Public Ctrl+K and Cmd+K open search. When the owner shortcut is active, the existing command palette takes priority and the search buttons remain available.
+
+The public deployment runs on browser search and sourced excerpts. The optional Gemini adapter is for a separately eligible deployment only. It requires `PORTFOLIO_GEMINI_MODE=eligible-adult-deployment`, an encrypted `GEMINI_API_KEY` from a project with billing disabled, the existing D1 bindings, and a Cloudflare country code of `SA`. Never enable this mode on the public portfolio. Google's terms place age and regional limits on API clients, and Google may use free-tier prompts to improve its services. Gemini sees only a bounded question and relevant public excerpts. Gemini selects passage IDs, and the server resolves those IDs to the published text. Only responses to the site's predefined suggestions can be cached on the server. [Gemini API terms](https://ai.google.dev/gemini-api/terms)
+
 ## Design decisions
 
 Warm ivory, stone beige and charcoal form the base palette. Forest emerald (#285547) marks the active navigation item, keyboard focus and directional details. Muted text uses #62594F for contrast. Locally hosted DM Serif Text and Source Sans 3 use Latin WOFF2 subsets totalling 40,208 bytes. Their OFL licenses are in `public/fonts`. Native disclosures, static routes and an HTML navigation fallback keep the site usable without JavaScript.

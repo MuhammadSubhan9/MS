@@ -4,6 +4,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { action, escape } from './components.mjs';
 import { createPages } from './pages.mjs';
 import { renderPage } from './layout.mjs';
+import { makeSearchIndex, searchPage } from './search-content.mjs';
 export { escape, createPages };
 
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
@@ -63,6 +64,8 @@ export async function build({ preview = false } = {}) {
     Object.assign(data, JSON.parse(await readFile(new URL('../tests/fixtures.json', import.meta.url), 'utf8')));
   }
   const pages = createPages(data);
+  const searchIndex = makeSearchIndex(data, pages);
+  pages.push({ path: '/search/', label: 'Search', description: 'Search Muhammad Subhan’s portfolio by question or keyword.', body: searchPage(searchIndex), noindex: true });
   const assets = new Set(await publicFiles());
   await verifyLocalFiles(pages, assets);
   const navigation = ['/', '/about/', '/journey/', '/work/', '/writing/', '/contact/']
@@ -96,11 +99,12 @@ export async function build({ preview = false } = {}) {
     await mkdir(dirname(destination), { recursive: true });
     await writeFile(destination, page.html);
   }
+  await writeFile(`${output}/search-index.json`, JSON.stringify(searchIndex));
   await writeFile(`${output}/robots.txt`, ready
     ? `User-agent: *\nAllow: /\nSitemap: ${origin}/sitemap.xml\n`
     : 'User-agent: *\nDisallow: /\n');
   if (ready) {
-    const urls = pages.filter(page => !page.redirect).map(page => `<url><loc>${escape(origin + page.path)}</loc></url>`).join('');
+    const urls = pages.filter(page => !page.redirect && !page.noindex).map(page => `<url><loc>${escape(origin + page.path)}</loc></url>`).join('');
     await writeFile(`${output}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`);
   }
   return { output, pages };

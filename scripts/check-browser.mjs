@@ -261,6 +261,8 @@ try {
 
   await commandShortcut();
   assert.equal(await paletteOpen(), false);
+  assert.equal(await chrome.evaluate("document.querySelector('.search-dialog').open"), true);
+  await chrome.key('Escape', 'Escape', 27);
   await chrome.navigate(origin + '/?owner=1#edit', 390);
   await chrome.evaluate("document.querySelector('#now-editor-code').value = 'browser-test-code-only-1234'");
   await chrome.evaluate(`
@@ -297,6 +299,8 @@ try {
   assert.equal(await chrome.evaluate("Number(localStorage.getItem('portfolio-tools-expires'))"), 0);
   await commandShortcut();
   assert.equal(await paletteOpen(), false);
+  assert.equal(await chrome.evaluate("document.querySelector('.search-dialog').open"), true);
+  await chrome.key('Escape', 'Escape', 27);
   await chrome.evaluate("localStorage.setItem('portfolio-tools-expires', String(Date.now() + 30000))");
   await commandShortcut();
   assert.equal(await paletteOpen(), true);

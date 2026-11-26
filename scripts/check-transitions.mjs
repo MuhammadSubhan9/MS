@@ -81,6 +81,9 @@ try {
     }
     await waitFor(() => chrome.evaluate("!document.documentElement.dataset.routeMotion && !document.querySelector('.route-line')"), 'transition cleanup');
     assert.equal(await chrome.evaluate('document.body.inert'), false, 'interaction resumes');
+    if (path === '/') {
+      assert.equal(await chrome.evaluate("getComputedStyle(document.querySelector('.name-line span')).animationName"), 'none', 'the homepage intro does not replay after a transition');
+    }
     assert.equal(await chrome.evaluate('document.documentElement.scrollWidth <= innerWidth'), true, path);
     if (type === 'contact' && shared && width === 390) {
       assert.equal(await chrome.evaluate("document.querySelector('.contact-form-panel').getBoundingClientRect().top < innerHeight * .3"), true);
@@ -125,7 +128,27 @@ try {
     await clickRoute('.footer-link[href="/work/"]', '/work/', 'fade', null, width);
   }
 
+  await chrome.navigate(origin + '/about/', 390);
+  const menuTop = await chrome.evaluate("document.querySelector('.menu').getBoundingClientRect().top");
+  await press('.menu', true);
+  await waitFor(() => chrome.evaluate("document.querySelector('.header-nav').getBoundingClientRect().height > 15"), 'mobile menu starts to expand');
+  await press('.menu', true);
+  assert.equal(await chrome.evaluate("document.querySelector('.menu').getAttribute('aria-expanded')"), 'false');
+  await press('.menu', true);
+  await waitFor(() => chrome.evaluate("!document.querySelector('.header-nav').hidden && !document.querySelector('.header-nav').dataset.revealMotion"), 'menu reverses and settles open');
+  assert.equal(await chrome.evaluate("document.querySelector('.menu').getBoundingClientRect().top"), menuTop, 'menu control stays under the same touch target');
+  await press('.menu', true);
+  await waitFor(() => chrome.evaluate("document.querySelector('.header-nav').hidden"), 'menu settles closed');
+
   await chrome.navigate(origin + '/contact/', 390);
+  await chrome.evaluate("document.querySelector('.contact-save').scrollIntoView({block:'center',behavior:'instant'})");
+  await press('.contact-save', true);
+  await waitFor(() => chrome.evaluate("document.querySelector('.contact-card-dialog').open"), 'contact card opens');
+  await chrome.key('Escape', 'Escape', 27);
+  await chrome.evaluate("document.querySelector('#contact-name').scrollIntoView({block:'center',behavior:'instant'})");
+  await press('#contact-name', true);
+  assert.equal(await chrome.evaluate('document.activeElement.id'), 'contact-name', 'the dismissing dialog does not steal the next tap');
+
   await chrome.evaluate("Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async()=>{}}});document.querySelector('[data-copy-email]').scrollIntoView({block:'center',behavior:'instant'})");
   await press('[data-copy-email]', true);
   await waitFor(() => chrome.evaluate("document.querySelector('[data-copy-email]').dataset.copyState==='copied'"), 'copy confirmation');

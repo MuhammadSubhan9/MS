@@ -11,7 +11,7 @@ const topics = [
 ];
 
 export const portfolioAssets = `<link rel="stylesheet" href="/portfolio-features.css">
-  <script src="/portfolio-features.js" defer></script>`;
+  <script src="/portfolio-features.js" type="module"></script>`;
 
 export const journeyAssets = `<link rel="stylesheet" href="/journey.css">
   <script src="/journey.js" defer></script>`;

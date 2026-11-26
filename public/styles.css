@@ -759,14 +759,17 @@ details p { padding: .2rem 0; }
 .work-event-row { display: grid; gap: .65rem; min-width: 0; }
 .work-event-row .project-entry { grid-column: 1 / -1; }
 .work-event-spread {
-  display: grid;
+  display: flow-root;
   grid-column: 1 / -1;
+}
+.work-event-spread-body {
+  display: grid;
   border: 1px solid #b9a389;
   border-block-start: 2px solid #6a8876;
   background: linear-gradient(110deg, #e9dec9, #f5ebdb 68%);
 }
 .work-event-spread[hidden] { display: none; }
-.work-lead > .work-event-spread { margin-block-start: .65rem; }
+.work-lead > .work-event-spread > .work-event-spread-body { margin-block-start: .65rem; }
 .work-event-artwork {
   display: grid;
   align-content: center;
@@ -788,13 +791,20 @@ details p { padding: .2rem 0; }
 @media (min-width: 761px) {
   .work-event-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .work-event-row > .work-event-spread { order: 1; }
-  .work-event-spread:has(.work-event-artwork) { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+  .work-event-spread-body:has(.work-event-artwork) { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .work-event-spread:not([hidden]) { animation: work-spread-in 260ms ease-out both; }
-  .work-event-caret { transition: rotate 200ms ease-out; }
-  @keyframes work-spread-in { from { opacity: .45; } to { opacity: 1; } }
+  .work-event-caret { transition: rotate 230ms var(--motion-interactive); }
+  .work-event-spread:not([hidden], [data-reveal-motion]) > .work-event-spread-body {
+    animation: work-spread-arrive 250ms var(--motion-enter);
+  }
+  .work-event-spread:not([hidden], [data-reveal-motion]) .work-event-artwork img {
+    animation: work-spread-artwork-in 300ms var(--motion-enter);
+  }
+  @keyframes work-spread-arrive { from { opacity: .62; } }
+  @keyframes work-spread-artwork-in { from { translate: 0 5px; } }
 }
+[data-reveal-motion] { overflow: clip; }
 
 .work-events .project-entry {
   grid-template-columns: minmax(9rem, .6fr) minmax(0, 2.1fr);
@@ -945,11 +955,11 @@ details p { padding: .2rem 0; }
 
 @media (max-width: 880px) {
   .header-inner { flex-wrap: wrap; min-height: 64px; gap: 0; }
-  .header-inner:has(.menu[aria-expanded="true"]) { padding-block-start: .55rem; }
+  .header-inner .wordmark { min-height: 64px; }
   .menu:not([hidden]) { display: inline-flex; }
+  .header-nav { width: 100%; }
   .nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; margin-bottom: .6rem; }
   .nav a.nav-contact { margin-inline-start: 0; }
-  .js .nav[hidden] { display: none; }
 }
 
 @media (max-width: 700px) {
@@ -1030,12 +1040,8 @@ details p { padding: .2rem 0; }
   .entry { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
 }
 
-@media (min-width: 881px) {
-  .nav[hidden] { display: flex; }
-}
-
 @keyframes rise-in {
-  from { opacity: 0; transform: translateY(22px); }
+  from { opacity: .62; transform: translateY(9px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -1045,7 +1051,7 @@ details p { padding: .2rem 0; }
 }
 
 @keyframes portrait-settle {
-  from { transform: scale(1.14); }
+  from { transform: scale(1.05); }
   to { transform: scale(1); }
 }
 
@@ -1067,68 +1073,72 @@ details p { padding: .2rem 0; }
 
 @media (prefers-reduced-motion: no-preference) {
   :root {
-    --motion-ease: cubic-bezier(.2, .65, .3, 1);
     --motion-cut: cubic-bezier(.23, 1, .32, 1);
   }
   html { scroll-behavior: smooth; }
 
-  html:not(.page-transitioning) .home-title .eyebrow {
-    animation: 520ms var(--motion-ease) both rise-in;
+  html:not(.page-transitioning, [data-route-arrived]) .home-title .eyebrow {
+    animation: 340ms var(--motion-enter) both rise-in;
   }
-  html:not(.page-transitioning) .name-line > span {
-    animation: 820ms var(--motion-cut) 60ms both name-enter;
+  html:not(.page-transitioning, [data-route-arrived]) .name-line > span {
+    animation: 580ms var(--motion-cut) 35ms both name-enter;
   }
-  html:not(.page-transitioning) .name-line:nth-child(2) > span {
-    animation-delay: 155ms;
+  html:not(.page-transitioning, [data-route-arrived]) .name-line:nth-child(2) > span {
+    animation-delay: 90ms;
   }
-  html:not(.page-transitioning) .home-intro > .lead {
-    animation: 670ms var(--motion-ease) 105ms both rise-in;
+  html:not(.page-transitioning, [data-route-arrived]) .home-intro > .lead {
+    animation: 440ms var(--motion-enter) 80ms both rise-in;
   }
-  html:not(.page-transitioning) .text-actions {
-    animation: 300ms ease-out link-group-appear;
+  html:not(.page-transitioning, [data-route-arrived]) .text-actions {
+    animation: 285ms var(--motion-enter) link-group-appear;
   }
   @keyframes link-group-appear { from { opacity: .75; } to { opacity: 1; } }
-  html:not(.page-transitioning) .home-masthead-portrait > figure {
-    animation: 900ms var(--motion-cut) 90ms both portrait-reveal;
+  html:not(.page-transitioning, [data-route-arrived]) .home-masthead-portrait > figure {
+    animation: 500ms var(--motion-cut) 65ms both portrait-reveal;
   }
-  html:not(.page-transitioning) .home-masthead-portrait > figure .media-window {
-    animation: 1050ms var(--motion-cut) 90ms both portrait-settle;
+  html:not(.page-transitioning, [data-route-arrived]) .home-masthead-portrait > figure .media-window {
+    animation: 585ms var(--motion-cut) 65ms both portrait-settle;
   }
-  html:not(.page-transitioning) main:not(.home-page) > :first-child {
-    animation: 540ms var(--motion-ease) both rise-in;
+  html:not(.page-transitioning, [data-route-arrived]) main:not(.home-page) > :first-child {
+    animation: 350ms var(--motion-enter) both rise-in;
   }
 
 
   .scroll-reveal {
-    transition: opacity 600ms var(--motion-ease), transform 680ms var(--motion-ease);
+    transition: opacity 345ms var(--motion-enter), transform 425ms var(--motion-enter);
   }
-  .reveal-pending:not(:focus-within):not(:target) { opacity: .16; }
-  .reveal-pending:not(:focus-within):not(:target):not(:has(a[href])) { transform: translateY(22px); }
+  .reveal-pending:not(:focus-within):not(:target) { opacity: .42; }
+  .reveal-pending:not(:focus-within):not(:target):not(:has(a[href])) { transform: translateY(9px); }
   .scroll-reveal:focus-within { transition: none; }
   .scroll-reveal:not(.reveal-pending):is(figure, .featured-project) .media-window {
-    animation: 850ms var(--motion-cut) both image-unmask;
+    animation: 525ms var(--motion-cut) both image-unmask;
   }
-  .arrow { transition: translate 360ms var(--motion-cut); }
-  a:is(:hover, :focus-visible) .arrow { translate: 5px 0; }
-  a:is(:hover, :focus-visible) .arrow-left { translate: -5px 0; }
-  a:is(:hover, :focus-visible) .arrow-down { translate: 0 5px; }
+  .arrow { transition: translate 220ms var(--motion-interactive); }
+  a:is(:hover, :focus-visible) .arrow { translate: 4px 0; }
+  a:is(:hover, :focus-visible) .arrow-left { translate: -4px 0; }
+  a:is(:hover, :focus-visible) .arrow-down { translate: 0 4px; }
   a:is(:hover, :focus-visible) .arrow-external { translate: 3px -3px; }
 
+  :is(.nav a, .button-link, .work-event-link) > .site-icon,
+  .menu > .toggle-icon {
+    transition: scale 185ms var(--motion-interactive);
+  }
+  :is(.nav a, .button-link, .work-event-link):active > .site-icon,
+  .menu:active > .toggle-icon {
+    scale: .92;
+    transition-duration: 75ms;
+  }
   @media (hover: hover) and (pointer: fine) {
     .media-link .media-window { position: relative; isolation: isolate; }
-    .media-link img { transition: translate 450ms var(--motion-cut), scale 600ms var(--motion-cut); }
+    .media-link img { transition: translate 330ms var(--motion-cut), scale 400ms var(--motion-cut); }
     .media-link .media-window::after {
       position: absolute; inset: 0; opacity: 0; content: ''; pointer-events: none;
       background: radial-gradient(ellipse at var(--light-x, 50%) var(--light-y, 50%), #fff2d52e, transparent 65%);
       transition: opacity 380ms ease;
     }
-    .media-link:hover img { translate: var(--image-x, 0px) var(--image-y, 0px); scale: 1.075; }
+    .media-link:hover img { translate: var(--image-x, 0px) var(--image-y, 0px); scale: 1.04; }
     .media-link:hover .media-window::after { opacity: 1; }
     .project-entry:has(:is(.project-link, .project-action):focus-visible) .media-link img { scale: 1.035; }
-  }
-
-  @media (max-width: 880px) {
-    .js .nav:not([hidden]) { animation: link-group-appear 150ms ease-out; }
   }
 
   @supports (animation-timeline: scroll(root block)) {

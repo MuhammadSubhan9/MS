@@ -1,31 +1,81 @@
 @view-transition { navigation: auto; }
+:root {
+  --motion-enter: cubic-bezier(.18, .75, .24, 1);
+  --motion-exit: cubic-bezier(.38, 0, .7, .48);
+  --motion-interactive: cubic-bezier(.22, .72, .22, 1);
+}
 @keyframes route-destination { from { opacity: 0; } to { opacity: 1; } }
-@keyframes route-release { to { opacity: 0; } }
-@keyframes route-book-appear { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
+@keyframes route-release { from { opacity: 1; } to { opacity: 0; } }
+@keyframes route-book-appear { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: no-preference) {
-  :root { view-transition-name: none; --route-ease: cubic-bezier(.22,.68,.2,1); --route-duration: 280ms; }
-  html[data-route-motion="event"] { --route-duration: 380ms; }
-  html[data-route-motion="contact"], html[data-route-motion="contact-card"] { --route-duration: 420ms; }
-  html[data-route-motion="book"] { --route-duration: 540ms; }
+  :root { view-transition-name: none; --route-duration: 200ms; --route-content-duration: 205ms; }
+  html[data-route-motion="event"] { --route-duration: 360ms; --route-content-duration: 245ms; }
+  html[data-route-motion="contact"], html[data-route-motion="contact-card"] { --route-duration: 375ms; --route-content-duration: 230ms; }
+  html[data-route-motion="book"] { --route-duration: 465ms; --route-content-duration: 260ms; }
   main { view-transition-name: none; }
   .route-shared-settled, .route-shared-settled .media-window { animation: none !important; }
   /* Keep the real links on screen. Only the travelling artwork gets a snapshot. */
-  html[data-route-arriving] main { animation: route-content-in 150ms ease-out; }
-  @keyframes route-content-in { from { opacity: .82; } to { opacity: 1; } }
+  html:is([data-route-arriving], [data-route-fallback]) main { animation: route-content-in var(--route-content-duration) var(--motion-enter) both; }
+  @keyframes route-content-in { from { opacity: .68; } to { opacity: 1; } }
   .contact-form-panel::before, .contact-feature::before { view-transition-name: var(--route-panel-name, none); }
   ::view-transition { pointer-events: none; }
-  ::view-transition-group(*) { animation-duration: var(--route-duration); animation-timing-function: var(--route-ease); }
-  html[data-route-motion="fade"] { --route-duration: 150ms; }
+  ::view-transition-group(*) { animation-duration: var(--route-duration); animation-timing-function: var(--motion-enter); }
   ::view-transition-group(route-event) { z-index: 4; }
-  ::view-transition-old(route-event) { opacity: 0; animation: none; }
-  ::view-transition-new(route-event) { animation: none; mix-blend-mode: normal; }
+  ::view-transition-old(route-event) { animation: route-release 205ms var(--motion-enter) both; }
+  ::view-transition-new(route-event) { animation: route-destination 255ms var(--motion-enter) both; mix-blend-mode: normal; }
   ::view-transition-group(route-book) { z-index: 5; }
-  ::view-transition-new(route-book):only-child { animation: route-book-appear 420ms var(--route-ease) both; }
+  ::view-transition-new(route-book):only-child { animation: route-book-appear 365ms var(--motion-enter) both; }
   ::view-transition-image-pair(route-book) { overflow: clip; box-shadow: 0 12px 40px #130c0740; }
   ::view-transition-group(route-contact), ::view-transition-group(route-card) { z-index: 4; background: #3b382f; border-radius: 1rem; }
-  ::view-transition-old(route-contact), ::view-transition-old(route-card) { animation: route-release 100ms ease-out both; }
-  ::view-transition-new(route-contact), ::view-transition-new(route-card) { animation: route-destination 90ms var(--route-duration) ease-out both; }
+  ::view-transition-old(route-contact), ::view-transition-old(route-card) { animation: route-release 185ms var(--motion-enter) both; }
+  ::view-transition-new(route-contact), ::view-transition-new(route-card) { animation: route-destination 270ms 35ms var(--motion-enter) both; }
   html.page-transitioning .novel-hero[data-entrance] * { animation: none; }
+
+  :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette)[open] {
+    animation: dialog-arrive 260ms var(--motion-enter) both;
+  }
+  :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette)[open]::backdrop {
+    animation: route-destination 210ms var(--motion-enter) both;
+  }
+  @keyframes dialog-arrive {
+    from { opacity: 0; transform: translateY(9px) scale(.985); }
+    to { opacity: 1; transform: none; }
+  }
+  @supports (transition-behavior: allow-discrete) and (overlay: auto) {
+    :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette) {
+      opacity: 0;
+      transform: translateY(6px) scale(.99);
+      transition: opacity 150ms var(--motion-exit), transform 150ms var(--motion-exit), display 150ms allow-discrete, overlay 150ms allow-discrete;
+    }
+    :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette)[open] {
+      opacity: 1;
+      transform: none;
+      animation: none;
+      transition-duration: 255ms;
+      transition-timing-function: var(--motion-enter);
+    }
+    :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette)::backdrop {
+      opacity: 0;
+      transition: opacity 150ms var(--motion-exit), display 150ms allow-discrete, overlay 150ms allow-discrete;
+    }
+    :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette)[open]::backdrop {
+      opacity: 1;
+      animation: none;
+      transition-duration: 215ms;
+      transition-timing-function: var(--motion-enter);
+    }
+    :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette):not([open]),
+    :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette):not([open])::backdrop {
+      pointer-events: none;
+    }
+    @starting-style {
+      :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette)[open] {
+        opacity: 0;
+        transform: translateY(9px) scale(.985);
+      }
+      :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette)[open]::backdrop { opacity: 0; }
+    }
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }

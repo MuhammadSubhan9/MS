@@ -72,9 +72,3 @@
 .command-palette :focus-visible { outline: 2px solid #285547; outline-offset: 3px; }
 .command-feedback { margin: 0; color: #62594f; }
 .command-feedback:empty { margin-block-start: -.85rem; }
-@media (prefers-reduced-motion: no-preference) {
-  .command-palette[open] { animation: command-in 180ms ease-out both; }
-}
-@keyframes command-in {
-  from { opacity: 0; translate: 0 .35rem; }
-}

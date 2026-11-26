@@ -14,7 +14,10 @@
       return value && value.to === location.href && Date.now() - value.at < 15000 ? value : null;
     } catch { return null; }
   }
-  if (readPending() && !reduce.matches) root.classList.add('page-transitioning');
+  if (readPending() && !reduce.matches) {
+    root.classList.add('page-transitioning');
+    root.setAttribute('data-route-arrived', '');
+  }
 
   function routeLink(event) {
     const link = event.target.closest?.('a[href]');
@@ -96,6 +99,7 @@
     if (!incoming && type === 'contact' && selected?.matches('.nav-contact')) type = 'contact-card';
     root.dataset.routeMotion = type;
     root.toggleAttribute('data-route-arriving', incoming);
+    if (incoming) root.setAttribute('data-route-arrived', '');
     root.classList.add('page-transitioning');
     const element = sharedElement(type, from, to, incoming);
     // A travelling cover must arrive in the visible shelf, including on phones.
@@ -156,6 +160,7 @@
     const pending = readPending();
     if (!event.viewTransition || reduce.matches || root.classList.contains('intro-playing')) {
       root.classList.remove('page-transitioning');
+      if (pending && !reduce.matches && !root.classList.contains('intro-playing')) root.setAttribute('data-route-fallback', '');
       event.viewTransition?.ready.catch(() => {});
       event.viewTransition?.skipTransition();
     } else {
@@ -166,6 +171,8 @@
   });
   addEventListener('pageshow', () => {
     if (!('onpagereveal' in window)) {
+      root.classList.remove('page-transitioning');
+      if (root.hasAttribute('data-route-arrived') && !reduce.matches) root.setAttribute('data-route-fallback', '');
       try { sessionStorage.removeItem(key); } catch { /* Storage is optional. */ }
     }
     selected = null;

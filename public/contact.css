@@ -257,7 +257,6 @@
   box-shadow: 0 1.5rem 5rem #1c191570;
 }
 .contact-card-dialog::backdrop { background: #211b14a6; backdrop-filter: blur(5px); }
-.contact-card-dialog[open] { animation: contact-notice-in 200ms ease-out both; }
 .contact-card-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .contact-card-heading h2 { color: inherit; font-size: clamp(1.9rem, 6vw, 2.5rem); line-height: 1.1; }
 .contact-card-heading button {

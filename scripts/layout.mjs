@@ -86,7 +86,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   ${contact ? '<link rel="stylesheet" href="/contact.css">\n  <script src="/contact.js" defer></script>\n  <script src="/contact-card.js" type="module"></script>' : ''}
   ${data.now ? commandAssets : ''}
   ${home && data.now ? '<script src="/now-editor.js" defer></script>' : ''}
-  <script src="/site.js" defer></script>
+  <script src="/site.js" type="module"></script>
   ${headerAssets}
   ${clarityTag(data, origin, ready)}
   ${google.head}
@@ -98,7 +98,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   <header class="site-header" data-blended-header>
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>${escape(data.name)}</span></a>
-      ${navigation.length > 1 ? `<button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu${toggleIcon('list', 'x')}</button><nav class="nav" id="navigation" aria-label="Primary">${links}</nav>` : ''}
+      ${navigation.length > 1 ? `<button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu${toggleIcon('list', 'x')}</button><div class="header-nav"><nav class="nav" id="navigation" aria-label="Primary">${links}</nav></div>` : ''}
     </div>
   </header>
   <main class="${home ? 'home-page' : about ? 'about-main' : journey ? 'journey-main' : 'container'}" id="main" tabindex="-1">${page.body}</main>

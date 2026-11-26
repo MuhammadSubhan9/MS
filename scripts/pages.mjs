@@ -181,11 +181,13 @@ function eventSpread(item, photo = item.image) {
   const artwork = photo || item.eventLogo;
   const summary = item.body?.[0] || item.sections?.[0]?.paragraphs?.[0] || item.description;
   return `<section class="work-event-spread" id="spread-${item.slug}" data-event="${item.slug}" data-motion-route="${destination}" aria-label="${escape(item.title)}" hidden>
+    <div class="work-event-spread-body">
     ${artwork ? `<div class="work-event-artwork${photo ? '' : ' work-event-mark'}">${image(artwork, { sizes: '(max-width: 700px) 90vw, 440px' })}</div>` : ''}
     <div class="work-event-summary">
       ${photo && item.eventLogo ? eventMark(item) : ''}
       ${paragraphs([summary], glossary)}
       ${action(destination, 'Read full write-up', 'button-link', `about ${item.title}`)}
+    </div>
     </div>
   </section>`;
 }

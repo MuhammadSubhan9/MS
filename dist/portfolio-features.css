@@ -43,7 +43,6 @@
   .section-copy[data-copy-state="copied"] [data-section-copy-label] {
     animation: section-copy-text-in 250ms ease-out both;
   }
-  .section-link-dialog[open] { animation: section-copy-text-in 220ms ease-out both; }
 }
 @keyframes section-copy-check-in {
   from { opacity: 0; transform: scale(.45) rotate(-24deg); }
@@ -159,7 +158,7 @@
 .entry-details .entry-detail-copy { margin: 0; padding-block: .35rem .5rem; }
 .entry-detail-copy p + p { margin-top: .58rem; }
 @media (prefers-reduced-motion: no-preference) {
-  .entry-detail-caret { transition: rotate 300ms cubic-bezier(.23,.74,.2,1); }
+  .entry-detail-caret { transition: rotate 245ms var(--motion-interactive); }
   .entry-details[data-disclosure-state="opening"] .entry-detail-copy {
     animation: entry-detail-enter 400ms cubic-bezier(.23,.74,.2,1) both;
   }

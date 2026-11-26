@@ -39,7 +39,7 @@ function followNovelIndex() {
 }
 
 function playEntrance() {
-  if (document.documentElement.classList.contains('page-transitioning')) return;
+  if (document.documentElement.matches('.page-transitioning, [data-route-arrived]')) return;
   if (reduceMotion.matches || location.hash || performance.getEntriesByType('navigation')[0]?.type === 'back_forward') return;
   try {
     if (sessionStorage.getItem('rehearsal-library-entrance')) return;

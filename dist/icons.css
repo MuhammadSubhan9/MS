@@ -26,6 +26,6 @@
 details[open] > summary .disclosure-caret { rotate: 180deg; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .toggle-icon > .site-icon { transition: opacity 180ms, scale 200ms; }
-  .disclosure-caret { transition: rotate 230ms ease; }
+  .toggle-icon > .site-icon { transition: opacity 145ms var(--motion-interactive, ease), scale 205ms var(--motion-interactive, ease); }
+  .disclosure-caret { transition: rotate 215ms var(--motion-interactive, ease); }
 }

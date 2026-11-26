@@ -1,3 +1,5 @@
+import { disclosureTiming, revealPanel } from './disclosure-motion.js';
+
 (() => {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const courses = document.querySelector('#courses .section-content');
@@ -42,7 +44,6 @@
         certificateDialog.showModal();
       });
     }
-    certificateDialog.addEventListener('close', () => preview.replaceChildren());
   }
 
   const evidence = document.querySelector('#evidence');
@@ -118,19 +119,25 @@
     toggle.setAttribute('aria-controls', spread.id);
     toggle.setAttribute('aria-expanded', 'false');
 
-    function setOpen(open) {
+    function setOpen(open, instant = false) {
+      if (!open && spread.contains(document.activeElement)) toggle.focus({ preventScroll: true });
       toggle.setAttribute('aria-expanded', String(open));
       label.textContent = open ? 'Close summary' : closedLabel;
-      spread.hidden = !open;
+      // Reserve the full row before animating its artwork so the read-more link is immediately reachable.
+      revealPanel(spread, open, instant || open);
     }
     toggle.addEventListener('click', event => {
       if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
       event.preventDefault();
-      const open = activeEvent !== setOpen;
+      if (activeEvent === setOpen) {
+        setOpen(false);
+        activeEvent = undefined;
+        return;
+      }
       const top = toggle.getBoundingClientRect().top;
-      activeEvent?.(false);
-      if (open) setOpen(true);
-      activeEvent = open ? setOpen : undefined;
+      activeEvent?.(false, true);
+      setOpen(true);
+      activeEvent = setOpen;
       const shift = toggle.getBoundingClientRect().top - top;
       if (shift) window.scrollBy({ top: shift, behavior: 'instant' });
     });
@@ -207,7 +214,8 @@
       const start = card.open ? panel.getBoundingClientRect().height : 0;
       previous?.animation.cancel();
       if (open) card.open = true;
-      const end = open ? panel.getBoundingClientRect().height : 0;
+      const fullHeight = panel.getBoundingClientRect().height;
+      const end = open ? fullHeight : 0;
       if (Math.abs(end - start) < 1) {
         settle(card, panel, open);
         return;
@@ -216,11 +224,8 @@
       if (!open && panel.contains(document.activeElement)) summary.focus({ preventScroll: true });
       panel.inert = !open;
       card.dataset.disclosureState = open ? 'opening' : 'closing';
-      const animation = panel.animate([{ height: start + 'px' }, { height: end + 'px' }], {
-        duration: open ? 560 : 385,
-        easing: open ? 'cubic-bezier(.23,.74,.2,1)' : 'cubic-bezier(.32,0,.25,1)',
-        fill: 'both',
-      });
+      const animation = panel.animate([{ height: start + 'px' }, { height: end + 'px' }],
+        disclosureTiming(open, Math.abs(end - start), fullHeight));
       moving.set(card, { animation, open, panel });
       animation.finished.then(() => {
         if (moving.get(card)?.animation === animation) settle(card, panel, open);

@@ -508,21 +508,21 @@
 @media (prefers-reduced-motion: no-preference) {
   html:not(.page-transitioning) .journey-main > .journey-page { animation: none; }
   .journey-timeline[data-journey-motion] .journey-card {
-    transition: opacity 390ms ease-out, transform 530ms cubic-bezier(.2,.72,.2,1);
+    transition: opacity 275ms var(--motion-enter), transform 365ms var(--motion-enter);
   }
   .journey-timeline[data-journey-motion] .journey-card::before {
-    transition: opacity 430ms, transform 620ms cubic-bezier(.2,.72,.2,1);
+    transition: opacity 275ms var(--motion-enter), transform 390ms var(--motion-enter);
   }
   .journey-timeline[data-journey-motion] .journey-milestone:not([data-reached]):not(:target):not(:focus-within) .journey-card {
     opacity: .58;
-    transform: translate(-.35rem, .25rem);
+    transform: translate(-.25rem, .18rem);
   }
   .journey-timeline[data-journey-motion] .journey-milestone:not([data-reached]):not(:target):not(:focus-within) .journey-card::before {
     opacity: .5;
     transform: scaleX(.63);
   }
   .journey-timeline[data-journey-motion] .journey-milestone::before {
-    transition: transform 440ms cubic-bezier(.2,.72,.2,1);
+    transition: transform 320ms var(--motion-enter);
     transform: scaleX(.3);
   }
   .journey-timeline[data-journey-motion] .journey-milestone:is([data-reached], :target, :focus-within)::before {
@@ -533,31 +533,31 @@
     background: #e5e8db;
   }
   .journey-switch { transition: color 200ms, background-color 200ms, border-color 200ms; }
-  .journey-switch > .site-icon { transition: rotate 340ms cubic-bezier(.22,.72,.2,1); }
-  .journey-emblem > .site-icon { transition: scale 300ms cubic-bezier(.22,.72,.2,1); }
-  .journey-card > summary:is(:hover, :focus-visible) .journey-emblem > .site-icon { scale: 1.12; }
+  .journey-switch > .site-icon { transition: rotate 245ms var(--motion-interactive); }
+  .journey-emblem > .site-icon { transition: scale 225ms var(--motion-interactive); }
+  .journey-card > summary:is(:hover, :focus-visible) .journey-emblem > .site-icon { scale: 1.07; }
   .journey-end::before { transition: background-color 340ms, box-shadow 480ms; }
   .journey-timeline[data-journey-motion] .journey-end:not([data-reached])::before {
     background: var(--journey-paper);
     box-shadow: 0 0 0 4px var(--journey-paper);
   }
   .journey-card[data-disclosure-state="opening"] .journey-brief::before {
-    animation: journey-rule-draw 430ms 40ms cubic-bezier(.23,.75,.2,1) both;
+    animation: journey-rule-draw 240ms 18ms var(--motion-enter) both;
   }
   .journey-card[data-disclosure-state="opening"] .journey-brief-text > :not(.journey-mark) {
-    animation: journey-copy-enter 370ms 85ms cubic-bezier(.2,.65,.25,1) both;
+    animation: journey-copy-enter 245ms 28ms var(--motion-enter) both;
   }
-  .journey-card[data-disclosure-state="opening"] .journey-brief-text > .journey-record-links { animation-delay: 140ms; }
+  .journey-card[data-disclosure-state="opening"] .journey-brief-text > .journey-record-links { animation-delay: 48ms; }
   .journey-card[data-disclosure-state="opening"] .journey-mark {
-    animation: journey-mark-enter 425ms 95ms cubic-bezier(.2,.7,.22,1) both;
+    animation: journey-mark-enter 255ms 33ms var(--motion-enter) both;
   }
   .journey-card[data-disclosure-state="closing"] .journey-brief-text {
-    animation: journey-brief-exit 260ms ease-in both;
+    animation: journey-brief-exit 175ms var(--motion-exit) both;
   }
   @keyframes journey-rule-draw { from { transform: scaleX(.04); } to { transform: scaleX(1); } }
-  @keyframes journey-copy-enter { from { opacity: 0; transform: translateY(.5rem); } to { opacity: 1; transform: none; } }
+  @keyframes journey-copy-enter { from { opacity: .5; transform: translateY(.28rem); } to { opacity: 1; transform: none; } }
   @keyframes journey-mark-enter {
-    from { opacity: 0; transform: translateX(.8rem) scale(.97); clip-path: inset(0 0 0 52% round .25rem); }
+    from { opacity: .25; transform: translateX(.4rem) scale(.99); clip-path: inset(0 0 0 35% round .25rem); }
     to { opacity: 1; transform: none; clip-path: inset(0 round .25rem); }
   }
   @keyframes journey-brief-exit { to { opacity: 0; transform: translateY(-.34rem); } }

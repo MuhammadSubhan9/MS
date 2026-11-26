@@ -25,8 +25,18 @@ try {
         link.textContent.trim(), link.getAttribute('href'), link.classList.contains('button-link'),
       ])`), [['Contact me', '/contact/', true]]);
       assert.equal(await chrome.evaluate("document.querySelector('#site-updates summary').getBoundingClientRect().height > 0"), true);
+      assert.equal(await chrome.evaluate("!document.querySelector('#site-updates details').open && document.querySelector('.site-update-title').getBoundingClientRect().height > 0"), true);
+    }
+    if (route === '/about/') {
+      assert.deepEqual(await chrome.evaluate("Array.from(document.querySelectorAll('.language-group-learning dt'), node => node.textContent)"), ['German', 'Latin']);
+      assert.match(await chrome.evaluate("document.querySelector('.language-group-learning .language-score').textContent"), /10/);
+      assert.match(await chrome.evaluate("document.querySelector('.language-group-spoken .language-score').textContent"), /130/);
     }
   }
+  await chrome.navigate(origin + '/work/unesco-ai-forum/', 390);
+  assert.equal(await chrome.evaluate('document.documentElement.scrollWidth <= innerWidth'), true);
+  assert.equal(await chrome.evaluate("!!document.querySelector('.experience-opening-with-photo > figure img') && !!document.querySelector('.experience-identity .work-event-mark img')"), true);
+  await chrome.navigate(origin + '/contact/', 320);
   await chrome.call('Browser.setDownloadBehavior', { behavior: 'deny', eventsEnabled: true });
   let downloads = 0;
   chrome.listeners.push(event => { if (event.method === 'Browser.downloadWillBegin') downloads++; });

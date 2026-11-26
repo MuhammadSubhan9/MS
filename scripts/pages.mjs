@@ -128,13 +128,21 @@ function aboutPage(data, background) {
 function languageList(languages = [], scoresUpdated) {
   if (!languages.length) return '';
   const hasScores = languages.some(language => Number.isInteger(language.duolingoScore));
-  return `<dl class="language-list">${languages.map(language => `<div>
-    <dt>${escape(language.name)}</dt>
-    <dd>${escape(language.description)}
-      ${Number.isInteger(language.duolingoScore) ? `<span class="language-score">Duolingo score <strong>${language.duolingoScore}</strong></span>` : ''}
-      ${language.certificateUrl ? action(language.certificateUrl, 'View credential', 'action-link', `for ${language.name}`, 'certificate') : ''}
-    </dd>
-  </div>`).join('')}</dl>
+  const groups = [
+    ['spoken', 'Languages I speak', languages.filter(language => !language.learning)],
+    ['learning', 'Languages I’m learning', languages.filter(language => language.learning)],
+  ];
+  return `<div class="language-groups">${groups.filter(([, , entries]) => entries.length).map(([id, title, entries]) =>
+    `<div class="language-group language-group-${id}">
+      <h3>${title}</h3>
+      <dl class="language-list">${entries.map(language => `<div>
+        <dt>${escape(language.name)}</dt>
+        <dd>${escape(language.description)}
+          ${Number.isInteger(language.duolingoScore) ? `<span class="language-score">Duolingo score <strong>${language.duolingoScore}</strong></span>` : ''}
+          ${language.certificateUrl ? action(language.certificateUrl, 'View credential', 'action-link', `for ${language.name}`, 'certificate') : ''}
+        </dd>
+      </div>`).join('')}</dl>
+    </div>`).join('')}</div>
   ${hasScores && scoresUpdated ? `<p class="meta language-score-source">Duolingo scores shared on LinkedIn, updated ${publicationDate(scoresUpdated)}.</p>` : ''}`;
 }
 
@@ -253,27 +261,31 @@ function collectionPages(add, data, items, path, label, evidence = '') {
     const hasCover = isWriting && item.image && item.image.height > item.image.width;
     const isWorkEvent = !isWriting && item.kind === 'event';
     const featuredReport = isWorkEvent && item.selected;
-    const mark = isWorkEvent ? eventMark(item) : '';
     const sources = item.sources?.length
       ? `<section class="article-section" id="sources" data-share-section tabindex="-1" aria-labelledby="sources-title">${sharedHeading('sources', 'Sources')}<ul>${item.sources.map(source =>
         `<li><a href="${safeLink(source.url)}">${escape(source.label)}</a></li>`).join('')}</ul></section>` : '';
     const renderText = isWriting ? escape : glossary;
     const parts = (item.sections || []).map(part => `<section class="article-section"><h2>${escape(part.title)}</h2>${paragraphs(part.paragraphs, renderText)}</section>`).join('');
+    const photo = image(item.image, { eager: true, sizes: hasCover ? '(max-width: 650px) 190px, 240px' : '(max-width: 760px) 92vw, 640px' });
+    const headline = `<h1>${escape(item.title)}</h1><p class="lead">${renderText(item.description)}</p>`;
+    const mark = isWorkEvent ? eventMark(item) : '';
+    const opening = isWriting
+      ? `<header class="page-heading article-heading">${metadata ? `<p class="eyebrow">${metadata}</p>` : ''}${headline}</header>${photo}`
+      : `<header class="experience-opening${photo ? ' experience-opening-with-photo' : ''}" data-event="${escape(item.slug)}">
+        ${photo}
+        <div class="experience-opening-copy">
+          ${mark || metadata ? `<div class="experience-identity">${mark}${metadata ? `<p class="meta">${metadata}</p>` : ''}</div>` : ''}
+          ${headline}
+        </div>
+      </header>`;
     const neighbours = isWriting ? [
       [detailed[index - 1], 'Previous article'],
       [detailed[index + 1], 'Next article'],
     ].filter(([entry]) => entry) : [];
     add(`/${path}/${item.slug}/`, item.title, item.description, `
       <p class="breadcrumb"><a href="/${path}/${isWorkEvent && !featuredReport ? '#events' : ''}">${icon('arrow-left', 'arrow arrow-left')}<span>${isWriting ? 'All writing' : isWorkEvent && !featuredReport ? 'All events' : 'All experiences'}</span></a></p>
-      <article class="detail${hasCover ? ' detail-with-cover' : ''}${isWriting ? '' : ' work-detail'}${featuredReport ? ' work-feature-report' : ''}" data-motion-route="/${path}/${item.slug}/">
-        <header class="page-heading article-heading${mark ? ' work-event-heading' : ''}"${mark ? ` data-event="${escape(item.slug)}"` : ''}>
-          <div>
-            ${metadata ? `<p class="eyebrow">${metadata}</p>` : ''}
-            <h1>${escape(item.title)}</h1><p class="lead">${renderText(item.description)}</p>
-          </div>
-          ${mark}
-        </header>
-        ${image(item.image, { eager: true, sizes: hasCover ? '(max-width: 650px) 190px, 240px' : '(max-width: 700px) calc(100vw - 40px), 780px' })}
+      <article class="detail${hasCover ? ' detail-with-cover' : ''}${isWriting ? '' : ' work-detail'}" data-motion-route="/${path}/${item.slug}/">
+        ${opening}
         <div class="reading article-body">${paragraphs(item.body, renderText)}
           ${parts && !isWriting ? `<div class="work-detail-parts">${parts}</div>` : parts}
           ${item.url ? action(item.url, 'View supporting material') : ''}${sources}

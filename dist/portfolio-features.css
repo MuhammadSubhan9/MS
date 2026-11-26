@@ -327,6 +327,13 @@
 .site-update[data-new-release] summary { margin-inline-end: 4.3rem; }
 .site-update summary::-webkit-details-marker { display: none; }
 .site-update summary .toggle-icon { color: var(--accent); }
+.site-update-title { min-width: 0; color: #685441; font-weight: 500; overflow-wrap: anywhere; }
+.site-update-title::before { margin-inline-end: .65rem; color: #927c63; content: '·'; }
+@media (max-width: 560px) {
+  .site-update-title { flex-basis: 100%; padding-inline-start: 1.65rem; }
+  .site-update-title::before { content: none; }
+  .site-update-unread:not([hidden]) { margin-inline-start: 1.65rem; }
+}
 .site-update-unread { color: var(--accent); font-size: .88rem; }
 .site-update-content { padding: .15rem .85rem .7rem; border-top: 1px solid #cdbca6; }
 .site-update-content .meta { margin-block: .35rem; }

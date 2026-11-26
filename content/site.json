@@ -42,8 +42,8 @@
     { "name": "Punjabi", "description": "Native language" },
     { "name": "Arabic", "description": "Strong spoken Arabic" },
     { "name": "English", "description": "Professional working proficiency", "duolingoScore": 130 },
-    { "name": "German", "description": "Elementary proficiency, continuing study", "duolingoScore": 10 },
-    { "name": "Latin", "description": "Currently learning" }
+    { "name": "German", "description": "Elementary proficiency, continuing study", "duolingoScore": 10, "learning": true },
+    { "name": "Latin", "description": "Currently learning", "learning": true }
   ],
   "duolingoScoresUpdated": "2026-06-30",
   "education": [
@@ -239,13 +239,7 @@
       {
         "record": "work:unesco-ai-forum",
         "date": "14–17 September 2026",
-        "preview": "Who is accountable when AI starts shaping real decisions?",
-        "logo": {
-          "src": "/images/event-unesco-ai-forum.webp",
-          "alt": "Fourth UNESCO Global Forum on the Ethics of AI event logo",
-          "width": 480,
-          "height": 236
-        }
+        "preview": "Who is accountable when AI starts shaping real decisions?"
       }
     ],
     "lookingAheadTitle": "Studying law"
@@ -260,6 +254,12 @@
       "date": "September 2026",
       "description": "At the fourth UNESCO forum in Riyadh, I listened to how countries and organisations were putting AI ethics into practice. I left thinking about who is accountable once AI starts shaping real decisions.",
       "selected": true,
+      "eventLogo": {
+        "src": "/images/event-unesco-ai-forum.webp",
+        "alt": "Fourth UNESCO Global Forum on the Ethics of AI event logo",
+        "width": 480,
+        "height": 236
+      },
       "image": {
         "src": "/images/forum-delegates.jpg",
         "alt": "Delegates gathered beneath a chandelier at the UNESCO Global Forum on the Ethics of AI in Riyadh.",
@@ -485,6 +485,7 @@
   "siteUpdate": {
     "id": "2026-11-18-journey-and-evidence",
     "date": "2026-11-18",
+    "title": "Journey, Evidence map and Capabilities",
     "items": [
       { "href": "/work/#evidence", "label": "Evidence map", "description": "Explore courses, events and projects by subject." },
       { "href": "/journey/", "label": "Journey", "description": "Follow the milestones from independent courses to my current work." },

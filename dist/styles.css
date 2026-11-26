@@ -520,24 +520,35 @@ body:has(.profile-page) .nav a[aria-current="page"] { background: #e1d2bb; color
 }
 
 .about-records > #languages { padding-bottom: 0; }
-.language-list {
+.language-groups {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
-  gap: .7rem;
+  gap: .85rem;
 }
-.language-list > div { padding: .85rem 1rem; border: 1px solid #bba08d; border-top: 2px solid var(--profile-bronze); background: #f7eee2; }
-.language-list dt { color: var(--ink); font: 1.32rem/1.25 var(--serif); letter-spacing: 0; text-transform: none; }
+.language-groups:has(.language-group + .language-group) {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+}
+.language-group {
+  padding: clamp(1rem, 2.9vw, 1.6rem);
+  border: 1px solid #bba08d;
+  border-top: 2px solid var(--profile-bronze);
+  background: #f7eee2;
+}
+.language-group-learning { background: #e9ebdf; border-color: #9fa992; border-top-color: #60816b; }
+.language-group > h3 { margin-bottom: .8rem; color: var(--profile-heading); font-size: clamp(1.2rem, 2.2vw, 1.7rem); }
+.language-group-learning > h3 { color: var(--emerald); }
+.language-list { display: grid; gap: .6rem 1.1rem; }
+.language-group-spoken .language-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.language-list > div { padding-block: .55rem .2rem; border-block-start: 1px solid #baaa947c; }
+.language-group-learning .language-list > div { border-block-start-color: #9aa9939c; }
+.language-list dt { color: var(--ink); font: 1.25rem/1.25 var(--serif); letter-spacing: 0; text-transform: none; }
 .language-list dd { margin-top: .25rem; color: var(--muted); }
-.language-score {
-  display: block;
-  margin-top: .55rem;
-  padding-top: .45rem;
-  border-top: 1px solid var(--rule);
-  color: var(--ink);
-  font-size: .9rem;
-}
+.language-score { display: block; margin-top: .32rem; color: var(--ink); font-size: .9rem; }
+.language-score strong { color: var(--emerald); font-variant-numeric: tabular-nums; }
 .language-score-source { margin-top: .7rem; }
 .language-list .action-link { display: flex; width: fit-content; font-size: .92rem; }
+@media (max-width: 660px) {
+  .language-groups:has(.language-group + .language-group) { grid-template-columns: 1fr; }
+}
 
 .about-records > #interests {
   padding: clamp(1.25rem, 3vw, 2.45rem);
@@ -750,7 +761,8 @@ details p { padding: .2rem 0; }
 }
 .work-event-artwork.work-event-mark img { width: clamp(8rem, 20vw, 15rem); max-height: 8rem; }
 .work-event-summary { align-self: center; padding: clamp(1.2rem, 3vw, 2.6rem); }
-.work-event-summary .work-event-mark { float: inline-end; padding: .25rem .25rem .65rem .85rem; background: none; }
+.work-event-summary .work-event-mark { float: inline-end; margin: 0 0 .55rem .7rem; padding: .45rem .6rem; background: var(--event-edge, #e4d7c0); }
+.work-event-summary .work-event-mark::after { content: none; }
 .work-event-summary .work-event-mark img { width: 7rem; }
 .work-event-summary .button-link { margin-top: 1rem; }
 .work-lead .work-event-spread figcaption { padding: .5rem 0 0; color: var(--muted); }
@@ -781,9 +793,10 @@ details p { padding: .2rem 0; }
   border-inline-start: 3px solid #698171;
   background: var(--event-paper);
 }
-:is(.work-event, .work-event-heading, .work-event-spread)[data-event="black-hat-mea"] { --event-edge: #29283d; --event-rule: #d4caed48; }
-:is(.work-event, .work-event-heading, .work-event-spread)[data-event="leap-riyadh"] { --event-edge: #44335f; --event-rule: #e2d6f749; }
-:is(.work-event, .work-event-heading, .work-event-spread)[data-event="global-airports-forum"] { --event-edge: #efe2c6; }
+:is(.work-event, .experience-opening, .work-event-spread)[data-event="black-hat-mea"] { --event-edge: #29283d; --event-rule: #d4caed48; }
+:is(.work-event, .experience-opening, .work-event-spread)[data-event="leap-riyadh"] { --event-edge: #44335f; --event-rule: #e2d6f749; }
+:is(.work-event, .experience-opening, .work-event-spread)[data-event="global-airports-forum"] { --event-edge: #efe2c6; }
+:is(.experience-opening, .work-event-spread)[data-event="unesco-ai-forum"] { --event-edge: #263f47; }
 .work-event-link {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -818,37 +831,49 @@ details p { padding: .2rem 0; }
   pointer-events: none;
 }
 .work-event-mark img { width: clamp(5rem, 12vw, 10.8rem); max-height: 6.5rem; object-fit: contain; }
-.work-event-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(8rem, .33fr); align-items: center; gap: 1rem; }
-.work-event-heading .work-event-mark { padding: 1rem .75rem 1rem 1.25rem; }
-.work-detail .article-heading {
-  margin-bottom: clamp(1.2rem, 3vw, 2.2rem);
-  padding: clamp(1.2rem, 4vw, 2.6rem);
+.work-detail { max-width: 68rem; }
+.experience-opening {
+  display: grid;
+  margin-block-end: clamp(1.8rem, 4vw, 3.5rem);
   border: 1px solid #c7b29b;
-  border-top: 3px solid var(--emerald);
+  border-block-start: 3px solid var(--emerald);
   background: linear-gradient(125deg, #f8efe2, #e9d9c6);
 }
-.work-detail .article-heading .eyebrow { margin-bottom: .7rem; }
-.work-detail > figure { border: 1px solid #cab9a4; background: #e9dfd0; }
-.work-detail > figure img { width: 100%; }
-.work-detail > figure figcaption { margin: 0; padding: .65rem .9rem; }
-.work-detail .article-body { max-width: none; font-size: 1.1rem; line-height: 1.65; }
-.work-detail-parts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15.5rem), 1fr));
-  gap: .8rem;
-  margin-top: 1.5rem;
+.experience-opening-with-photo { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+.experience-opening > figure {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: #ded0ba;
 }
-.work-detail-parts .article-section { margin: 0; padding: 1.15rem; border: 1px solid #c7b29b; background: #f8efe2; }
-.work-feature-report .article-body { max-width: 42rem; }
-.work-feature-report .work-detail-parts { display: block; margin-top: clamp(1.8rem, 5vw, 3.25rem); }
-.work-feature-report .work-detail-parts .article-section {
-  padding: clamp(1rem, 3vw, 1.5rem) 0 0;
-  margin-bottom: clamp(1.6rem, 4vw, 2.6rem);
-  border: 0;
+.experience-opening > figure .media-window { display: flex; flex: 1; }
+.experience-opening > figure img { width: 100%; object-fit: cover; }
+.experience-opening > figure figcaption { margin: 0; padding: .55rem .9rem; color: #4f493d; font-size: .88rem; }
+.experience-opening-copy { align-self: center; padding: clamp(1.25rem, 3.6vw, 3rem); }
+.experience-opening-copy h1 { font-size: clamp(2.25rem, 4vw, 3.75rem); text-wrap: balance; }
+.experience-opening-copy .lead { margin-top: .85rem; font-size: clamp(1.02rem, 1.65vw, 1.25rem); }
+.experience-identity {
+  display: flex;
+  align-items: center;
+  gap: .65rem 1rem;
+  flex-wrap: wrap;
+  margin-block-end: .95rem;
+}
+.experience-identity .meta { color: #5b4939; font-weight: 650; }
+.experience-identity .work-event-mark { padding: .45rem .6rem; background: var(--event-edge, #e4d7c0); }
+.experience-identity .work-event-mark::after { content: none; }
+.experience-identity .work-event-mark img { width: clamp(5rem, 8vw, 7.5rem); max-height: 3.5rem; }
+.work-detail .article-body { max-width: min(100%, 62ch); font-size: 1.1rem; line-height: 1.7; }
+.work-detail-parts { margin-top: clamp(1.8rem, 4vw, 3rem); }
+.work-detail-parts .article-section {
+  padding-block-start: 1.2rem;
+  margin-block: 0 clamp(1.25rem, 3vw, 2.35rem);
   border-block-start: 1px solid #c7b29b;
-  background: transparent;
 }
-.work-feature-report .article-section h2 { color: var(--emerald); }
+.work-detail-parts h2 { color: var(--emerald); }
+@media (max-width: 760px) {
+  .experience-opening-with-photo { grid-template-columns: minmax(0, 1fr); }
+}
 
 @media (max-width: 700px) {
   .work-heading { align-items: start; flex-direction: column; gap: .6rem; }
@@ -862,8 +887,6 @@ details p { padding: .2rem 0; }
   .work-experiences .work-entries, .work-experiences .project-entry.featured-with-image { grid-template-columns: minmax(0, 1fr); }
   .work-event-link:has(.work-event-mark) { grid-template-columns: minmax(0, 1fr) minmax(5.2rem, .39fr); }
   .work-event-mark { padding-inline: 1rem .55rem; }
-  .work-event-heading { grid-template-columns: minmax(0, 1fr) minmax(4.75rem, .3fr); gap: .55rem; }
-  .work-event-heading .work-event-mark { padding: .4rem; }
 }
 
 .error-page { max-width: 44rem; border-top: 1px solid var(--rule); padding-block: var(--space-3); }

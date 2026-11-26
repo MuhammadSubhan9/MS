@@ -4,7 +4,7 @@ const narrow = matchMedia('(max-width: 780px)');
 
 function followNovelIndex() {
   const header = document.querySelector('.novel-header');
-  const sections = [...header.querySelectorAll('.novel-index a[href^="#"]')].map(link => ({
+  const sections = [...header.querySelectorAll('.novel-index a')].map(link => ({
     link,
     section: document.getElementById(link.hash.slice(1)),
   }));

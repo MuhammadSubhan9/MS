@@ -3,7 +3,6 @@ import { commandAssets, commandPalette } from './commands.mjs';
 import { clarityTag, googleAnalytics } from './analytics.mjs';
 import excerpt from '../content/eleventh-rehearsal.json' with { type: 'json' };
 import { portfolioAssets, sectionLinkDialog } from './portfolio-features.mjs';
-import { searchAssets, searchDialog, searchLink } from './search-content.mjs';
 
 const slug = 'the-eleventh-rehearsal';
 export const novelPath = '/writing/';
@@ -196,7 +195,6 @@ export function renderNovelPage({ data, page, origin, ready }) {
   ${headerAssets}
   <script src="/novel-subscription.js" defer></script>
   ${data.now ? commandAssets : ''}
-  ${searchAssets}
   ${clarityTag(data, origin, ready)}
   ${google.head}
 </head>
@@ -213,7 +211,6 @@ export function renderNovelPage({ data, page, origin, ready }) {
         <a href="#synopsis">${icon('text-align-left')}Synopsis</a>
         <a href="#excerpt">${icon('book-open-text')}Excerpt</a>
         <a href="#release-updates">${icon('bell-simple')}Release updates</a>
-        ${searchLink()}
       </nav>
     </div>
   </header>
@@ -234,7 +231,6 @@ export function renderNovelPage({ data, page, origin, ready }) {
   </footer>
   ${sectionLinkDialog}
   ${data.now ? commandPalette : ''}
-  ${searchDialog}
 </body>
 </html>`;
 }

@@ -6,7 +6,6 @@ import { findNovel, novelContent, novelPath, oldNovelPath } from './novel.mjs';
 import { contactPage } from './contact.mjs';
 import { nowSection, parseNow, renderNowPreview } from './now.mjs';
 import { capabilitiesCards, evidenceMap, journeyPage, portfolioRecords } from './portfolio-features.mjs';
-import { searchLink } from './search-content.mjs';
 
 function homePage(data, { hasAbout, hasContact, selected }) {
   const { education, projects, portrait, writing, contact } = data;
@@ -95,7 +94,6 @@ function homePage(data, { hasAbout, hasContact, selected }) {
         <div class="lead">${paragraphs(data.introduction)}</div>
         ${note ? renderNowPreview(note) : ''}
         ${actions ? `<nav class="text-actions" aria-label="Explore the portfolio">${actions}</nav>` : ''}
-        ${searchLink(true)}
       </div>
       ${portraitMarkup}
     </div>

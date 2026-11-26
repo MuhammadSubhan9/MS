@@ -23,6 +23,17 @@ test('editing and subscription responses exclude third-party scripts and referre
   }
 });
 
+test('retired search URLs bypass the static asset cache', async () => {
+  for (const path of ['/search', '/search/', '/search-index.json', '/search.js', '/search-core.js', '/search.css']) {
+    const response = await onRequest({
+      request: new Request('https://example.test' + path),
+      next: () => assert.fail('Retired search URLs must be handled before static assets'),
+    });
+    assert.equal(response.status, 410);
+    assert.equal(response.headers.get('Cache-Control'), 'no-store');
+  }
+});
+
 test('a failed live read leaves the homepage usable and never presents stale copy as current', async () => {
   const request = new Request('https://example.test/');
   const snapshot = { date: '2026-11-17', text: 'Original snapshot' };

@@ -7,10 +7,20 @@ import { renderNowContent, renderNowPreview } from '../scripts/now.mjs';
 
 test('static pages and dynamic pages use the same browser protection policy', async () => {
   const rules = await readFile(new URL('../public/_headers', import.meta.url), 'utf8');
-  const response = await onRequest({ next: () => Response.json({ ok: true }) });
-  assert.equal(response.headers.get('Content-Security-Policy'), rules.match(/Content-Security-Policy: (.+)/)[1]);
-  assert.equal(response.headers.get('X-Frame-Options'), 'DENY');
+  const response = await onRequest({ request: new Request('https://example.test/'), next: () => Response.json({ ok: true }) });
+  for (const [, name, value] of rules.split(/\r?\n\r?\n/, 1)[0].matchAll(/^  ([\w-]+): (.+)$/gm)) {
+    assert.equal(response.headers.get(name), value);
+  }
   assert.deepEqual(await response.json(), { ok: true });
+});
+
+test('editing and subscription responses exclude third-party scripts and referrers', async () => {
+  for (const path of ['/?owner=1', '/api/now', '/api/novel/unsubscribe']) {
+    const response = await onRequest({ request: new Request('https://example.test' + path), next: () => new Response() });
+    assert.doesNotMatch(response.headers.get('Content-Security-Policy'), /https:/);
+    assert.equal(response.headers.get('Cache-Control'), 'no-store');
+    assert.equal(response.headers.get('Referrer-Policy'), 'no-referrer');
+  }
 });
 
 test('a failed live read leaves the homepage usable and never presents stale copy as current', async () => {

@@ -1,5 +1,6 @@
 const palette = document.querySelector('#command-title')?.closest('dialog');
 const commandSessionKey = 'portfolio-tools-expires';
+let tabCommandExpiry = 0;
 
 function readCommandExpiry() {
   try {
@@ -9,14 +10,18 @@ function readCommandExpiry() {
     if (previous !== null) localStorage.setItem(commandSessionKey, previous);
     return Number(previous);
   } catch {
-    try { return Number(sessionStorage.getItem(commandSessionKey)); }
-    catch { return 0; }
+    try { return Number(sessionStorage.getItem(commandSessionKey) ?? tabCommandExpiry); }
+    catch { return tabCommandExpiry; }
   }
 }
 
 function rememberCommandExpiry(expiresAt) {
+  tabCommandExpiry = expiresAt;
   try { localStorage.setItem(commandSessionKey, String(expiresAt)); }
-  catch { sessionStorage.setItem(commandSessionKey, String(expiresAt)); }
+  catch {
+    try { sessionStorage.setItem(commandSessionKey, String(expiresAt)); }
+    catch { /* Keep the shortcut usable for this document. */ }
+  }
 }
 
 if (typeof palette?.showModal === 'function') {
@@ -24,14 +29,14 @@ if (typeof palette?.showModal === 'function') {
   const input = palette.querySelector('input');
   const feedback = palette.querySelector('.command-feedback');
   const destinations = new Map([
-    ['edit now', '/#edit'],
-    ['clg upd', '/#edit'],
-    ['preview now', '/#preview-now'],
+    ['edit now', '/?owner=1#edit'],
+    ['clg upd', '/?owner=1#edit'],
+    ['preview now', '/?owner=1#preview-now'],
   ]);
 
   function openUnlock() {
     palette.close();
-    location.assign('/#edit');
+    location.assign('/?owner=1#edit');
   }
 
   function lock() {
@@ -85,7 +90,6 @@ if (typeof palette?.showModal === 'function') {
     input.readOnly = true;
     feedback.textContent = 'Checking…';
     try {
-      if (command === 'lock tools') lock();
       const response = await fetch('/api/now', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -93,10 +97,16 @@ if (typeof palette?.showModal === 'function') {
         signal: AbortSignal.timeout(10000),
       });
       const result = await response.json();
+      if (command === 'lock tools' && response.ok && result.locked === true) {
+        lock();
+        return;
+      }
       if (!palette.open) return;
       if (response.status === 401 && readCommandExpiry() === expiry) rememberCommandExpiry(Date.now());
       if (!response.ok) {
         feedback.textContent = result.error || 'The command could not run.';
+      } else if (command === 'lock tools') {
+        feedback.textContent = 'Locking could not be confirmed. Try again.';
       } else if (command === 'novel signups') {
         feedback.textContent = result.pending + ' awaiting confirmation · ' + result.confirmed +
           ' confirmed · ' + result.notified + ' notified';

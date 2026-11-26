@@ -22,19 +22,28 @@ export function onRequestGet({ request }) {
 
 export async function onRequestPost({ request, env }) {
   const json = request.headers.get('Accept')?.includes('application/json');
-  const reply = (message, status = 200) => json
-    ? Response.json({ ok: status === 200, message }, { status, headers: { 'Cache-Control': 'no-store' } })
-    : new Response(subscriptionPage(status === 200 ? 'Unsubscribed' : 'Please try again', message), { status, headers });
+  const reply = (message, status = 200, retryAfter) => {
+    const replyHeaders = new Headers(headers);
+    if (retryAfter) replyHeaders.set('Retry-After', String(retryAfter));
+    if (json) {
+      replyHeaders.delete('Content-Type');
+      return Response.json({ ok: status === 200, message }, { status, headers: replyHeaders });
+    }
+    return new Response(subscriptionPage(status === 200 ? 'Unsubscribed' : 'Please try again', message), { status, headers: replyHeaders });
+  };
   if (request.headers.get('Origin') !== new URL(request.url).origin) {
     return reply('Please open the unsubscribe link in your browser.', 403);
   }
-  if (!env.NOW_DB) return reply('Unsubscribing is temporarily unavailable. Please try again later.', 503);
+  if (!env.NOW_DB || !(env.NOVEL_SIGNUP_SECRET || env.NOW_EDITOR_CODE)) {
+    return reply('Unsubscribing is temporarily unavailable. Please try again later.', 503);
+  }
   const body = await readSubscriptionBody(request);
   if (body.error) return reply(body.error, body.status);
   const token = body.fields.token;
   if (typeof token !== 'string' || !/^[a-f0-9]{64}$/.test(token)) return reply('Use the unsubscribe link in your release email.', 400);
   try {
-    if (await limitAction(request, env, 'unsubscribe', 60)) return reply('Please try again later.', 429);
+    const retryAfter = await limitAction(request, env, 'unsubscribe', 60);
+    if (retryAfter) return reply('Please try again later.', 429, retryAfter);
     await env.NOW_DB.prepare('DELETE FROM novel_subscribers WHERE unsubscribe_token = ?').bind(token).run();
     return reply('You will not receive the novel’s release announcement.');
   } catch (error) {

@@ -14,9 +14,13 @@ const heroPreview = document.querySelector('[data-now-preview]');
 const draftKey = () => 'portfolio-now-draft-' + snapshot.dataset.nowRevision;
 
 function openEditor() {
-  if (!snapshot || editor.open || typeof editor.showModal !== 'function') return;
   const previewing = location.hash === '#preview-now';
   if (location.hash !== '#edit' && !previewing) return;
+  if (new URLSearchParams(location.search).get('owner') !== '1') {
+    location.replace('/?owner=1' + location.hash);
+    return;
+  }
+  if (!snapshot || editor.open || typeof editor.showModal !== 'function') return;
   if (previewing && !(readCommandExpiry() > Date.now())) return;
   if (!text.value) {
     try { text.value = sessionStorage.getItem(draftKey()) || ''; } catch { /* Storage is optional. */ }

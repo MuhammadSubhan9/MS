@@ -4,7 +4,8 @@ import { readFile } from 'node:fs/promises';
 import { createPages, escape, build } from '../scripts/build.mjs';
 import { createSiteServer } from '../scripts/server.mjs';
 import { renderPage } from '../scripts/layout.mjs';
-import { formatDate, image } from '../scripts/components.mjs';
+import { formatDate, image, safeLink } from '../scripts/components.mjs';
+import { evidenceMap, portfolioRecords } from '../scripts/portfolio-features.mjs';
 const source = JSON.parse(await readFile(new URL('../content/site.json',import.meta.url)));
 const fixtures = JSON.parse(await readFile(new URL('./fixtures.json',import.meta.url)));
 test('unpopulated content produces only home', () => {
@@ -34,6 +35,19 @@ test('content is escaped and unsafe URLs fail the build', () => {
 });
 test('duplicate detail slugs fail before publishing', () => {
   assert.throws(() => createPages({...source,projects:[fixtures.projects[0],fixtures.projects[0]]}), /duplicate/);
+  const { slug, ...withoutSlug } = fixtures.projects[0];
+  assert.throws(() => createPages({...source, projects:[withoutSlug]}), /slug/);
+  assert.throws(() => safeLink('/section/..//other.example'), /Unsupported/);
+});
+
+test('the evidence map keeps same-named courses and experiences distinct', () => {
+  const entry = { id: 'finance', title: 'Finance', evidence: { topics: ['business'] } };
+  const records = portfolioRecords({ projects: [entry], courses: [entry], education: [], writing: [] });
+  const markup = evidenceMap(records);
+  for (const key of ['work:finance', 'course:finance']) {
+    assert.ok(markup.includes(`data-evidence-node="${key}"`));
+    assert.ok(markup.includes(`data-evidence-record="${key}"`));
+  }
 });
 test('public build excludes fixture data and includes production SEO', async () => {
   const {output} = await build();

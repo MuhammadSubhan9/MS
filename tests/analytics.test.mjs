@@ -7,13 +7,14 @@ const source = await readFile(new URL('../public/google-analytics.js', import.me
 const origin = 'https://portfolio.example';
 const measurementId = 'G-TEST123';
 
-function loadAnalytics({ pageOrigin = origin, hash = '', privacy = {}, savedChoice } = {}) {
+function loadAnalytics({ pageOrigin = origin, hash = '', search = '', privacy = {}, savedChoice } = {}) {
   const scripts = [];
   const window = {};
   let storageReads = 0;
   const context = {
     window,
-    location: { origin: pageOrigin, hash },
+    location: { origin: pageOrigin, pathname: '/', hash, search },
+    URLSearchParams,
     navigator: privacy,
     document: {
       currentScript: { dataset: { ga4Id: measurementId, analyticsOrigin: origin } },
@@ -55,6 +56,8 @@ test('automatic analytics still excludes previews, direct editor links and brows
     { pageOrigin: 'http://localhost:4173' },
     { pageOrigin: 'https://preview.example' },
     { hash: '#edit' },
+    { hash: '#preview-now' },
+    { search: '?owner=1' },
     { privacy: { globalPrivacyControl: true } },
     { privacy: { doNotTrack: '1' } },
   ]) {

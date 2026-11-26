@@ -73,14 +73,14 @@ if (contactForm) {
 
   contactForm.addEventListener('input', event => {
     if (event.target.hasAttribute('aria-invalid')) updateError(event.target);
-    if (status.dataset.state === 'sent' || (status.dataset.state === 'validation' && !contactForm.querySelector('[aria-invalid]'))) {
+    if (['sent', 'edited'].includes(status.dataset.state) || (status.dataset.state === 'validation' && !contactForm.querySelector('[aria-invalid]'))) {
       report('', '');
     }
   });
 
   contactForm.addEventListener('submit', async event => {
     event.preventDefault();
-    if (submitButton.disabled) return;
+    if (submitButton.disabled || submitButton.hidden) return;
     const invalidFields = requiredFields.filter(updateError);
     if (invalidFields.length) {
       invalidFields[0].focus();
@@ -108,16 +108,21 @@ if (contactForm) {
     try {
       const response = await fetch(contactForm.action, {
         method: 'POST', headers: { Accept: 'application/json' }, body: data,
+        redirect: 'error', credentials: 'omit', referrerPolicy: 'origin',
         signal: AbortSignal.timeout(20000),
       });
       const result = await response.json().catch(() => null);
       const accepted = result?.ok === true || result?.status === 'success' || result?.success === true || result?.success === 'true';
       if (response.ok && accepted) {
         const unchanged = [...new FormData(contactForm)].every(([name, value]) => value.trim() === data.get(name));
-        if (unchanged) contactForm.reset();
+        if (!unchanged) {
+          report('Your earlier message was sent. Your edits are here if you want to send another message.', 'edited');
+          return;
+        }
+        contactForm.reset();
         const button = submitButton.getBoundingClientRect();
         report('Message sent.', 'sent');
-        if (!reducedMotion.matches && button.width && button.bottom > 0 && button.top < innerHeight) {
+        if (!reducedMotion.matches && typeof status.animate === 'function' && button.width && button.bottom > 0 && button.top < innerHeight) {
           const destination = status.getBoundingClientRect();
           status.animate([
             { transform: 'translate(' + (button.left - destination.left) + 'px,' + (button.top - destination.top) + 'px) scale(' + (button.width / destination.width) + ',' + (button.height / destination.height) + ')', transformOrigin: 'top left', borderRadius: '.55rem' },

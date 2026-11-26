@@ -256,7 +256,7 @@ function collectionPages(add, data, items, path, label, evidence = '') {
   if (!items.length) return;
   const slugs = new Set();
   for (const item of items) {
-    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.slug) || slugs.has(item.slug)) {
+    if (typeof item.slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.slug) || slugs.has(item.slug)) {
       throw new Error('Invalid or duplicate content slug');
     }
     slugs.add(item.slug);

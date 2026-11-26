@@ -1,5 +1,5 @@
 import { createServer } from 'node:http';
-import { readFile, stat } from 'node:fs/promises';
+import { readFile, realpath, stat } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { gzip } from 'node:zlib';
@@ -45,7 +45,9 @@ export function createSiteServer(output) {
         }
         file = resolve(file, 'index.html');
       }
-      let body = await readFile(file);
+      const canonical = await realpath(file);
+      if (!canonical.startsWith((await realpath(output)) + sep)) throw new Error('Invalid path');
+      let body = await readFile(canonical);
       const extension = extname(file);
       response.setHeader('Content-Type', types[extension] || 'application/octet-stream');
       response.setHeader('Cache-Control', extension === '.woff2' ? 'public, max-age=86400' : 'no-cache');

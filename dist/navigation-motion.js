@@ -129,6 +129,8 @@
       clearNames();
       arrival = null;
       delete root.dataset.routeMotion;
+      delete root.dataset.routeArriving;
+      root.classList.remove('page-transitioning');
     }
     transition.ready.catch(() => {});
     transition.finished.then(clean, clean);
@@ -153,6 +155,7 @@
   addEventListener('pagereveal', event => {
     const pending = readPending();
     if (!event.viewTransition || reduce.matches || root.classList.contains('intro-playing')) {
+      root.classList.remove('page-transitioning');
       event.viewTransition?.ready.catch(() => {});
       event.viewTransition?.skipTransition();
     } else {

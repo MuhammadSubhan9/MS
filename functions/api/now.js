@@ -41,22 +41,26 @@ function sessionMessage(code, content) {
   return encoder.encode(JSON.stringify([toolCookie, code, content]));
 }
 
-async function createToolSession(code, secret) {
+async function createToolSession(code, secret, db) {
   const expires = Math.floor(Date.now() / 1000) + toolSessionSeconds;
-  const content = expires + '.' + crypto.randomUUID();
+  const nonce = crypto.randomUUID();
+  const content = expires + '.' + nonce;
   const signature = await crypto.subtle.sign('HMAC', await sessionKey(secret), sessionMessage(code, content));
   const hex = Array.from(new Uint8Array(signature), byte => byte.toString(16).padStart(2, '0')).join('');
+  // The existing expiry table also cleans up these short-lived session records.
+  await db.prepare('INSERT INTO novel_signup_limits (key, expires_at) VALUES (?, ?)').bind('tools-session:' + nonce, expires).run();
   return { expiresAt: expires * 1000, cookie: sessionCookie(content + '.' + hex, toolSessionSeconds) };
 }
 
-async function hasToolSession(request, code, secret) {
+async function signedSessionKey(request, code, secret) {
   const cookie = request.headers.get('Cookie')?.split(';').map(part => part.trim())
     .find(part => part.startsWith(toolCookie + '='));
   const match = cookie?.slice(toolCookie.length + 1).match(/^(\d{10})\.([a-f0-9-]{36})\.([a-f0-9]{64})$/);
-  if (!match || Number(match[1]) <= Date.now() / 1000) return false;
+  if (!match || Number(match[1]) <= Date.now() / 1000) return null;
   const [, expires, nonce, hex] = match;
   const signature = Uint8Array.from(hex.match(/../g), byte => Number.parseInt(byte, 16));
-  return crypto.subtle.verify('HMAC', await sessionKey(secret), signature, sessionMessage(code, expires + '.' + nonce));
+  const valid = await crypto.subtle.verify('HMAC', await sessionKey(secret), signature, sessionMessage(code, expires + '.' + nonce));
+  return valid ? 'tools-session:' + nonce : null;
 }
 
 export async function onRequestPost({ request, env }) {
@@ -66,11 +70,6 @@ export async function onRequestPost({ request, env }) {
   const body = await readSubscriptionBody(request, 1024);
   if (body.error) return json({ error: 'Invalid command request.' }, body.status);
   const command = body.fields.command;
-  if (command === 'lock') {
-    const response = json({ locked: true });
-    response.headers.set('Set-Cookie', sessionCookie('', 0));
-    return response;
-  }
   const code = env.NOW_EDITOR_CODE;
   const secret = sessionSecret(env);
   if (!env.NOW_DB || !publishingCodePattern.test(code ?? '') || !secret) {
@@ -85,12 +84,20 @@ export async function onRequestPost({ request, env }) {
         return response;
       }
       if (!await validCode(request, code)) return json({ error: 'That publishing code did not match.' }, 401);
-      const session = await createToolSession(code, secret);
+      const session = await createToolSession(code, secret, env.NOW_DB);
       const response = json({ expiresAt: session.expiresAt });
       response.headers.set('Set-Cookie', session.cookie);
       return response;
     }
-    if (!await hasToolSession(request, code, secret)) return json({ error: 'Unlock Ctrl+K again in the Now editor.' }, 401);
+    const key = await signedSessionKey(request, code, secret);
+    if (command === 'lock') {
+      if (key) await env.NOW_DB.prepare('DELETE FROM novel_signup_limits WHERE key = ?').bind(key).run();
+      const response = json({ locked: true });
+      response.headers.set('Set-Cookie', sessionCookie('', 0));
+      return response;
+    }
+    if (!key || !await env.NOW_DB.prepare('SELECT 1 FROM novel_signup_limits WHERE key = ? AND expires_at > ?')
+      .bind(key, Math.floor(Date.now() / 1000)).first()) return json({ error: 'Unlock Ctrl+K again in the Now editor.' }, 401);
     if (command === 'now status') {
       const latest = await env.NOW_DB.prepare('SELECT revision, date FROM now_page WHERE id = 1').first();
       return json(latest ? { revision: latest.revision, date: formatDate(latest.date) } : { revision: 0 });

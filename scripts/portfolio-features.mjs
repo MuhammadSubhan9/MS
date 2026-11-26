@@ -91,7 +91,7 @@ export function evidenceMap(records) {
           const branch = items.filter(item => item.evidence.topics[0] === topic);
           return branch.length ? `<div class="evidence-branch" data-evidence-branch="${topic}">
             <h3>${title}</h3>
-            <ul>${branch.map(item => `<li><a href="${safeLink(item.destination)}" data-evidence-node="${item.id}" data-evidence-topics="${item.evidence.topics.join(' ')}">${escape(item.label)}</a></li>`).join('')}</ul>
+            <ul>${branch.map(item => `<li><a href="${safeLink(item.destination)}" data-evidence-node="${item.type}:${item.id}" data-evidence-topics="${item.evidence.topics.join(' ')}">${escape(item.label)}</a></li>`).join('')}</ul>
           </div>` : '';
         }).join('')}
       </div>
@@ -99,7 +99,7 @@ export function evidenceMap(records) {
         ${evidenceSummary(first, topicLabels)}
       </article>
     </div>
-    ${items.map(item => `<template data-evidence-record="${item.id}">${evidenceSummary(item, topicLabels)}</template>`).join('')}
+    ${items.map(item => `<template data-evidence-record="${item.type}:${item.id}">${evidenceSummary(item, topicLabels)}</template>`).join('')}
   </section>`;
 }
 

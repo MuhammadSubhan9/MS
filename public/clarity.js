@@ -1,6 +1,7 @@
 (() => {
   const { clarityProject, analyticsOrigin } = document.currentScript.dataset;
-  if (location.origin !== analyticsOrigin || location.hash === '#edit' ||
+  if (location.origin !== analyticsOrigin || ['#edit', '#preview-now'].includes(location.hash) ||
+      (location.pathname === '/' && new URLSearchParams(location.search).get('owner') === '1') ||
       navigator.globalPrivacyControl || navigator.doNotTrack === '1' || window.clarity) return;
 
   function clarity() {

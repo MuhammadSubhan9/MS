@@ -33,7 +33,7 @@ export async function onRequestPost({ request, env }) {
     `).bind(crypto.randomUUID(), email, token).run();
     return reply({ message: success });
   } catch (error) {
-    if (String(error).includes('novel_daily_limit')) {
+    if ([error?.message, error?.cause?.message].some(message => message?.includes('novel_daily_limit'))) {
       return reply({ status: 429, retryAfter: 86400 - Math.floor(Date.now() / 1000) % 86400, error: true, message: 'Please try again tomorrow.' });
     }
     logStorageFailure('Novel signup storage failed', error, request);

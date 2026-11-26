@@ -7,7 +7,10 @@ export function safeLink(value) {
   if (typeof value !== 'string' || /[\s\\\u0000-\u001f]/.test(value)) {
     throw new Error(`Unsupported URL: ${value}`);
   }
-  if (value.startsWith('/') && !value.startsWith('//')) return escape(value);
+  if (value.startsWith('/') && !value.startsWith('//')) {
+    if (new URL(value, 'https://portfolio.invalid').pathname.startsWith('//')) throw new Error('Unsupported local URL');
+    return escape(value);
+  }
   if (!URL.canParse(value)) throw new Error(`Unsupported URL: ${value}`);
   const url = new URL(value);
   if (url.protocol !== 'https:' || url.username || url.password) {

@@ -83,6 +83,7 @@ test('Now requires the shared code and rejects stale writes without replacing ne
     assert.deepEqual(await (await tool('novel signups', { cookie })).json(), { pending: 1, confirmed: 2, notified: 1 });
     assert.equal((await tool('unknown command', { cookie })).status, 400);
     assert.match((await tool('lock', { cookie })).headers.get('Set-Cookie'), /^__Host-portfolio-tools=; Path=\/; Max-Age=0;/);
+    assert.equal((await tool('now status', { cookie })).status, 401);
 
     const request = new Request(origin + '/', { headers: { 'If-None-Match': 'old-asset-tag' } });
     const snapshot = { date: '2026-11-17', text: 'Static fallback.' };

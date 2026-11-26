@@ -2,4 +2,6 @@
 artifacts/
 .codex-attachments/
 /.dev.vars*
+**/.env
+**/.env.*
 /.wrangler/

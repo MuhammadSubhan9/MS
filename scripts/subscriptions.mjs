@@ -31,7 +31,7 @@ export function subscriptionResponse(request, { message, status = 200, error = f
 }
 
 export async function readSubscriptionBody(request, limit = maxBodyBytes) {
-  const type = request.headers.get('Content-Type')?.split(';')[0].trim();
+  const type = request.headers.get('Content-Type')?.split(';')[0].trim().toLowerCase();
   if (!['application/json', 'application/x-www-form-urlencoded'].includes(type)) {
     return { error: 'Send the form using the email field.', status: 415 };
   }

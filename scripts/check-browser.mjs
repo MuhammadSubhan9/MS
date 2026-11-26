@@ -63,11 +63,12 @@ try {
   await waitFor(() => chrome.evaluate("!document.querySelector('.contact-card-dialog').open"), 'cancelling contact card');
   await chrome.evaluate("const style=document.createElement('style');style.textContent='*{letter-spacing:.12em!important;word-spacing:.16em!important}';document.head.append(style)");
   assert.equal(await chrome.evaluate("const a=document.querySelector('.contact-address');a.scrollWidth<=a.clientWidth+1"), true);
-  await chrome.navigate(origin + '/#edit', 390);
+  await chrome.call('Page.navigate', { url: origin + '/#edit' });
+  await waitFor(() => chrome.evaluate("location.search === '?owner=1' && document.querySelector('.now-editor')?.open").catch(() => false), 'legacy editor link opens the isolated document');
   await waitFor(() => chrome.evaluate("document.querySelector('.now-editor').open"), 'editor opening');
   await chrome.evaluate("const t=document.querySelector('#now-editor-text');t.value='Browser test draft';t.dispatchEvent(new Event('input'))");
   await chrome.navigate(origin + '/about/', 390);
-  await chrome.navigate(origin + '/#edit', 390);
+  await chrome.navigate(origin + '/?owner=1#edit', 390);
   assert.equal(await chrome.evaluate("document.querySelector('#now-editor-text').value"), 'Browser test draft');
   await chrome.key('Escape','Escape',27);
   await waitFor(() => chrome.evaluate("location.hash==='#now'"), 'focus return after closing the editor');
@@ -107,16 +108,16 @@ try {
   assert.equal(await chrome.evaluate("document.querySelector('.education-school > h3').textContent"), 'Al-Rowad International Schools');
 
   await chrome.navigate(origin + '/work/#evidence', 390);
-  await chrome.evaluate("document.querySelector('[data-evidence-node=money2020-middle-east]').focus()");
+  await chrome.evaluate("document.querySelector('[data-evidence-node=\"work:money2020-middle-east\"]').focus()");
   await chrome.key('Enter', 'Enter', 13);
   assert.deepEqual(await chrome.evaluate("[...document.querySelectorAll('[data-evidence-branch][data-evidence-topic-match]')].map(node => node.dataset.evidenceBranch)"), ['technology', 'business']);
-  assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=unesco-ai-forum]').hasAttribute('data-evidence-related')"), true);
-  assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=global-airports-forum]').hasAttribute('data-evidence-related')"), false);
+  assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=\"work:unesco-ai-forum\"]').hasAttribute('data-evidence-related')"), true);
+  assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=\"work:global-airports-forum\"]').hasAttribute('data-evidence-related')"), false);
   assert.match(await chrome.evaluate("document.querySelector('[data-evidence-selection] .eyebrow').textContent"), /Business \/ Technology/);
   await chrome.evaluate("document.querySelector('[data-evidence-filter=aviation]').click()");
-  assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=black-hat-mea]').closest('li').hidden"), true);
-  assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=global-airports-forum]').getAttribute('aria-current')"), 'true');
-  await chrome.evaluate("document.querySelector('[data-evidence-node=course-aircraft-design]').click()");
+  assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=\"work:black-hat-mea\"]').closest('li').hidden"), true);
+  assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=\"work:global-airports-forum\"]').getAttribute('aria-current')"), 'true');
+  await chrome.evaluate("document.querySelector('[data-evidence-node=\"course:course-aircraft-design\"]').click()");
   assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-selection] h3').textContent"), 'Introduction to Aircraft Design');
   await chrome.evaluate("document.querySelector('[data-evidence-selection] a').click()");
   await waitFor(() => chrome.evaluate("location.hash === '#course-aircraft-design' && document.querySelector('#course-aircraft-design details')?.open"), 'opening course details from the map');
@@ -235,6 +236,19 @@ try {
   assert.equal(await chrome.evaluate("document.querySelector('#contact-message').value"), 'Keep this draft.');
   await chrome.evaluate("document.querySelector('.contact-form').reset()");
   assert.equal(await chrome.evaluate("document.querySelector('#contact-message').placeholder"), '');
+  await chrome.evaluate(`(() => {
+    const form = document.querySelector('.contact-form');
+    for (const [name, value] of Object.entries({ name: 'Reader', email: 'reader@example.test', subject: 'Hello', message: 'First version' })) {
+      form.elements[name].value = value;
+    }
+    window.fetch = () => new Promise(resolve => { window.finishContact = () => resolve(Response.json({ ok: true })); });
+    form.requestSubmit();
+    form.elements.message.value = 'Second version';
+    window.finishContact();
+  })()`);
+  await waitFor(() => chrome.evaluate("document.querySelector('.contact-form-status').dataset.state === 'edited'"), 'separate confirmation for an edited message');
+  assert.equal(await chrome.evaluate("document.querySelector('#contact-message').value"), 'Second version');
+  assert.equal(await chrome.evaluate("document.querySelector('.contact-send').hidden"), false);
 
   const commandShortcut = () => chrome.key('k', 'KeyK', 75, 2);
   const paletteOpen = () => chrome.evaluate("document.querySelector('[aria-labelledby=command-title]').open");
@@ -247,7 +261,7 @@ try {
 
   await commandShortcut();
   assert.equal(await paletteOpen(), false);
-  await chrome.navigate(origin + '/#edit', 390);
+  await chrome.navigate(origin + '/?owner=1#edit', 390);
   await chrome.evaluate("document.querySelector('#now-editor-code').value = 'browser-test-code-only-1234'");
   await chrome.evaluate(`
     window.fetch = async (_url, options) => {
@@ -273,7 +287,12 @@ try {
   await waitFor(() => chrome.evaluate("document.querySelector('[aria-labelledby=command-title] .command-feedback').textContent.includes('2 awaiting confirmation')"), 'novel signup totals');
   await chrome.key('Escape', 'Escape', 27);
   await waitFor(async () => !await paletteOpen(), 'closing owner commands');
+  await chrome.evaluate("window.fetch = async () => { throw new Error('offline') }");
   await command('lock tools');
+  await waitFor(() => chrome.evaluate("document.querySelector('[aria-labelledby=command-title] .command-feedback').textContent.includes('Try again')"), 'failed lock remains visible');
+  assert.equal(await paletteOpen(), true);
+  await chrome.evaluate("window.fetch = async () => Response.json({ locked: true })");
+  await chrome.key('Enter', 'Enter', 13);
   await waitFor(async () => !await paletteOpen(), 'locking owner commands');
   assert.equal(await chrome.evaluate("Number(localStorage.getItem('portfolio-tools-expires'))"), 0);
   await commandShortcut();
@@ -286,7 +305,7 @@ try {
   await commandShortcut();
   await waitFor(() => chrome.evaluate("location.hash === '#edit' && document.querySelector('.now-editor')?.open"), 'returning to the unlock prompt after expiry');
 
-  await chrome.navigate(origin + '/?publish-preview=1#edit', 390);
+  await chrome.navigate(origin + '/?owner=1&publish-preview=1#edit', 390);
   await chrome.evaluate(`
     const nowDialog = document.querySelector('.now-editor');
     window.fetch = async () => Response.json({

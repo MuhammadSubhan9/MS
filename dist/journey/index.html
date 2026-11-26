@@ -21,10 +21,11 @@
   <link rel="stylesheet" href="/styles.css?v=first-press">
   <link rel="stylesheet" href="/navigation-motion.css?v=first-press">
   <script src="/navigation-motion.js" blocking="render"></script>
-  <link rel="stylesheet" href="/portfolio-features.css">
-  <script src="/portfolio-features.js" type="module"></script>
-  <link rel="stylesheet" href="/journey.css">
-  <script src="/journey.js" defer></script>
+  <link rel="stylesheet" href="/portfolio-features.css?v=viewer-controls">
+  <script src="/portfolio-features.js?v=viewer-controls" type="module"></script>
+
+  <link rel="stylesheet" href="/journey.css?v=viewer-controls">
+  <script src="/journey.js?v=viewer-controls" defer></script>
 
 
   <link rel="stylesheet" href="/commands.css">
@@ -76,16 +77,20 @@
             <span data-calendar-display-year>2024</span>
             <span data-calendar-display-month></span>
           </div>
-          <div class="journey-calendar-scale" aria-hidden="true">
-            <span class="journey-calendar-track"></span>
-            <span>Jan</span><span>Dec</span>
+          <div class="journey-calendar-control">
+            <label class="visually-hidden" for="journey-scrubber">Browse milestones by date</label>
+            <input class="journey-scrubber" id="journey-scrubber" type="range" min="0" max="11" value="0">
+            <div class="journey-calendar-scale" aria-hidden="true">
+              <span>2024</span><span>2026</span>
+            </div>
           </div>
+          <p class="journey-calendar-selection" aria-hidden="true" data-calendar-selection></p>
         </div>
         <div class="journey-timeline" data-journey-timeline>
     <div class="journey-rail" aria-hidden="true"><span></span></div>
     <ol class="journey-list"><li class="journey-year" id="journey-year-2024" data-calendar-year="2024">
         <h3>2024</h3><span class="journey-point" aria-hidden="true"></span>
-      </li><li class="journey-milestone" id="milestone-course-crew-management" data-topic="aviation" data-calendar-month="1" data-share-section tabindex="-1">
+      </li><li class="journey-milestone" id="milestone-course-crew-management" data-topic="aviation" data-milestone-year="2024" data-calendar-month="1" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -110,7 +115,7 @@
         </div>
       </div>
     </details>
-  </li><li class="journey-milestone" id="milestone-course-aviation-management" data-topic="aviation" data-calendar-month="3" data-share-section tabindex="-1">
+  </li><li class="journey-milestone" id="milestone-course-aviation-management" data-topic="aviation" data-milestone-year="2024" data-calendar-month="3" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -135,7 +140,7 @@
         </div>
       </div>
     </details>
-  </li><li class="journey-milestone" id="milestone-course-business-administration" data-topic="business" data-calendar-month="12" data-share-section tabindex="-1">
+  </li><li class="journey-milestone" id="milestone-course-business-administration" data-topic="business" data-milestone-year="2024" data-calendar-month="12" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -162,7 +167,7 @@
     </details>
   </li><li class="journey-year" id="journey-year-2025" data-calendar-year="2025">
         <h3>2025</h3><span class="journey-point" aria-hidden="true"></span>
-      </li><li class="journey-milestone" id="milestone-course-aircraft-design" data-topic="aviation" data-calendar-month="5" data-share-section tabindex="-1">
+      </li><li class="journey-milestone" id="milestone-course-aircraft-design" data-topic="aviation" data-milestone-year="2025" data-calendar-month="5" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -187,7 +192,7 @@
         </div>
       </div>
     </details>
-  </li><li class="journey-milestone" id="milestone-graduation-volunteering" data-topic="communication" data-calendar-month="5" data-share-section tabindex="-1">
+  </li><li class="journey-milestone" id="milestone-graduation-volunteering" data-topic="communication" data-milestone-year="2025" data-calendar-month="5" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -212,7 +217,7 @@
         </div>
       </div>
     </details>
-  </li><li class="journey-milestone" id="milestone-course-business-finance" data-topic="business" data-calendar-month="10" data-share-section tabindex="-1">
+  </li><li class="journey-milestone" id="milestone-course-business-finance" data-topic="business" data-milestone-year="2025" data-calendar-month="10" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -237,7 +242,7 @@
         </div>
       </div>
     </details>
-  </li><li class="journey-milestone" id="milestone-black-hat-mea" data-topic="technology" data-calendar-month="12" data-share-section tabindex="-1">
+  </li><li class="journey-milestone" id="milestone-black-hat-mea" data-topic="technology" data-milestone-year="2025" data-calendar-month="12" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -265,7 +270,7 @@
         </div>
       </div>
     </details>
-  </li><li class="journey-milestone" id="milestone-global-airports-forum" data-topic="aviation" data-calendar-month="12" data-share-section tabindex="-1">
+  </li><li class="journey-milestone" id="milestone-global-airports-forum" data-topic="aviation" data-milestone-year="2025" data-calendar-month="12" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -295,7 +300,7 @@
     </details>
   </li><li class="journey-year" id="journey-year-2026" data-calendar-year="2026">
         <h3>2026</h3><span class="journey-point" aria-hidden="true"></span>
-      </li><li class="journey-milestone" id="milestone-igcses" data-topic="education" data-calendar-month="5" data-share-section tabindex="-1">
+      </li><li class="journey-milestone" id="milestone-igcses" data-topic="education" data-milestone-year="2026" data-calendar-month="5" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -320,7 +325,7 @@
         </div>
       </div>
     </details>
-  </li><li class="journey-milestone" id="milestone-course-sales-fundamentals" data-topic="business" data-calendar-month="7" data-share-section tabindex="-1">
+  </li><li class="journey-milestone" id="milestone-course-sales-fundamentals" data-topic="business" data-milestone-year="2026" data-calendar-month="7" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -345,7 +350,7 @@
         </div>
       </div>
     </details>
-  </li><li class="journey-milestone" id="milestone-money2020-middle-east" data-topic="business" data-calendar-month="9" data-share-section tabindex="-1">
+  </li><li class="journey-milestone" id="milestone-money2020-middle-east" data-topic="business" data-milestone-year="2026" data-calendar-month="9" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -373,7 +378,7 @@
         </div>
       </div>
     </details>
-  </li><li class="journey-milestone" id="milestone-unesco-ai-forum" data-topic="technology" data-calendar-month="9" data-share-section tabindex="-1">
+  </li><li class="journey-milestone" id="milestone-unesco-ai-forum" data-topic="technology" data-milestone-year="2026" data-calendar-month="9" data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>

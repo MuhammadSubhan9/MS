@@ -116,8 +116,12 @@ try {
       })()`), 'desktop spread opens underneath both cards');
     }
     await clickRoute('#spread-money2020-middle-east .button-link', '/work/money2020-middle-east/', 'event', 'route-event', width);
-    await chrome.evaluate('history.back()');
+    assert.equal(await chrome.evaluate("document.querySelector('.breadcrumb').textContent.trim()"), 'Back to event summary');
+    await chrome.evaluate("document.querySelector('.breadcrumb').scrollIntoView({block:'center',behavior:'instant'})");
+    await press('.breadcrumb a', width <= 390);
     await waitFor(() => chrome.evaluate("location.pathname==='/work/' && !document.documentElement.dataset.routeMotion"), 'Back to Work');
+    await waitFor(() => chrome.evaluate(`!document.querySelector('#spread-money2020-middle-east').hidden &&
+      Math.abs(history.state.eventSummary.y - scrollY) < 3`), 'the original expanded event and scroll position');
     await clickRoute('.wordmark', '/', 'fade', null, width);
     await clickRoute('.home-writing-layout .button-link', '/writing/', 'book', 'route-book', width);
     await clickRoute('.novel-back', '/', 'book', 'route-book', width);
@@ -127,6 +131,10 @@ try {
     await chrome.navigate(origin + '/about/', width);
     await clickRoute('.footer-link[href="/work/"]', '/work/', 'fade', null, width);
   }
+
+  await chrome.navigate(origin + '/work/money2020-middle-east/?from=summary', 390);
+  await press('.breadcrumb a', true);
+  await waitFor(() => chrome.evaluate("location.pathname === '/work/' && location.hash === '#spread-money2020-middle-east' && document.querySelector('#spread-money2020-middle-east')?.hidden === false"), 'direct write-up link returns to its specific summary');
 
   await chrome.navigate(origin + '/about/', 390);
   const menuTop = await chrome.evaluate("document.querySelector('.menu').getBoundingClientRect().top");

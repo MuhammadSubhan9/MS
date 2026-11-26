@@ -81,6 +81,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   <link rel="stylesheet" href="/navigation-motion.css?v=first-press">
   <script src="/navigation-motion.js" blocking="render"></script>
   ${portfolioFeatures ? portfolioAssets : ''}
+  ${about && data.courses?.some(course => course.certificateUrl && course.certificatePreview) ? '<script src="/certificate-viewer.js" type="module"></script>' : ''}
   ${journey ? journeyAssets : ''}
   ${home ? '<link rel="stylesheet" href="/intro.css">\n  <script src="/intro.js" defer blocking="render"></script>' : ''}
   ${contact ? '<link rel="stylesheet" href="/contact.css">\n  <script src="/contact.js" defer></script>\n  <script src="/contact-card.js" type="module"></script>' : ''}

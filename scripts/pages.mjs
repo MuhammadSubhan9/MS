@@ -127,6 +127,12 @@ function aboutPage(data, background) {
         <form method="dialog"><button type="submit" autofocus>Close</button></form>
       </div>
       <p class="meta">Excerpt from the issuer’s document</p>
+      <div class="certificate-tools" role="group" aria-label="Zoom controls">
+        <button type="button" data-certificate-zoom-out aria-label="Zoom out">${icon('minus')}</button>
+        <output class="certificate-zoom-level" data-certificate-level aria-live="off">100%</output>
+        <button type="button" data-certificate-zoom-in aria-label="Zoom in">${icon('plus')}</button>
+        <button type="button" data-certificate-fit>Fit to view</button>
+      </div>
       <div class="certificate-dialog-content"></div>
     </dialog>` : ''}
   </div>`;
@@ -186,7 +192,7 @@ function eventSpread(item, photo = item.image) {
     <div class="work-event-summary">
       ${photo && item.eventLogo ? eventMark(item) : ''}
       ${paragraphs([summary], glossary)}
-      ${action(destination, 'Read full write-up', 'button-link', `about ${item.title}`)}
+      ${action(destination + '?from=summary', 'Read full write-up', 'button-link', `about ${item.title}`)}
     </div>
     </div>
   </section>`;
@@ -292,7 +298,7 @@ function collectionPages(add, data, items, path, label, evidence = '') {
       [detailed[index + 1], 'Next article'],
     ].filter(([entry]) => entry) : [];
     add(`/${path}/${item.slug}/`, item.title, item.description, `
-      <p class="breadcrumb"><a href="/${path}/${isWorkEvent && !featuredReport ? '#events' : ''}">${icon('arrow-left', 'arrow arrow-left')}<span>${isWriting ? 'All writing' : isWorkEvent && !featuredReport ? 'All events' : 'All experiences'}</span></a></p>
+      <p class="breadcrumb"><a href="/${path}/${isWorkEvent && !featuredReport ? '#events' : ''}"${isWorkEvent ? ` data-event-return="spread-${item.slug}"` : ''}>${icon('arrow-left', 'arrow arrow-left')}<span>${isWriting ? 'All writing' : isWorkEvent && !featuredReport ? 'All events' : 'All experiences'}</span></a></p>
       <article class="detail${hasCover ? ' detail-with-cover' : ''}${isWriting ? '' : ' work-detail'}" data-motion-route="/${path}/${item.slug}/">
         ${opening}
         <div class="reading article-body">${paragraphs(item.body, renderText)}

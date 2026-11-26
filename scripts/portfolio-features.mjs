@@ -10,11 +10,11 @@ const topics = [
   ['communication', 'Communication', 'chats-circle'],
 ];
 
-export const portfolioAssets = `<link rel="stylesheet" href="/portfolio-features.css">
-  <script src="/portfolio-features.js" type="module"></script>`;
+export const portfolioAssets = `<link rel="stylesheet" href="/portfolio-features.css?v=viewer-controls">
+  <script src="/portfolio-features.js?v=viewer-controls" type="module"></script>`;
 
-export const journeyAssets = `<link rel="stylesheet" href="/journey.css">
-  <script src="/journey.js" defer></script>`;
+export const journeyAssets = `<link rel="stylesheet" href="/journey.css?v=viewer-controls">
+  <script src="/journey.js?v=viewer-controls" defer></script>`;
 
 export const sectionLinkDialog = `<dialog class="section-link-dialog" aria-labelledby="section-link-title">
     <form method="dialog">
@@ -131,7 +131,7 @@ function journeyMonth(date) {
   return journeyMonths.indexOf(date.match(journeyMonthPattern)?.[1]) + 1;
 }
 
-function journeyMilestone({ record, date, logo, preview, icon: milestoneIcon }) {
+function journeyMilestone({ record, date, year, logo, preview, icon: milestoneIcon }) {
   const id = `milestone-${record.id}`;
   const mark = logo || record.eventLogo;
   const category = { education: 'Education', course: 'Course' }[record.type]
@@ -140,7 +140,7 @@ function journeyMilestone({ record, date, logo, preview, icon: milestoneIcon }) 
   const theme = topic?.[0] || record.type;
   const symbol = milestoneIcon || topic?.[2] || (record.type === 'education' ? 'graduation-cap' : 'notebook');
   const month = journeyMonth(date);
-  return `<li class="journey-milestone" id="${id}" data-topic="${theme}"${month ? ` data-calendar-month="${month}"` : ''} data-share-section tabindex="-1">
+  return `<li class="journey-milestone" id="${id}" data-topic="${theme}" data-milestone-year="${year || ''}"${month ? ` data-calendar-month="${month}"` : ''} data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -236,10 +236,14 @@ export function journeyPage(data, records) {
             <span data-calendar-display-year>${years[0]}</span>
             <span data-calendar-display-month></span>
           </div>
-          <div class="journey-calendar-scale" aria-hidden="true">
-            <span class="journey-calendar-track"></span>
-            <span>Jan</span><span>Dec</span>
+          <div class="journey-calendar-control">
+            <label class="visually-hidden" for="journey-scrubber">Browse milestones by date</label>
+            <input class="journey-scrubber" id="journey-scrubber" type="range" min="0" max="${milestones.length - 1}" value="0"${milestones.length < 2 ? ' disabled' : ''}>
+            <div class="journey-calendar-scale" aria-hidden="true">
+              <span>${years[0]}</span><span>${years.at(-1)}</span>
+            </div>
           </div>
+          <p class="journey-calendar-selection" aria-hidden="true" data-calendar-selection></p>
         </div>` : ''}
         ${journeyTimeline(milestones, current.length > 0)}
       </div>

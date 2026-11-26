@@ -16,6 +16,28 @@ try {
   });
   await chrome.call('Runtime.enable');
   await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+
+  await chrome.navigate(origin + '/journey/#milestone-igcses', 390);
+  await chrome.evaluate("document.querySelector('.journey-milestone').scrollIntoView({ block: 'center', behavior: 'instant' })");
+  await waitFor(() => chrome.evaluate("document.querySelector('.journey-scrubber').value === '0'"), 'scroll syncs the timeline scrubber');
+  const scrub = await chrome.evaluate(`(() => {
+    const input = document.querySelector('.journey-scrubber');
+    const bounds = input.getBoundingClientRect();
+    const left = bounds.left + 10;
+    const y = bounds.top + bounds.height / 2;
+    return { left, right: bounds.right - 4, y, scroll: scrollY, hit: document.elementFromPoint(left, y)?.className };
+  })()`);
+  assert.equal(scrub.hit, 'journey-scrubber', JSON.stringify(scrub));
+  await chrome.call('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: scrub.left, y: scrub.y }] });
+  await chrome.call('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: scrub.right, y: scrub.y }] });
+  await waitFor(() => chrome.evaluate("document.querySelector('[data-calendar-selection]').textContent.includes('UNESCO')"), 'touch drag previews the newest milestone');
+  assert.ok(Math.abs(await chrome.evaluate('scrollY') - scrub.scroll) < 2, 'the page stays put while choosing a milestone');
+  await chrome.call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await waitFor(() => chrome.evaluate("Math.abs(document.querySelector('#milestone-unesco-ai-forum').getBoundingClientRect().top - innerHeight * .46) < 4"), 'release lands on the newest milestone');
+  await chrome.evaluate("document.querySelector('.journey-scrubber').focus({preventScroll:true})");
+  await chrome.key('Home', 'Home', 36);
+  await waitFor(() => chrome.evaluate("Math.abs(document.querySelector('.journey-milestone').getBoundingClientRect().top - innerHeight * .46) < 4"), 'range keyboard navigation lands on the first milestone');
+
   for (const [route, shareButtons] of Object.entries({ '/': 0, '/about/': 1, '/journey/': 1, '/work/': 2, '/writing/': 1, '/contact/': 0 })) {
     await chrome.navigate(origin + route, 320);
     assert.equal(await chrome.evaluate('document.documentElement.scrollWidth <= innerWidth'), true, route);
@@ -174,6 +196,23 @@ try {
   await chrome.call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
   await waitFor(() => chrome.evaluate("document.querySelector('.certificate-dialog').open && document.querySelector('.certificate-dialog img').naturalWidth === 920"), 'first tap opens the original certificate excerpt');
   assert.equal(await chrome.evaluate("document.querySelector('.certificate-dialog-content a').getAttribute('href')"), 'https://alison.com/verify/640283d4a4');
+  const viewerCenter = await chrome.evaluate(`(() => {
+    const bounds = document.querySelector('.certificate-dialog-content .media-window').getBoundingClientRect();
+    return { x: bounds.left + bounds.width / 2, y: bounds.top + bounds.height / 2 };
+  })()`);
+  const pinch = distance => [-1, 1].map((side, id) => ({ id, x: viewerCenter.x + distance * side, y: viewerCenter.y }));
+  await chrome.call('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: pinch(45) });
+  await chrome.call('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: pinch(96) });
+  await chrome.call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await waitFor(() => chrome.evaluate("parseInt(document.querySelector('[data-certificate-level]').value) > 180"), 'pinch zoom enlarges the certificate');
+  const beforePan = await chrome.evaluate("new DOMMatrix(getComputedStyle(document.querySelector('.certificate-dialog-content img')).transform).m41");
+  await chrome.call('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [viewerCenter] });
+  await chrome.call('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: viewerCenter.x + 30, y: viewerCenter.y }] });
+  await chrome.call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await waitFor(() => chrome.evaluate(`new DOMMatrix(getComputedStyle(document.querySelector('.certificate-dialog-content img')).transform).m41 > ${beforePan + 15}`), 'dragging pans the zoomed certificate');
+  await chrome.evaluate("document.querySelector('[data-certificate-fit]').focus()");
+  await chrome.key('Enter', 'Enter', 13);
+  assert.equal(await chrome.evaluate("document.querySelector('[data-certificate-level]').value"), '100%');
   await chrome.key('Escape', 'Escape', 27);
   await waitFor(() => chrome.evaluate("!document.querySelector('.certificate-dialog').open"), 'closing the certificate preview');
   await chrome.navigate(origin + '/about/#igcses', 390);

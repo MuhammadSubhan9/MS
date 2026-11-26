@@ -33,19 +33,6 @@ import { disclosureTiming, revealPanel } from './disclosure-motion.js';
     tablet.addEventListener('change', arrangeCourses);
   }
 
-  const certificateDialog = document.querySelector('.certificate-dialog');
-  if (typeof certificateDialog?.showModal === 'function') {
-    const preview = certificateDialog.querySelector('.certificate-dialog-content');
-    for (const button of document.querySelectorAll('.entry-preview')) {
-      const template = button.nextElementSibling;
-      button.hidden = false;
-      button.addEventListener('click', () => {
-        preview.replaceChildren(template.content.cloneNode(true));
-        certificateDialog.showModal();
-      });
-    }
-  }
-
   const evidence = document.querySelector('#evidence');
   if (evidence) {
     const filters = evidence.querySelector('[data-evidence-filters]');
@@ -109,6 +96,9 @@ import { disclosureTiming, revealPanel } from './disclosure-motion.js';
   const featuredEvent = document.querySelector('[data-feature-spread]');
   const featuredToggle = featuredEvent?.querySelector('.project-action');
   if (featuredToggle) featuredToggle.dataset.eventToggle = featuredEvent.dataset.featureSpread;
+  const eventPanels = new Map();
+  const plainClick = event => !event.defaultPrevented && event.button === 0 &&
+    !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey;
   let activeEvent;
   for (const toggle of document.querySelectorAll('[data-event-toggle]')) {
     const spread = document.getElementById(toggle.dataset.eventToggle);
@@ -126,9 +116,18 @@ import { disclosureTiming, revealPanel } from './disclosure-motion.js';
       // Reserve the full row before animating its artwork so the read-more link is immediately reachable.
       revealPanel(spread, open, instant || open);
     }
+    eventPanels.set(spread.id, { spread, setOpen });
+    spread.querySelector('.button-link')?.addEventListener('click', event => {
+      if (!plainClick(event)) return;
+      history.replaceState({
+        ...history.state,
+        eventSummary: { id: spread.id, y: scrollY, width: innerWidth },
+      }, '');
+    });
     toggle.addEventListener('click', event => {
-      if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
+      if (!plainClick(event)) return;
       event.preventDefault();
+      if (history.state?.eventSummary) history.replaceState({ ...history.state, eventSummary: null }, '');
       if (activeEvent === setOpen) {
         setOpen(false);
         activeEvent = undefined;
@@ -145,6 +144,42 @@ import { disclosureTiming, revealPanel } from './disclosure-motion.js';
       if (event.key !== ' ') return;
       event.preventDefault();
       if (!event.repeat) toggle.click();
+    });
+  }
+
+  function restoreEventPanel() {
+    const saved = history.state?.eventSummary;
+    const target = location.hash.startsWith('#spread-') ? location.hash.slice(1) : saved?.id;
+    const entry = eventPanels.get(target);
+    if (!entry) return;
+    if (activeEvent !== entry.setOpen) {
+      activeEvent?.(false, true);
+      entry.setOpen(true, true);
+      activeEvent = entry.setOpen;
+    }
+    requestAnimationFrame(() => {
+      if (saved?.id === target && saved.width === innerWidth && Number.isFinite(saved.y)) {
+        scrollTo({ top: saved.y, behavior: 'instant' });
+      } else {
+        entry.spread.scrollIntoView({ block: 'start', behavior: 'instant' });
+      }
+    });
+  }
+  if (eventPanels.size) {
+    restoreEventPanel();
+    addEventListener('pageshow', event => { if (event.persisted) restoreEventPanel(); });
+    addEventListener('hashchange', () => { if (location.hash.startsWith('#spread-')) restoreEventPanel(); });
+  }
+  const eventReturn = document.querySelector('[data-event-return]');
+  if (eventReturn && new URLSearchParams(location.search).get('from') === 'summary') {
+    eventReturn.setAttribute('href', '/work/#' + eventReturn.dataset.eventReturn);
+    eventReturn.querySelector('span').textContent = 'Back to event summary';
+    eventReturn.addEventListener('click', event => {
+      if (!plainClick(event) || location.hash || history.length < 2 || !document.referrer) return;
+      const from = new URL(document.referrer);
+      if (from.origin !== location.origin || from.pathname !== '/work/') return;
+      event.preventDefault();
+      history.back();
     });
   }
 

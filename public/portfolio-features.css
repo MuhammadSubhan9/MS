@@ -188,8 +188,8 @@
 }
 .certificate-dialog::backdrop { background: #201911a6; }
 .certificate-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
-.certificate-dialog-header button {
-  min-height: 42px;
+.certificate-dialog button {
+  min-height: 44px;
   padding-inline: .75rem;
   border: 1px solid #aa967e;
   border-radius: .25rem;
@@ -198,10 +198,46 @@
   font: inherit;
   cursor: pointer;
 }
+.certificate-dialog button:hover { background: #ecdfcc; }
+.certificate-dialog button[aria-disabled="true"] { color: var(--muted); opacity: .62; cursor: default; }
+.certificate-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .35rem;
+  margin-top: .65rem;
+}
+.certificate-tools button { min-width: 44px; }
+.certificate-tools [data-certificate-fit] { margin-inline-start: auto; }
+.certificate-zoom-level { min-width: 4ch; text-align: center; font-variant-numeric: tabular-nums; }
 .certificate-course-title { margin-block-start: .85rem; font-weight: 650; }
-.certificate-dialog-content figure { margin-block: .9rem .55rem; border: 1px solid #c7b49a; border-block-end-width: 3px; background: #fff; }
-.certificate-dialog-content img { width: 100%; height: auto; max-height: 58svh; object-fit: contain; }
+.certificate-dialog-content figure { margin-block: .55rem .65rem; border: 1px solid #c7b49a; background: #e8ddcb; }
+.certificate-dialog-content .media-window {
+  height: min(58dvh, 32rem);
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  outline-offset: 2px;
+}
+.certificate-dialog-content .media-window[data-zoomed] { cursor: grab; }
+.certificate-dialog-content .media-window[data-zoomed][data-panning] { cursor: grabbing; }
+.certificate-dialog-content .media-window[data-wide-excerpt] { height: min(40dvh, 21rem); }
+.certificate-dialog-content img { width: 100%; height: 100%; object-fit: contain; }
 .certificate-dialog-content a { width: fit-content; }
+@media (max-width: 700px) {
+  .certificate-dialog {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right))
+      max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+    border: 0;
+    border-radius: 0;
+  }
+  .certificate-dialog-content .media-window { height: 62dvh; }
+}
 
 .capability {
   display: grid;

@@ -77,8 +77,8 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   <link rel="preload" href="/fonts/dm-serif-text.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/source-sans-3.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/icons.css">
-  <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/navigation-motion.css">
+  <link rel="stylesheet" href="/styles.css?v=first-press">
+  <link rel="stylesheet" href="/navigation-motion.css?v=first-press">
   <script src="/navigation-motion.js" blocking="render"></script>
   ${portfolioFeatures ? portfolioAssets : ''}
   ${journey ? journeyAssets : ''}
@@ -86,7 +86,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   ${contact ? '<link rel="stylesheet" href="/contact.css">\n  <script src="/contact.js" defer></script>\n  <script src="/contact-card.js" type="module"></script>' : ''}
   ${data.now ? commandAssets : ''}
   ${home && data.now ? '<script src="/now-editor.js" defer></script>' : ''}
-  <script src="/site.js" type="module"></script>
+  <script src="/site.js?v=first-press" defer></script>
   ${headerAssets}
   ${clarityTag(data, origin, ready)}
   ${google.head}

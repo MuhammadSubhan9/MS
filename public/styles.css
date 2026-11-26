@@ -954,10 +954,12 @@ details p { padding: .2rem 0; }
 }
 
 @media (max-width: 880px) {
-  .header-inner { flex-wrap: wrap; min-height: 64px; gap: 0; }
+  .header-inner { position: relative; flex-wrap: wrap; min-height: 64px; gap: 0; }
   .header-inner .wordmark { min-height: 64px; }
   .menu:not([hidden]) { display: inline-flex; }
   .header-nav { width: 100%; }
+  .js .header-nav { position: absolute; inset: 100% 0 auto; }
+  .js .header-nav[hidden] { pointer-events: none; }
   .nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; margin-bottom: .6rem; }
   .nav a.nav-contact { margin-inline-start: 0; }
 }
@@ -1100,7 +1102,7 @@ details p { padding: .2rem 0; }
     animation: 585ms var(--motion-cut) 65ms both portrait-settle;
   }
   html:not(.page-transitioning, [data-route-arrived]) main:not(.home-page) > :first-child {
-    animation: 350ms var(--motion-enter) both rise-in;
+    animation: 250ms var(--motion-enter) both link-group-appear;
   }
 
 
@@ -1108,7 +1110,7 @@ details p { padding: .2rem 0; }
     transition: opacity 345ms var(--motion-enter), transform 425ms var(--motion-enter);
   }
   .reveal-pending:not(:focus-within):not(:target) { opacity: .42; }
-  .reveal-pending:not(:focus-within):not(:target):not(:has(a[href])) { transform: translateY(9px); }
+  .reveal-pending:not(:focus-within):not(:target):not(:has(a[href], button, summary, input, select, textarea)) { transform: translateY(9px); }
   .scroll-reveal:focus-within { transition: none; }
   .scroll-reveal:not(.reveal-pending):is(figure, .featured-project) .media-window {
     animation: 525ms var(--motion-cut) both image-unmask;
@@ -1118,6 +1120,21 @@ details p { padding: .2rem 0; }
   a:is(:hover, :focus-visible) .arrow-left { translate: -4px 0; }
   a:is(:hover, :focus-visible) .arrow-down { translate: 0 4px; }
   a:is(:hover, :focus-visible) .arrow-external { translate: 3px -3px; }
+
+  @media (max-width: 880px) {
+    .js .header-nav:not([hidden]) { animation: link-group-appear 175ms var(--motion-enter); }
+    @supports (transition-behavior: allow-discrete) {
+      .js .header-nav {
+        opacity: 1;
+        transition: opacity 155ms var(--motion-enter), display 155ms allow-discrete;
+      }
+      .js .header-nav:not([hidden]) { animation: none; }
+      .js .header-nav[hidden] { opacity: 0; }
+      @starting-style {
+        .js .header-nav:not([hidden]) { opacity: .72; }
+      }
+    }
+  }
 
   :is(.nav a, .button-link, .work-event-link) > .site-icon,
   .menu > .toggle-icon {

@@ -188,7 +188,7 @@ export function renderNovelPage({ data, page, origin, ready }) {
   <link rel="preload" href="/fonts/welcome-editorial.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/icons.css">
   <link rel="stylesheet" href="/novel.css">
-  <link rel="stylesheet" href="/navigation-motion.css">
+  <link rel="stylesheet" href="/navigation-motion.css?v=first-press">
   <script src="/navigation-motion.js" blocking="render"></script>
   ${portfolioAssets}
   <script src="/novel.js" defer blocking="render"></script>

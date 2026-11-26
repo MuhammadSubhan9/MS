@@ -1,24 +1,20 @@
-import { revealPanel } from './disclosure-motion.js';
-
 document.documentElement.classList.add('js');
 const button = document.querySelector('.menu');
 const navigation = document.querySelector('.header-nav');
 if (button && navigation) {
   const mobile = matchMedia('(max-width: 880px)');
   const expanded = () => button.getAttribute('aria-expanded') === 'true';
-  function setMenu(open, instant = false) {
+  function setMenu(open) {
     button.setAttribute('aria-expanded', String(open));
-    revealPanel(navigation, open || !mobile.matches, instant);
+    navigation.hidden = !open && mobile.matches;
+    navigation.inert = navigation.hidden;
   }
   function close() {
     if (expanded()) setMenu(false);
   }
   button.hidden = false;
-  setMenu(false, true);
+  setMenu(false);
   button.addEventListener('click', () => setMenu(!expanded()));
-  navigation.addEventListener('focusin', () => {
-    if (navigation.dataset.revealMotion === 'opening') setMenu(true, true);
-  });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && expanded()) {
       close();
@@ -31,7 +27,7 @@ if (button && navigation) {
   document.addEventListener('focusin', event => {
     if (!event.target.closest('.site-header')) close();
   });
-  mobile.addEventListener('change', () => setMenu(false, true));
+  mobile.addEventListener('change', () => setMenu(false));
 }
 document.querySelector('[data-year]').textContent = new Date().getFullYear();
 

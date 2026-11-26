@@ -18,7 +18,11 @@
   html:is([data-route-arriving], [data-route-fallback]) main { animation: route-content-in var(--route-content-duration) var(--motion-enter) both; }
   @keyframes route-content-in { from { opacity: .68; } to { opacity: 1; } }
   .contact-form-panel::before, .contact-feature::before { view-transition-name: var(--route-panel-name, none); }
-  ::view-transition { pointer-events: none; }
+  ::view-transition,
+  ::view-transition-group(*),
+  ::view-transition-image-pair(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { pointer-events: none; }
   ::view-transition-group(*) { animation-duration: var(--route-duration); animation-timing-function: var(--motion-enter); }
   ::view-transition-group(route-event) { z-index: 4; }
   ::view-transition-old(route-event) { animation: route-release 205ms var(--motion-enter) both; }
@@ -38,18 +42,16 @@
     animation: route-destination 210ms var(--motion-enter) both;
   }
   @keyframes dialog-arrive {
-    from { opacity: 0; transform: translateY(9px) scale(.985); }
-    to { opacity: 1; transform: none; }
+    from { opacity: .7; }
+    to { opacity: 1; }
   }
   @supports (transition-behavior: allow-discrete) and (overlay: auto) {
     :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette) {
       opacity: 0;
-      transform: translateY(6px) scale(.99);
-      transition: opacity 150ms var(--motion-exit), transform 150ms var(--motion-exit), display 150ms allow-discrete, overlay 150ms allow-discrete;
+      transition: opacity 150ms var(--motion-exit), display 150ms allow-discrete, overlay 150ms allow-discrete;
     }
     :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette)[open] {
       opacity: 1;
-      transform: none;
       animation: none;
       transition-duration: 255ms;
       transition-timing-function: var(--motion-enter);
@@ -70,8 +72,7 @@
     }
     @starting-style {
       :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette)[open] {
-        opacity: 0;
-        transform: translateY(9px) scale(.985);
+        opacity: .7;
       }
       :is(.contact-card-dialog, .certificate-dialog, .section-link-dialog, .command-palette)[open]::backdrop { opacity: 0; }
     }

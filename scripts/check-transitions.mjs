@@ -131,14 +131,33 @@ try {
   await chrome.navigate(origin + '/about/', 390);
   const menuTop = await chrome.evaluate("document.querySelector('.menu').getBoundingClientRect().top");
   await press('.menu', true);
-  await waitFor(() => chrome.evaluate("document.querySelector('.header-nav').getBoundingClientRect().height > 15"), 'mobile menu starts to expand');
+  assert.equal(await chrome.evaluate("document.querySelector('.menu').getAttribute('aria-expanded')"), 'true');
   await press('.menu', true);
   assert.equal(await chrome.evaluate("document.querySelector('.menu').getAttribute('aria-expanded')"), 'false');
   await press('.menu', true);
-  await waitFor(() => chrome.evaluate("!document.querySelector('.header-nav').hidden && !document.querySelector('.header-nav').dataset.revealMotion"), 'menu reverses and settles open');
+  assert.equal(await chrome.evaluate("document.querySelector('.header-nav').hidden"), false, 'a second tap reopens the menu immediately');
   assert.equal(await chrome.evaluate("document.querySelector('.menu').getBoundingClientRect().top"), menuTop, 'menu control stays under the same touch target');
   await press('.menu', true);
   await waitFor(() => chrome.evaluate("document.querySelector('.header-nav').hidden"), 'menu settles closed');
+
+  await chrome.navigate(origin + '/work/', 466);
+  const headerBottom = await chrome.evaluate("document.querySelector('.site-header').getBoundingClientRect().bottom");
+  await press('.menu');
+  const contactIsClickable = await chrome.evaluate(`(() => {
+    const menu = document.querySelector('.header-nav');
+    const link = menu.querySelector('a[href="/contact/"]');
+    const bounds = link.getBoundingClientRect();
+    // Freeze the opening frame so this tests a quick press even on a slow runner.
+    for (const animation of menu.getAnimations()) {
+      animation.pause();
+      animation.currentTime = 0;
+    }
+    return document.elementFromPoint(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2)?.closest('a') === link;
+  })()`);
+  assert.equal(contactIsClickable, true, 'the bottom link is clickable in the first frame of the menu');
+  assert.equal(await chrome.evaluate("document.querySelector('.site-header').getBoundingClientRect().bottom"), headerBottom, 'the menu does not move the page');
+  await press('.nav a[href="/contact/"]');
+  await waitFor(() => chrome.evaluate("location.pathname === '/contact/' && document.readyState === 'complete'"), 'first mouse press on the bottom menu link');
 
   await chrome.navigate(origin + '/contact/', 390);
   await chrome.evaluate("document.querySelector('.contact-save').scrollIntoView({block:'center',behavior:'instant'})");

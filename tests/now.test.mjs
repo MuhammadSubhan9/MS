@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { DatabaseSync } from 'node:sqlite';
 import { onRequestPost, onRequestPut } from '../functions/api/now.js';
 import { onRequestGet } from '../functions/index.js';
-import { renderNowContent } from '../scripts/now.mjs';
+import { renderNowContent, renderNowPreview } from '../scripts/now.mjs';
 
 const schema = await readFile(new URL('../scripts/now-schema.sql', import.meta.url), 'utf8');
 const origin = 'https://portfolio.example';
@@ -45,7 +45,9 @@ test('Now requires the shared code and rejects stale writes without replacing ne
     const newText = 'Writing update.\n\n<treat this as text>';
     const saved = await put({ revision: 1, text: newText });
     assert.equal(saved.status, 200);
-    assert.deepEqual((await saved.json()).paragraphs, ['Writing update.', '<treat this as text>']);
+    const published = await saved.json();
+    assert.deepEqual(published.paragraphs, ['Writing update.', '<treat this as text>']);
+    assert.equal(published.preview, 'Writing update.');
     assert.equal((await put({ revision: 1, text: 'Stale update.' })).status, 409);
 
     function tool(command, { code, cookie, from = origin } = {}) {
@@ -83,7 +85,8 @@ test('Now requires the shared code and rejects stale writes without replacing ne
     assert.match((await tool('lock', { cookie })).headers.get('Set-Cookie'), /^__Host-portfolio-tools=; Path=\/; Max-Age=0;/);
 
     const request = new Request(origin + '/', { headers: { 'If-None-Match': 'old-asset-tag' } });
-    const html = renderNowContent({ date: '2026-11-17', text: 'Static fallback.' });
+    const snapshot = { date: '2026-11-17', text: 'Static fallback.' };
+    const html = renderNowPreview(snapshot) + renderNowContent(snapshot);
     const page = await onRequestGet({
       request,
       env,
@@ -96,6 +99,7 @@ test('Now requires the shared code and rejects stale writes without replacing ne
     assert.equal(page.headers.get('ETag'), null);
     const rendered = await page.text();
     assert.match(rendered, /data-now-revision="2"/);
+    assert.match(rendered, /data-now-preview>Writing update\.<\/span>/);
     assert.match(rendered, /&lt;treat this as text&gt;/);
     assert.doesNotMatch(rendered, /Static fallback|Stale update/);
 

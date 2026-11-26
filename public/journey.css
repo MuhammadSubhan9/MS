@@ -60,112 +60,97 @@
   font-size: clamp(1.1rem, 1.9vw, 1.36rem);
   text-wrap: balance;
 }
-.journey-overview {
-  min-width: 0;
-  padding: .32rem;
-  border: 1px solid #465043;
-  background: linear-gradient(108deg, #30382e, #282d25 67%, #262c25);
-  box-shadow: 0 1.2rem 2.6rem -1.9rem #333b2b8c;
-  color: #f8f0df;
-}
 .journey-overview > ol {
-  display: grid;
-  grid-template-columns: repeat(var(--journey-year-count), minmax(5.25rem, 1fr));
-  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem .55rem;
+  margin: .6rem 0 1rem;
   padding: 0;
-  border: 1px solid #a0ad9459;
-  overflow-x: auto;
   list-style: none;
 }
-.journey-overview li { min-width: 0; }
-.journey-overview li + li { border-inline-start: 1px solid #a0ad9459; }
-.journey-overview-year {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: start;
-  gap: .55rem .65rem;
-  padding: clamp(.76rem, 1.65vw, 1.23rem) clamp(.8rem, 2vw, 1.55rem) clamp(.84rem, 1.65vw, 1.22rem);
-  color: inherit;
+.journey-overview a {
+  min-height: 2.3rem;
+  padding: .25rem .65rem;
+  border: 1px solid var(--journey-rule);
+  color: var(--journey-accent);
+  font-weight: 650;
   text-decoration: none;
 }
-.journey-overview-year:is(:hover, :focus-visible) { background: #e7efd013; }
-.journey-overview-year:focus-visible { outline: 2px solid #d2deba; outline-offset: -2px; }
-.journey-overview-label {
+.journey-overview a:hover { background: #e3e7da; }
+
+.journey-history-layout:has(.journey-calendar:not([hidden])) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(8rem, 16vw, 12rem);
+  align-items: start;
+  gap: clamp(.85rem, 3vw, 2.35rem);
+}
+.journey-calendar {
+  position: sticky;
+  z-index: 2;
+  inset-block-start: calc(var(--blended-header-height) + 1rem);
+  order: 1;
+  margin-block-start: .8rem;
+  padding: .95rem;
+  border: 1px solid #565f50;
+  background: linear-gradient(125deg, #39443a, #282f28);
+  color: #f5efe3;
+}
+.journey-calendar-date {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  flex-wrap: wrap;
-  column-gap: .7rem;
-}
-.journey-overview-date {
-  font: 400 clamp(1.65rem, 3.3vw, 2.65rem)/1.04 var(--serif);
+  gap: .5rem;
   font-variant-numeric: lining-nums tabular-nums;
-  letter-spacing: -.015em;
-  white-space: nowrap;
 }
-.journey-overview-count {
-  color: #ccd7bc;
-  font-size: .9rem;
-  white-space: nowrap;
-}
-.journey-overview-arrow {
-  grid-area: 1 / 2 / 2 / 3;
-  align-self: center;
-  color: #d3deba;
-  transition: translate 220ms ease-out;
-}
-.journey-overview-year:hover .journey-overview-arrow { translate: 0 .18rem; }
-.journey-overview-plot {
-  position: relative;
-  grid-column: 1 / -1;
-  height: 2.35rem;
-  overflow: clip;
-  border-block-end: 1px solid #a0ad948c;
-}
-.journey-overview-months {
-  display: flex;
-  grid-column: 1 / -1;
-  justify-content: space-between;
-  color: #bdc9ad;
-  font-size: .75rem;
+[data-calendar-display-year] { font: 400 clamp(1.65rem, 3vw, 2.5rem)/1 var(--serif); }
+[data-calendar-display-month] { color: #d5dfbe; font-size: .88rem; }
+.journey-calendar-scale {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .25rem;
+  margin-block-start: .75rem;
+  color: #d5dfbe;
+  font-size: .72rem;
   line-height: 1;
 }
-.journey-overview-plot::after {
-  position: absolute;
-  inset: auto 0 0;
-  height: .25rem;
-  background: repeating-linear-gradient(90deg, #a0ad9465 0 1px, transparent 1px calc(100% / 12));
-  border-inline-end: 1px solid #a0ad9465;
-  content: '';
+.journey-calendar-track {
+  position: relative;
+  grid-column: 1 / -1;
+  height: .45rem;
+  border-block-end: 1px solid #b8c9a47a;
+  background: repeating-linear-gradient(90deg, #b8c9a47a 0 1px, transparent 1px calc(100% / 12));
+  border-inline-end: 1px solid #b8c9a47a;
 }
-.journey-month-marker {
+.journey-calendar[data-calendar-dated] .journey-calendar-track::after {
   position: absolute;
-  isolation: isolate;
-  inset-block-end: 0;
-  inset-inline-start: var(--position);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: .16rem;
-  padding-block-end: .45rem;
-  translate: -50% 0;
-  transform-origin: bottom;
-}
-.journey-month-marker::before {
-  position: absolute;
-  z-index: -1;
-  inset: .17rem auto 0 50%;
-  width: 1px;
-  background: #b5c3a572;
-  content: '';
-}
-.journey-month-marker > span {
-  width: .39rem;
-  height: .39rem;
+  inset-inline-start: var(--calendar-position);
+  inset-block-end: -.16rem;
+  width: .37rem;
+  aspect-ratio: 1;
   border-radius: 50%;
-  background: #c6d3af;
+  background: #efdeb0;
+  translate: -50% 0;
+  content: '';
 }
-.journey-overview-year:hover .journey-month-marker > span { background: #eee5c6; }
+@media (prefers-reduced-motion: no-preference) {
+  .journey-calendar-track::after { transition: inset-inline-start 220ms ease-out; }
+}
+@media (max-width: 760px) {
+  .journey-history-layout:has(.journey-calendar:not([hidden])) { display: block; }
+  .journey-calendar:not([hidden]) {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: .9rem;
+    inset-block-start: var(--blended-header-height);
+    margin: 0 0 .35rem;
+    padding: .47rem .65rem;
+  }
+  .journey-calendar-date { min-width: 6.15rem; }
+  [data-calendar-display-year] { font-size: 1.45rem; }
+  .journey-calendar-scale { margin-block-start: 0; }
+  :is(.journey-year, .journey-milestone) { scroll-margin-top: 1.1rem; }
+}
 .journey-jumps {
   display: flex;
   align-items: center;
@@ -522,11 +507,6 @@
 
 @media (prefers-reduced-motion: no-preference) {
   html:not(.page-transitioning) .journey-main > .journey-page { animation: none; }
-  html:not(.page-transitioning) .journey-month-marker {
-    animation: journey-marker-enter 540ms cubic-bezier(.22,.7,.22,1) 80ms both;
-  }
-  html:not(.page-transitioning) .journey-overview li:nth-child(2) .journey-month-marker { animation-delay: 145ms; }
-  html:not(.page-transitioning) .journey-overview li:nth-child(3) .journey-month-marker { animation-delay: 210ms; }
   .journey-timeline[data-journey-motion] .journey-card {
     transition: opacity 390ms ease-out, transform 530ms cubic-bezier(.2,.72,.2,1);
   }
@@ -574,7 +554,6 @@
   .journey-card[data-disclosure-state="closing"] .journey-brief-text {
     animation: journey-brief-exit 260ms ease-in both;
   }
-  @keyframes journey-marker-enter { from { opacity: 0; transform: translateY(.26rem) scaleY(.8); } to { opacity: 1; transform: none; } }
   @keyframes journey-rule-draw { from { transform: scaleX(.04); } to { transform: scaleX(1); } }
   @keyframes journey-copy-enter { from { opacity: 0; transform: translateY(.5rem); } to { opacity: 1; transform: none; } }
   @keyframes journey-mark-enter {
@@ -614,14 +593,6 @@
   .journey-switch { grid-area: 2 / 2 / 4 / 3; width: 2rem; height: 2rem; }
 }
 @media (max-width: 470px) {
-  .journey-overview > ol { grid-template-columns: repeat(var(--journey-year-count), minmax(4.7rem, 1fr)); }
-  .journey-overview-year { gap: .4rem .18rem; padding: .65rem .42rem .7rem; }
-  .journey-overview-label { display: contents; }
-  .journey-overview-date { font-size: clamp(1.35rem, 6.9vw, 1.65rem); }
-  .journey-overview-count { grid-column: 1 / -1; font-size: .75rem; }
-  .journey-overview-arrow { width: .76em; height: .76em; }
-  .journey-overview-plot { height: 1.7rem; }
-  .journey-overview-months { font-size: .68rem; }
   .journey-jumps { column-gap: .12rem; }
   .journey-jumps a { padding-inline: .26rem; font-size: .86rem; }
   .journey-jumps a:first-child { padding-inline: .46rem; }
@@ -638,7 +609,4 @@
     text-align: center;
   }
   .journey-jumps a .site-icon { display: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .journey-overview-arrow { transition: none; }
 }

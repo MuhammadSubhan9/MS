@@ -119,6 +119,15 @@ export function capabilitiesMatrix(capabilities = [], records) {
   }).join('');
 }
 
+const journeyMonths = 'January February March April May June July August September October November December'.split(' ');
+const journeyMonthPattern = new RegExp(`\\b(${journeyMonths.join('|')})\\b`);
+
+function journeyMonth(date) {
+  const isoMonth = Number(date.match(/^\d{4}-(\d{2})(?:-\d{2})?$/)?.[1]);
+  if (isoMonth >= 1 && isoMonth <= 12) return isoMonth;
+  return journeyMonths.indexOf(date.match(journeyMonthPattern)?.[1]) + 1;
+}
+
 function journeyMilestone({ record, date, logo, preview, icon: milestoneIcon }) {
   const id = `milestone-${record.id}`;
   const mark = logo || record.eventLogo;
@@ -127,7 +136,8 @@ function journeyMilestone({ record, date, logo, preview, icon: milestoneIcon }) 
   const topic = topics.find(([id]) => id === record.evidence?.topics?.[0]);
   const theme = topic?.[0] || record.type;
   const symbol = milestoneIcon || topic?.[2] || (record.type === 'education' ? 'graduation-cap' : 'notebook');
-  return `<li class="journey-milestone" id="${id}" data-topic="${theme}" data-share-section tabindex="-1">
+  const month = journeyMonth(date);
+  return `<li class="journey-milestone" id="${id}" data-topic="${theme}"${month ? ` data-calendar-month="${month}"` : ''} data-share-section tabindex="-1">
     <span class="journey-point" aria-hidden="true"></span>
     <details class="journey-card" data-open-for-section-link>
       <summary>
@@ -161,7 +171,7 @@ function journeyTimeline(milestones, hasCurrentWork) {
     <div class="journey-rail" aria-hidden="true"><span></span></div>
     <ol class="journey-list">${milestones.map(entry => {
       const { year } = entry;
-      const divider = year && !displayedYears.has(year) ? `<li class="journey-year" id="journey-year-${year}">
+      const divider = year && !displayedYears.has(year) ? `<li class="journey-year" id="journey-year-${year}" data-calendar-year="${year}">
         <h3>${year}</h3><span class="journey-point" aria-hidden="true"></span>
       </li>` : '';
       displayedYears.add(year);
@@ -173,33 +183,10 @@ function journeyTimeline(milestones, hasCurrentWork) {
   </div>`;
 }
 
-function journeyYearOverview(years, milestones) {
+function journeyYearOverview(years) {
   if (!years.length) return '';
-  const months = 'January February March April May June July August September October November December'.split(' ');
   return `<nav class="journey-overview" aria-label="Milestones by year">
-    <ol style="--journey-year-count: ${years.length}">
-      ${years.map(year => {
-        const entries = milestones.filter(entry => entry.year === year);
-        const counts = Array(12).fill(0);
-        for (const { date } of entries) {
-          const isoMonth = date.match(/^\d{4}-(\d{2})(?:-\d{2})?$/)?.[1];
-          const month = isoMonth ? Number(isoMonth) - 1 : months.findIndex(monthName => date.includes(monthName));
-          if (month >= 0 && month < counts.length) counts[month]++;
-        }
-        const markers = counts.map((count, month) => count ? `<span class="journey-month-marker" style="--position: ${(month + .5) / 12 * 100}%">
-          ${'<span></span>'.repeat(count)}
-        </span>` : '').join('');
-        return `<li><a class="journey-overview-year" href="#journey-year-${year}">
-          <span class="journey-overview-label">
-            <span class="journey-overview-date">${year}</span>
-            <span class="journey-overview-count">${entries.length} ${entries.length === 1 ? 'milestone' : 'milestones'}</span>
-          </span>
-          <span class="journey-overview-plot" aria-hidden="true">${markers}</span>
-          <span class="journey-overview-months" aria-hidden="true"><span>Jan</span><span>Dec</span></span>
-          ${icon('arrow-down', 'journey-overview-arrow')}
-        </a></li>`;
-      }).join('')}
-    </ol>
+    <ol>${years.map(year => `<li>${action(`#journey-year-${year}`, year)}</li>`).join('')}</ol>
   </nav>`;
 }
 
@@ -230,7 +217,6 @@ export function journeyPage(data, records) {
           <h1>Journey</h1>
           <p class="lead">From my first aviation courses to my A&nbsp;Levels and the novel I’m writing now.</p>
         </div>
-        ${journeyYearOverview(years, milestones)}
         <nav class="journey-jumps" aria-label="On this page">
           ${sections.map(([id, title]) => `<a href="#${id}">${icon(sectionIcons[id])}<span>${escape(title)}</span>${icon('arrow-down', 'journey-jump-arrow')}</a>`).join('')}
         </nav>
@@ -240,7 +226,20 @@ export function journeyPage(data, records) {
       <div class="journey-history-heading">
         ${sharedHeading('milestones', 'Milestones', { share: true })}
       </div>
-      ${journeyTimeline(milestones, current.length > 0)}
+      ${journeyYearOverview(years)}
+      <div class="journey-history-layout">
+        ${years.length ? `<div class="journey-calendar" data-journey-calendar hidden>
+          <div class="journey-calendar-date">
+            <span data-calendar-display-year>${years[0]}</span>
+            <span data-calendar-display-month></span>
+          </div>
+          <div class="journey-calendar-scale" aria-hidden="true">
+            <span class="journey-calendar-track"></span>
+            <span>Jan</span><span>Dec</span>
+          </div>
+        </div>` : ''}
+        ${journeyTimeline(milestones, current.length > 0)}
+      </div>
     </section>` : ''}
     ${current.length || data.futureDirection ? `<div class="journey-next" data-header-surface>
       <div class="container journey-next-inner${current.length && data.futureDirection ? ' journey-next-split' : ''}">

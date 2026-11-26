@@ -10,6 +10,7 @@ const heading = form.querySelector('#now-editor-title');
 const preview = form.querySelector('.now-draft-preview');
 const copy = snapshot?.querySelector('.now-copy');
 const date = snapshot?.querySelector('time');
+const heroPreview = document.querySelector('[data-now-preview]');
 const draftKey = () => 'portfolio-now-draft-' + snapshot.dataset.nowRevision;
 
 function openEditor() {
@@ -114,6 +115,7 @@ form.addEventListener('submit', async event => {
     snapshot.dataset.nowRevision = result.revision;
     date.dateTime = result.date;
     date.textContent = result.dateLabel;
+    if (heroPreview) heroPreview.textContent = result.preview ?? result.paragraphs[0];
     copy.replaceChildren(...result.paragraphs.map(value => {
       const paragraph = document.createElement('p');
       paragraph.textContent = value;

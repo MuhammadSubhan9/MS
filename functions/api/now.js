@@ -1,7 +1,7 @@
 import { logStorageFailure } from '../../scripts/storage-errors.mjs';
 import { limitAction, readSubscriptionBody } from '../../scripts/subscriptions.mjs';
 import { formatDate } from '../../scripts/components.mjs';
-import { nowLimit, nowParagraphs } from '../../scripts/now.mjs';
+import { nowLimit, nowParagraphs, nowPreview } from '../../scripts/now.mjs';
 
 const encoder = new TextEncoder();
 const publishingCodePattern = /^[!-~]{8,128}$/;
@@ -150,7 +150,7 @@ export async function onRequestPut({ request, env }) {
     if (result.meta.changes !== 1) {
       return json({ error: 'A newer update is live. Copy your draft, reload the page, then try again.' }, 409);
     }
-    return json({ date, dateLabel: formatDate(date), paragraphs: nowParagraphs(text), revision: revision + 1 });
+    return json({ date, dateLabel: formatDate(date), paragraphs: nowParagraphs(text), preview: nowPreview(text), revision: revision + 1 });
   } catch (error) {
     logStorageFailure('Now database write failed', error, request);
     return json({ error: 'Publishing is unavailable. Your draft is still here.' }, 503);

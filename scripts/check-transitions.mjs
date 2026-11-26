@@ -99,7 +99,20 @@ try {
     await clickRoute('.nav a[href="/about/"]', '/about/', 'fade', null, width);
     await clickRoute('.footer-contact', '/contact/', 'contact', 'route-contact', width);
     await clickRoute('.footer-link[href="/work/"]', '/work/', 'fade', null, width);
-    await clickRoute('.work-event-link[href="/work/money2020-middle-east/"]', '/work/money2020-middle-east/', 'event', 'route-event', width);
+    const eventCard = '[data-event-toggle="spread-money2020-middle-east"]';
+    await chrome.evaluate(`document.querySelector(${JSON.stringify(eventCard)}).scrollIntoView({block:'center',behavior:'instant'})`);
+    await press(eventCard, width <= 390);
+    assert.equal(await chrome.evaluate("location.pathname"), '/work/', 'event opens on the same page');
+    assert.equal(await chrome.evaluate("document.querySelector('#spread-money2020-middle-east').hidden"), false, 'first press opens the spread');
+    if (width > 760) {
+      assert.ok(await chrome.evaluate(`(() => {
+        const spread = document.querySelector('#spread-money2020-middle-east');
+        const row = spread.parentElement;
+        const cards = [...row.querySelectorAll('.work-event')].map(card => card.getBoundingClientRect());
+        return cards[0].top === cards[1].top && spread.getBoundingClientRect().top >= cards[1].bottom;
+      })()`), 'desktop spread opens underneath both cards');
+    }
+    await clickRoute('#spread-money2020-middle-east .button-link', '/work/money2020-middle-east/', 'event', 'route-event', width);
     await chrome.evaluate('history.back()');
     await waitFor(() => chrome.evaluate("location.pathname==='/work/' && !document.documentElement.dataset.routeMotion"), 'Back to Work');
     await clickRoute('.wordmark', '/', 'fade', null, width);

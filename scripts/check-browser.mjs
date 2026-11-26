@@ -140,6 +140,7 @@ try {
   assert.equal(await chrome.evaluate("document.querySelector('#milestone-unesco-ai-forum').hasAttribute('data-reached')"), false);
   await chrome.evaluate("document.querySelector('#milestone-unesco-ai-forum').scrollIntoView({ block: 'center', behavior: 'instant' })");
   await waitFor(() => chrome.evaluate("document.querySelector('#milestone-unesco-ai-forum').hasAttribute('data-reached')"), 'newer milestone revealed by scrolling');
+  await waitFor(() => chrome.evaluate("document.querySelector('[data-calendar-display-year]').textContent === '2026' && document.querySelector('[data-calendar-display-month]').textContent.startsWith('Sep')"), 'Journey scroll updates the year and month');
   assert.ok(await chrome.evaluate("Number(document.querySelector('[data-journey-timeline]').style.getPropertyValue('--journey-progress')) > .75"));
   assert.equal(await chrome.evaluate("getComputedStyle(document.querySelector('.site-header'), '::after').animationName"), 'none');
   const motion = await chrome.evaluate(`
@@ -244,6 +245,20 @@ try {
   await chrome.evaluate("localStorage.setItem('portfolio-tools-expires', String(Date.now() - 1000))");
   await commandShortcut();
   await waitFor(() => chrome.evaluate("location.hash === '#edit' && document.querySelector('.now-editor')?.open"), 'returning to the unlock prompt after expiry');
+
+  await chrome.navigate(origin + '/?publish-preview=1#edit', 390);
+  await chrome.evaluate(`
+    const nowDialog = document.querySelector('.now-editor');
+    window.fetch = async () => Response.json({
+      date: '2026-11-26', dateLabel: '26 November 2026', revision: 3,
+      paragraphs: ['A new first line. More detail follows.', 'Another paragraph.'],
+      preview: 'A new first line.',
+    });
+    nowDialog.querySelector('#now-editor-text').value = 'A new first line. More detail follows.';
+    nowDialog.querySelector('#now-editor-code').value = 'browser-test-code-only';
+    nowDialog.querySelector('form').requestSubmit();
+  `);
+  await waitFor(() => chrome.evaluate("document.querySelector('[data-now-preview]').textContent === 'A new first line.'"), 'published Now note refreshes the homepage intro');
 
   assert.deepEqual(errors, []);
   console.log('Browser checks passed for mobile layout, the contact form and card, draft recovery, the reader, evidence, credentials, sharing, glossary, Journey, site updates and owner commands.');

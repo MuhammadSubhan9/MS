@@ -4,7 +4,7 @@ import {
 } from './components.mjs';
 import { findNovel, novelContent, novelPath, oldNovelPath } from './novel.mjs';
 import { contactPage } from './contact.mjs';
-import { nowSection } from './now.mjs';
+import { nowSection, parseNow, renderNowPreview } from './now.mjs';
 import { capabilitiesMatrix, evidenceMap, journeyPage, portfolioRecords, siteUpdateBrief } from './portfolio-features.mjs';
 
 function homePage(data, { hasAbout, hasContact, selected }) {
@@ -65,7 +65,8 @@ function homePage(data, { hasAbout, hasContact, selected }) {
       })}
     </div>
   </section>` : '';
-  const now = data.now ? nowSection(data.now) : '';
+  const note = data.now ? parseNow(data.now) : null;
+  const now = note ? nowSection(note) : '';
   const nextSection = profile ? '#background' : now ? '#now' : work ? '#selected-work' : writingFeature ? '#writing' : '';
   const contactFeature = hasContact ? `<section class="home-section home-contact container" aria-labelledby="home-contact-title">
     <div data-reveal>
@@ -92,6 +93,7 @@ function homePage(data, { hasAbout, hasContact, selected }) {
           <h1 id="home-title">${nameLines.map(line => `<span class="name-line"><span>${escape(line)}</span></span>`).join(' ')}</h1>
         </div>
         <div class="lead">${paragraphs(data.introduction)}</div>
+        ${note ? renderNowPreview(note) : ''}
         ${actions ? `<nav class="text-actions" aria-label="Explore the portfolio">${actions}</nav>` : ''}
       </div>
       ${portraitMarkup}
@@ -137,7 +139,21 @@ function languageList(languages = [], scoresUpdated) {
 }
 
 function eventMark(item) {
-  return item.eventLogo ? `<div class="work-event-mark" aria-hidden="true">${image(item.eventLogo, { eager: true })}</div>` : '';
+  return item.eventLogo ? `<div class="work-event-mark" aria-hidden="true">${image(item.eventLogo, { sizes: '(max-width: 700px) 100px, 175px' })}</div>` : '';
+}
+
+function eventSpread(item, photo = item.image) {
+  const destination = safeLink(`/work/${item.slug}/`);
+  const artwork = photo || item.eventLogo;
+  const summary = item.body?.[0] || item.sections?.[0]?.paragraphs?.[0] || item.description;
+  return `<section class="work-event-spread" id="spread-${item.slug}" data-event="${item.slug}" data-motion-route="${destination}" aria-label="${escape(item.title)}" hidden>
+    ${artwork ? `<div class="work-event-artwork${photo ? '' : ' work-event-mark'}">${image(artwork, { sizes: '(max-width: 700px) 90vw, 440px' })}</div>` : ''}
+    <div class="work-event-summary">
+      ${photo && item.eventLogo ? eventMark(item) : ''}
+      ${paragraphs([summary], glossary)}
+      ${action(destination, 'Read full write-up', 'button-link', `about ${item.title}`)}
+    </div>
+  </section>`;
 }
 
 function workEvent(item) {
@@ -146,16 +162,16 @@ function workEvent(item) {
   const destination = safeLink(`/work/${item.slug}/`);
   const metadata = [escape(item.category), publicationDate(item.date)].filter(Boolean).join(' · ');
   return `<article class="work-event" data-event="${escape(item.slug)}" data-motion-route="${destination}">
-    <a class="work-event-link" href="${destination}" aria-labelledby="${titleId}">
+    <a class="work-event-link" href="${destination}" data-event-toggle="spread-${item.slug}" aria-labelledby="${titleId} ${titleId}-action">
       <div class="work-event-copy">
         ${metadata ? `<p class="meta">${metadata}</p>` : ''}
         <h3 id="${titleId}">${escape(item.title)}</h3>
         <p class="work-event-description">${escape(item.description)}</p>
-        <span class="work-event-action">Read event summary${icon('arrow-right', 'arrow')}</span>
+        <span class="work-event-action"><span id="${titleId}-action" data-event-toggle-label>Read event summary</span>${icon('caret-down', 'work-event-caret')}</span>
       </div>
       ${eventMark(item)}
     </a>
-  </article>`;
+  </article>${eventSpread(item)}`;
 }
 
 function workIndex(items, label, introduction, evidence) {
@@ -173,6 +189,11 @@ function workIndex(items, label, introduction, evidence) {
     ...(evidence ? [['evidence', 'Evidence map']] : []),
     ...sections,
   ];
+  const featureSpreads = feature.kind === 'event' && hasDetail(feature);
+  const eventRows = [];
+  for (let index = 0; index < events.length; index += 2) {
+    eventRows.push(`<div class="work-event-row">${events.slice(index, index + 2).map(workEvent).join('')}</div>`);
+  }
 
   return `<div class="work-page">
     <header class="work-heading">
@@ -183,13 +204,14 @@ function workIndex(items, label, introduction, evidence) {
       ${jumps.length ? `<nav class="work-jumps" aria-label="On this page">${jumps.map(([id, title]) =>
         action('#' + id, title, 'action-link', '', sectionIcons[id])).join('')}</nav>` : ''}
     </header>
-    <div class="work-lead" data-header-surface${feature.slug === 'unesco-ai-forum' ? ' id="event-unesco"' : ''}>
-      ${projectEntry(feature, { featured: true, eagerImage: true, actionLabel: 'Read more' })}
+    <div class="work-lead" data-header-surface${feature.slug === 'unesco-ai-forum' ? ' id="event-unesco"' : ''}${featureSpreads ? ` data-feature-spread="spread-${feature.slug}"` : ''}>
+      ${projectEntry(feature, { featured: true, eagerImage: true, actionLabel: featureSpreads ? 'Read event summary' : 'Read more' })}
+      ${featureSpreads ? eventSpread(feature, feature.homeImage ?? feature.image) : ''}
     </div>
     ${evidence}
     ${sections.map(([id, title, entries]) => `<section class="work-section work-${id}" id="${id}" aria-labelledby="work-${id}-title" tabindex="-1" data-share-section data-header-surface>
       ${sharedHeading(id, title, { headingId: `work-${id}-title`, share: id === 'events' })}
-      <div class="work-entries">${entries.map(item => id === 'events' ? workEvent(item) : projectEntry(item, {
+      <div class="work-entries">${id === 'events' ? eventRows.join('') : entries.map(item => projectEntry(item, {
         heading: 'h3', featured: Boolean(item.image), showSummary: true, actionLabel: 'Read more',
       })).join('')}</div>
     </section>`).join('')}

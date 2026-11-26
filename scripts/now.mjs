@@ -3,9 +3,30 @@ import { escape, formatDate, icon, paragraphs } from './components.mjs';
 export const nowLimit = 4000;
 export const nowStart = '<!-- now:content -->';
 export const nowEnd = '<!-- /now:content -->';
+export const nowPreviewStart = '<!-- now:preview -->';
+export const nowPreviewEnd = '<!-- /now:preview -->';
 
 export function nowParagraphs(text) {
   return text.trim().replaceAll('\r\n', '\n').split(/\n[^\S\n]*\n/).map(part => part.trim()).filter(Boolean);
+}
+
+export function nowPreview(text) {
+  const paragraph = nowParagraphs(text)[0]?.replace(/\s+/g, ' ') ?? '';
+  const first = new Intl.Segmenter('en-GB', { granularity: 'sentence' })
+    .segment(paragraph).containing(0)?.segment.trim() ?? '';
+  const characters = Array.from(first);
+  if (characters.length <= 122) return first;
+  const excerpt = characters.slice(0, 121).join('');
+  const boundary = excerpt.lastIndexOf(' ');
+  return (boundary > 0 ? excerpt.slice(0, boundary) : excerpt) + '…';
+}
+
+export function renderNowPreview({ text }) {
+  return `${nowPreviewStart}<p class="home-now-note"><a href="#now">
+    <span class="home-now-note-label">Now</span>
+    <span data-now-preview>${escape(nowPreview(text))}</span>
+    ${icon('arrow-down', 'arrow-down')}
+  </a></p>${nowPreviewEnd}`;
 }
 
 export function renderNowContent({ date, text, revision = 0 }) {
@@ -22,13 +43,17 @@ export function renderNowContent({ date, text, revision = 0 }) {
     ${nowEnd}`;
 }
 
-export function nowSection(content) {
+export function parseNow(content) {
   const [date, ...lines] = content.trim().split(/\r?\n/);
   const text = lines.join('\n').trim();
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !text.length || text.length > nowLimit) {
     throw new Error(`Start content/now.txt with a YYYY-MM-DD date and up to ${nowLimit} characters of text.`);
   }
-  return `${renderNowContent({ date, text })}
+  return { date, text };
+}
+
+export function nowSection(note) {
+  return `${renderNowContent(note)}
     <dialog class="command-palette now-editor" aria-labelledby="now-editor-title" data-clarity-mask="true">
       <form class="command-form" data-now-form>
         <div class="command-heading">

@@ -49,6 +49,42 @@
     filters.hidden = false;
   }
 
+  const featuredEvent = document.querySelector('[data-feature-spread]');
+  const featuredToggle = featuredEvent?.querySelector('.project-action');
+  if (featuredToggle) featuredToggle.dataset.eventToggle = featuredEvent.dataset.featureSpread;
+  let activeEvent;
+  for (const toggle of document.querySelectorAll('[data-event-toggle]')) {
+    const spread = document.getElementById(toggle.dataset.eventToggle);
+    const label = toggle.querySelector('[data-event-toggle-label]') ?? toggle.querySelector('.link-label');
+    if (!spread || !label) continue;
+    const closedLabel = label.textContent;
+    toggle.setAttribute('role', 'button');
+    toggle.setAttribute('aria-controls', spread.id);
+    toggle.setAttribute('aria-expanded', 'false');
+
+    function setOpen(open) {
+      toggle.setAttribute('aria-expanded', String(open));
+      label.textContent = open ? 'Close summary' : closedLabel;
+      spread.hidden = !open;
+    }
+    toggle.addEventListener('click', event => {
+      if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
+      event.preventDefault();
+      const open = activeEvent !== setOpen;
+      const top = toggle.getBoundingClientRect().top;
+      activeEvent?.(false);
+      if (open) setOpen(true);
+      activeEvent = open ? setOpen : undefined;
+      const shift = toggle.getBoundingClientRect().top - top;
+      if (shift) window.scrollBy({ top: shift, behavior: 'instant' });
+    });
+    toggle.addEventListener('keydown', event => {
+      if (event.key !== ' ') return;
+      event.preventDefault();
+      if (!event.repeat) toggle.click();
+    });
+  }
+
   const copyDialog = document.querySelector('.section-link-dialog');
   const copyAddress = copyDialog?.querySelector('input');
   const announcer = document.createElement('p');

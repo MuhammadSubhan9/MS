@@ -1,5 +1,13 @@
 import { logStorageFailure } from '../scripts/storage-errors.mjs';
-import { nowEnd, nowStart, renderNowContent } from '../scripts/now.mjs';
+import { nowEnd, nowStart, nowPreviewEnd, nowPreviewStart, renderNowContent, renderNowPreview } from '../scripts/now.mjs';
+
+function replaceNowMarkup(html, start, end, replacement) {
+  const from = html.indexOf(start);
+  const to = html.indexOf(end, from + start.length);
+  return from >= 0 && to > from
+    ? html.slice(0, from) + replacement + html.slice(to + end.length)
+    : html;
+}
 
 export async function onRequestGet({ request, env, next }) {
   if (!env.NOW_DB) return next();
@@ -20,11 +28,13 @@ export async function onRequestGet({ request, env, next }) {
   const response = await next(new Request(request, { headers: requestHeaders }));
   if (!response.ok || !response.headers.get('Content-Type')?.startsWith('text/html')) return response;
   const html = await response.text();
-  const start = html.indexOf(nowStart);
-  const end = html.indexOf(nowEnd, start + nowStart.length);
-  const body = start >= 0 && end > start
-    ? html.slice(0, start) + (unavailable ? '<section id="now" class="home-section container"><h2>Now</h2><p>The latest update is temporarily unavailable.</p></section>' : renderNowContent(current)) + html.slice(end + nowEnd.length)
-    : html;
+  const content = unavailable
+    ? '<section id="now" class="home-section container"><h2>Now</h2><p>The latest update is temporarily unavailable.</p></section>'
+    : renderNowContent(current);
+  const body = replaceNowMarkup(
+    replaceNowMarkup(html, nowStart, nowEnd, content),
+    nowPreviewStart, nowPreviewEnd, unavailable ? '' : renderNowPreview(current),
+  );
   const headers = new Headers(response.headers);
   for (const name of ['Content-Length', 'Content-Encoding', 'ETag', 'Last-Modified']) headers.delete(name);
   headers.set('Cache-Control', 'no-store');

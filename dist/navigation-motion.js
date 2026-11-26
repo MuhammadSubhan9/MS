@@ -47,6 +47,8 @@
     }
     if (type === 'event') {
       const path = /^\/work\/[^/]+\/$/.test(to.pathname) ? to.pathname : from.pathname;
+      const source = selected?.closest('[data-motion-route]');
+      if (!incoming && source?.dataset.motionRoute === path) return source.querySelector('.work-event-mark img');
       const entry = [...document.querySelectorAll('[data-motion-route]')].find(item => item.dataset.motionRoute === path);
       return entry?.querySelector('.work-event-mark img');
     }

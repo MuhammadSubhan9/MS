@@ -138,6 +138,25 @@ function languageList(languages = [], scoresUpdated) {
   ${hasScores && scoresUpdated ? `<p class="meta language-score-source">Duolingo scores shared on LinkedIn, updated ${publicationDate(scoresUpdated)}.</p>` : ''}`;
 }
 
+function educationRecord(education) {
+  const groups = new Map();
+  for (const item of education) {
+    const key = item.institution || item;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(item);
+  }
+  return [...groups.values()].map(items => {
+    if (items.length === 1) return chronology(items, { renderText: glossary });
+    const stages = [...items].sort((left, right) => Number(Boolean(left.current)) - Number(Boolean(right.current)));
+    return `<div class="education-school">
+      <h3>${escape(items[0].institution)}</h3>
+      <div class="education-school-stages">
+        ${chronology(stages, { renderText: glossary, heading: 'h4', showInstitution: false })}
+      </div>
+    </div>`;
+  }).join('');
+}
+
 function eventMark(item) {
   return item.eventLogo ? `<div class="work-event-mark" aria-hidden="true">${image(item.eventLogo, { sizes: '(max-width: 700px) 100px, 175px' })}</div>` : '';
 }
@@ -292,7 +311,7 @@ export function createPages(data) {
   const novel = findNovel(data.writing);
   const records = portfolioRecords(data, novel);
   const journey = journeyPage(data, records);
-  const education = chronology(data.education, { renderText: glossary });
+  const education = educationRecord(data.education);
   const background = [
     ['education', 'Education', education && education + (journey ? action('/journey/', 'Explore my journey', 'action-link education-journey') : '')],
     ['experience', 'Experience', chronology(data.experience)],

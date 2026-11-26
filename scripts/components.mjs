@@ -119,11 +119,13 @@ export function image(asset, { eager = false, sizes = '(max-width: 700px) calc(1
     ${asset.caption ? `<figcaption>${escape(asset.caption)}</figcaption>` : ''}</figure>`;
 }
 
-export function chronology(items, { detailLabel, renderText = escape } = {}) {
-  return items.map(item => `<article class="entry"${item.id ? ` id="${escape(item.id)}" data-share-section tabindex="-1"` : ''}>
+export function chronology(items, { detailLabel, renderText = escape, heading = 'h3', showInstitution = true } = {}) {
+  return items.map(item => {
+    const context = [item.role, showInstitution ? item.institution : '', item.status].filter(Boolean);
+    return `<article class="entry${item.current ? ' entry-current' : ''}"${item.id ? ` id="${escape(item.id)}" data-share-section tabindex="-1"` : ''}>
     <p class="meta entry-date">${escape(item.date)}</p>
-    <div><h3>${renderText(item.title)}</h3>
-      ${item.role || item.institution || item.status ? `<p class="entry-context">${[item.role, item.institution, item.status].filter(Boolean).map(escape).join(' · ')}</p>` : ''}
+    <div><${heading}>${renderText(item.title)}</${heading}>
+      ${context.length ? `<p class="entry-context">${context.map(escape).join(' · ')}</p>` : ''}
       ${item.description ? `<p>${renderText(item.description)}</p>` : ''}
       ${item.subjects?.length ? `<ul class="entry-subjects" aria-label="Subjects">${item.subjects.map(subject => `<li>${escape(subject)}</li>`).join('')}</ul>` : ''}
       ${item.outcome ? `<p>${renderText(item.outcome)}</p>` : ''}
@@ -135,7 +137,8 @@ export function chronology(items, { detailLabel, renderText = escape } = {}) {
         ${action(item.certificateUrl, 'View certificate', 'action-link entry-certificate', `for ${item.title}`, 'certificate')}
       </div>` : ''}
     </div>
-  </article>`).join('');
+  </article>`;
+  }).join('');
 }
 
 export const hasDetail = item => Boolean(item.body?.length || item.sections?.length);

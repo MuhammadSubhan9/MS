@@ -70,7 +70,39 @@ try {
   await chrome.key('Escape','Escape',27);
   await waitFor(() => chrome.evaluate("!!document.querySelector('[data-inline-reader] [data-reader]')"), 'closing the reader');
 
+  for (const [width, columns] of [[1440, 3], [800, 2]]) {
+    await chrome.navigate(origin + '/about/?columns=' + columns + '#courses', width);
+    assert.equal(await chrome.evaluate("document.querySelectorAll('#courses .course-column').length"), columns);
+    const position = await chrome.evaluate(`(() => {
+      const summary = document.querySelector('#course-sales-fundamentals summary');
+      summary.scrollIntoView({ block: 'center', behavior: 'instant' });
+      const box = summary.getBoundingClientRect();
+      const groups = document.querySelectorAll('#courses .course-column');
+      return {
+        x: box.left + box.width / 2, y: box.top + box.height / 2,
+        same: groups[0].lastElementChild.getBoundingClientRect().top + scrollY,
+        neighbour: groups[1].lastElementChild.getBoundingClientRect().top + scrollY,
+      };
+    })()`);
+    for (const type of ['mousePressed', 'mouseReleased']) {
+      await chrome.call('Input.dispatchMouseEvent', { type, x: position.x, y: position.y, button: 'left', clickCount: 1 });
+    }
+    assert.equal(await chrome.evaluate("document.querySelector('#course-sales-fundamentals details').open"), true);
+    const [same, neighbour] = await chrome.evaluate("[...document.querySelectorAll('#courses .course-column')].map(group => group.lastElementChild.getBoundingClientRect().top + scrollY)");
+    assert.ok(same > position.same, 'the expanded course moves its own column');
+    assert.equal(neighbour, position.neighbour, 'the neighbouring column stays in place');
+  }
+  await chrome.navigate(origin + '/about/#education', 390);
+  assert.deepEqual(await chrome.evaluate("[...document.querySelectorAll('.education-school .entry')].map(item => item.id)"), ['igcses', 'international-a-levels']);
+  assert.equal(await chrome.evaluate("document.querySelector('.education-school > h3').textContent"), 'Al-Rowad International Schools');
+
   await chrome.navigate(origin + '/work/#evidence', 390);
+  await chrome.evaluate("document.querySelector('[data-evidence-node=money2020-middle-east]').focus()");
+  await chrome.key('Enter', 'Enter', 13);
+  assert.deepEqual(await chrome.evaluate("[...document.querySelectorAll('[data-evidence-branch][data-evidence-topic-match]')].map(node => node.dataset.evidenceBranch)"), ['technology', 'business']);
+  assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=unesco-ai-forum]').hasAttribute('data-evidence-related')"), true);
+  assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=global-airports-forum]').hasAttribute('data-evidence-related')"), false);
+  assert.match(await chrome.evaluate("document.querySelector('[data-evidence-selection] .eyebrow').textContent"), /Business \/ Technology/);
   await chrome.evaluate("document.querySelector('[data-evidence-filter=aviation]').click()");
   assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=black-hat-mea]').closest('li').hidden"), true);
   assert.equal(await chrome.evaluate("document.querySelector('[data-evidence-node=global-airports-forum]').getAttribute('aria-current')"), 'true');

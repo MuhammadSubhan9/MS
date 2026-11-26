@@ -1,10 +1,42 @@
 (() => {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const courses = document.querySelector('#courses .section-content');
+  if (courses) {
+    const cards = [...courses.children];
+    const compact = matchMedia('(max-width: 560px)');
+    const tablet = matchMedia('(max-width: 900px)');
+    let columnsShown;
+
+    function arrangeCourses() {
+      const count = compact.matches ? 1 : tablet.matches ? 2 : 3;
+      if (count === columnsShown) return;
+      columnsShown = count;
+      const focused = courses.contains(document.activeElement) ? document.activeElement : null;
+      if (count === 1) {
+        courses.replaceChildren(...cards);
+      } else {
+        const columns = Array.from({ length: count }, () => {
+          const column = document.createElement('div');
+          column.className = 'course-column';
+          return column;
+        });
+        cards.forEach((card, index) => columns[index % count].append(card));
+        courses.replaceChildren(...columns);
+      }
+      focused?.focus({ preventScroll: true });
+    }
+
+    arrangeCourses();
+    compact.addEventListener('change', arrangeCourses);
+    tablet.addEventListener('change', arrangeCourses);
+  }
+
   const evidence = document.querySelector('#evidence');
   if (evidence) {
     const filters = evidence.querySelector('[data-evidence-filters]');
     const filterButtons = [...filters.querySelectorAll('[data-evidence-filter]')];
     const nodes = [...evidence.querySelectorAll('[data-evidence-node]')];
+    const nodeTopics = new Map(nodes.map(node => [node, node.dataset.evidenceTopics.split(' ')]));
     const branches = [...evidence.querySelectorAll('[data-evidence-branch]')];
     const panel = evidence.querySelector('[data-evidence-selection]');
     const records = new Map([...evidence.querySelectorAll('template[data-evidence-record]')]
@@ -17,6 +49,16 @@
       selected?.removeAttribute('aria-current');
       selected = node;
       selected.setAttribute('aria-current', 'true');
+      const connectedTopics = new Set(nodeTopics.get(node));
+      for (const branch of branches) {
+        branch.toggleAttribute('data-evidence-topic-match', connectedTopics.has(branch.dataset.evidenceBranch));
+      }
+      for (const button of filterButtons) {
+        button.toggleAttribute('data-evidence-topic-match', connectedTopics.has(button.dataset.evidenceFilter));
+      }
+      for (const other of nodes) {
+        other.toggleAttribute('data-evidence-related', other !== node && nodeTopics.get(other).some(topic => connectedTopics.has(topic)));
+      }
       panel.replaceChildren(records.get(node.dataset.evidenceNode).content.cloneNode(true));
     }
 
@@ -38,7 +80,7 @@
         const topic = button.dataset.evidenceFilter;
         for (const filter of filterButtons) filter.setAttribute('aria-pressed', String(filter === button));
         for (const node of nodes) {
-          node.parentElement.hidden = topic !== 'all' && !node.dataset.evidenceTopics.split(' ').includes(topic);
+          node.parentElement.hidden = topic !== 'all' && !nodeTopics.get(node).includes(topic);
         }
         for (const branch of branches) branch.hidden = !branch.querySelector('li:not([hidden])');
         if (selected.parentElement.hidden) select(nodes.find(node => !node.parentElement.hidden));

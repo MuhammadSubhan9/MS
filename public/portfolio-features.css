@@ -135,7 +135,6 @@
 
 .education-journey { margin-top: .65rem; }
 .entry-actions { margin-top: .35rem; }
-#courses .section-content { align-items: start; }
 .entry-details { margin-top: .55rem; width: 100%; }
 .entry-details > summary {
   display: flex;
@@ -227,6 +226,7 @@
   cursor: pointer;
 }
 .evidence-filters button:hover { background: #e5e7d9; }
+.evidence-filters button[data-evidence-topic-match]:not([aria-pressed="true"]) { border-color: #60826a; background: #e0eadb; }
 .evidence-filters button[aria-pressed="true"] { border-color: #284b3c; background: #284b3c; color: #fff4e6; }
 .evidence-board {
   display: grid;
@@ -255,6 +255,7 @@
   letter-spacing: .075em;
   text-transform: uppercase;
 }
+.evidence-branch[data-evidence-topic-match] h3 { color: #d7edc2; }
 .evidence-branch ul { margin: 0; padding: 0; list-style: none; }
 .evidence-branch li { position: relative; padding-inline-start: .74rem; border-inline-start: 1px solid #c3bd9e6b; }
 .evidence-branch li::before {
@@ -288,6 +289,9 @@
   content: '';
 }
 .evidence-branch a:is(:hover, :focus-visible) { border-color: #ccb8998c; background: #eee5c718; outline-color: #f2d4ad; outline-offset: 1px; }
+.evidence-branch a[data-evidence-related] { border-color: #a6c5a448; background: #b1d9a316; }
+.evidence-branch a[data-evidence-related]::before { border-color: #d3e9bf; background: #b7d6a6; }
+.evidence-branch li:has(> a[data-evidence-related])::before { border-color: #b7d6a6; }
 .evidence-branch a[aria-current] { border-color: #d4bb9799; background: #eee5c728; }
 .evidence-branch a[aria-current]::before { background: #e8cfac; }
 .evidence-selection {

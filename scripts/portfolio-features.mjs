@@ -57,9 +57,10 @@ function recordLink(record) {
   return action(record.destination, label, 'action-link', `for ${record.title}`);
 }
 
-function evidenceSummary(record, primaryTopic) {
+function evidenceSummary(record, topicLabels) {
   const metadata = [record.type === 'course' ? escape(record.institution) : '', publicationDate(record.date)].filter(Boolean).join(' · ');
-  return `<p class="eyebrow">${escape(primaryTopic)} · ${record.type === 'course' ? 'Credential' : escape(record.kind === 'event' ? 'Event' : record.context || 'Experience')}</p>
+  const subjects = record.evidence.topics.map(topic => escape(topicLabels.get(topic))).join(' / ');
+  return `<p class="eyebrow">${subjects} · ${record.type === 'course' ? 'Credential' : escape(record.kind === 'event' ? 'Event' : record.context || 'Experience')}</p>
     <h3>${escape(record.title)}</h3>
     ${metadata ? `<p class="meta">${metadata}</p>` : ''}
     ${record.workSummary || record.description ? `<p class="evidence-summary">${escape(record.workSummary || record.description)}</p>` : ''}
@@ -95,10 +96,10 @@ export function evidenceMap(records) {
         }).join('')}
       </div>
       <article class="evidence-selection" data-evidence-selection aria-live="polite" tabindex="-1">
-        ${evidenceSummary(first, topicLabels.get(first.evidence.topics[0]))}
+        ${evidenceSummary(first, topicLabels)}
       </article>
     </div>
-    ${items.map(item => `<template data-evidence-record="${item.id}">${evidenceSummary(item, topicLabels.get(item.evidence.topics[0]))}</template>`).join('')}
+    ${items.map(item => `<template data-evidence-record="${item.id}">${evidenceSummary(item, topicLabels)}</template>`).join('')}
   </section>`;
 }
 

@@ -24,8 +24,7 @@ try {
       assert.deepEqual(await chrome.evaluate(`Array.from(document.querySelectorAll('.home-contact-links a'), link => [
         link.textContent.trim(), link.getAttribute('href'), link.classList.contains('button-link'),
       ])`), [['Contact me', '/contact/', true]]);
-      assert.equal(await chrome.evaluate("document.querySelector('#site-updates summary').getBoundingClientRect().height > 0"), true);
-      assert.equal(await chrome.evaluate("!document.querySelector('#site-updates details').open && document.querySelector('.site-update-title').getBoundingClientRect().height > 0"), true);
+      assert.equal(await chrome.evaluate("document.querySelector('#site-updates, footer [href=\"#site-updates\"]')"), null);
     }
     if (route === '/about/') {
       assert.deepEqual(await chrome.evaluate("Array.from(document.querySelectorAll('.language-group-learning dt'), node => node.textContent)"), ['German', 'Latin']);
@@ -212,20 +211,6 @@ try {
   await waitFor(() => chrome.evaluate("location.hash === '#in-progress'"), 'endpoint links to current work');
   await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
 
-  await chrome.evaluate("localStorage.setItem('portfolio-seen-update','older-release')");
-  await chrome.navigate(origin + '/', 390);
-  assert.equal(await chrome.evaluate("document.querySelector('[data-site-update]').hasAttribute('data-new-release')"), true);
-  await chrome.evaluate("document.querySelector('[data-dismiss-site-update]').click()");
-  await chrome.navigate(origin + '/about/', 390);
-  await chrome.navigate(origin + '/?return=1', 390);
-  assert.equal(await chrome.evaluate("document.querySelector('[data-site-update]').hasAttribute('data-new-release')"), false);
-  assert.equal(await chrome.evaluate("document.querySelector('#site-updates summary').getBoundingClientRect().height > 0"), true);
-  assert.equal(await chrome.evaluate("document.querySelector('#site-updates details').open"), false);
-  await chrome.evaluate("document.querySelector('footer a[href=\"#site-updates\"]').click()");
-  await waitFor(() => chrome.evaluate("document.querySelector('#site-updates details').open"), 'latest updates still available after dismissal');
-  await chrome.navigate(origin + '/?direct=1#site-updates', 390);
-  assert.equal(await chrome.evaluate("document.querySelector('#site-updates details').open"), true);
-
   await chrome.navigate(origin + '/contact/', 390);
   await chrome.evaluate(`
     const contact = document.querySelector('.contact-form');
@@ -303,7 +288,7 @@ try {
   await waitFor(() => chrome.evaluate("document.querySelector('[data-now-preview]').textContent === 'A new first line.'"), 'published Now note refreshes the homepage intro');
 
   assert.deepEqual(errors, []);
-  console.log('Browser checks passed for mobile layout, the contact form and card, draft recovery, the reader, evidence, credentials, sharing, glossary, Journey, site updates and owner commands.');
+  console.log('Browser checks passed for mobile layout, the contact form and card, draft recovery, the reader, evidence, credentials, sharing, glossary, Journey and owner commands.');
 } finally {
   try { await chrome?.close(); } finally { server.closeAllConnections(); server.close(); }
 }

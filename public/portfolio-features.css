@@ -304,56 +304,6 @@
 .evidence-record-links { display: flex; flex-wrap: wrap; gap: 0 1.05rem; margin-top: .65rem; }
 .evidence-record-links a { color: var(--accent); }
 
-.site-update { margin-block: .85rem; }
-.site-update-inner {
-  position: relative;
-  padding-inline: .9rem;
-  border: 1px solid #bbaf9b;
-  border-inline-start: 3px solid var(--accent);
-  border-radius: .3rem;
-  background: #f5ebdc;
-}
-.site-update summary {
-  display: flex;
-  align-items: baseline;
-  gap: .1rem .7rem;
-  flex-wrap: wrap;
-  padding-block: .65rem;
-  font-weight: 650;
-  list-style: none;
-  text-decoration: none;
-  cursor: pointer;
-}
-.site-update[data-new-release] summary { margin-inline-end: 4.3rem; }
-.site-update summary::-webkit-details-marker { display: none; }
-.site-update summary .toggle-icon { color: var(--accent); }
-.site-update-title { min-width: 0; color: #685441; font-weight: 500; overflow-wrap: anywhere; }
-.site-update-title::before { margin-inline-end: .65rem; color: #927c63; content: '·'; }
-@media (max-width: 560px) {
-  .site-update-title { flex-basis: 100%; padding-inline-start: 1.65rem; }
-  .site-update-title::before { content: none; }
-  .site-update-unread:not([hidden]) { margin-inline-start: 1.65rem; }
-}
-.site-update-unread { color: var(--accent); font-size: .88rem; }
-.site-update-content { padding: .15rem .85rem .7rem; border-top: 1px solid #cdbca6; }
-.site-update-content .meta { margin-block: .35rem; }
-.site-update-content ul { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none; }
-.site-update-content li p { font-size: .94rem; }
-.site-update-content a { min-height: 0; padding: 0; color: var(--accent); }
-.site-update-dismiss {
-  position: absolute;
-  inset: .19rem .5rem auto auto;
-  min-height: 2.2rem;
-  padding-inline: .35rem;
-  border: 1px solid transparent;
-  border-radius: .25rem;
-  background: transparent;
-  color: var(--muted);
-  font: 600 .88rem var(--sans);
-  cursor: pointer;
-}
-.site-update-dismiss:hover { border-color: #b8a994; }
-
 @media (max-width: 760px) {
   .evidence-board, .capability-matrix { grid-template-columns: minmax(0, 1fr); }
   .evidence-map { min-height: auto; }

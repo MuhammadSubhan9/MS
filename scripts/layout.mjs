@@ -45,8 +45,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   const about = page.path === '/about/';
   const journey = page.path === '/journey/';
   const contact = page.path === '/contact/';
-  const siteUpdates = home && data.siteUpdate?.items?.length;
-  const portfolioFeatures = siteUpdates || about || journey || /^(?:\/work\/|\/writing\/.+)/.test(page.path);
+  const portfolioFeatures = about || journey || /^(?:\/work\/|\/writing\/.+)/.test(page.path);
   const links = navigation.map(item => {
     const active = page.path === item.path || item.path !== '/' && page.path.startsWith(item.path);
     const isContact = item.path === '/contact/';
@@ -109,10 +108,9 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
       <small>© <span data-year>${new Date().getFullYear()}</span></small>
       ${google.notice}
     </div>
-    ${footerPages.length || footerContact || footerNow || siteUpdates ? `<nav class="footer-nav" aria-label="Footer">
+    ${footerPages.length || footerContact || footerNow ? `<nav class="footer-nav" aria-label="Footer">
       ${footerPages.map(item => `<a class="footer-link icon-label" href="${item.path}">${pageIcons[item.path] ? icon(pageIcons[item.path]) : ''}${item.path === '/writing/' ? 'Writing' : escape(item.label)}</a>`).join('')}
       ${footerNow}
-      ${siteUpdates ? `<a class="footer-link icon-label" href="#site-updates">${icon('list-bullets')}Site updates</a>` : ''}
       ${footerContact ? action('/contact/', 'Get in touch', 'button-link footer-contact', '', 'envelope-simple') : ''}
     </nav>` : ''}
   </div></footer>

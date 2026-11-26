@@ -5,7 +5,7 @@ import {
 import { findNovel, novelContent, novelPath, oldNovelPath } from './novel.mjs';
 import { contactPage } from './contact.mjs';
 import { nowSection, parseNow, renderNowPreview } from './now.mjs';
-import { capabilitiesMatrix, evidenceMap, journeyPage, portfolioRecords, siteUpdateBrief } from './portfolio-features.mjs';
+import { capabilitiesMatrix, evidenceMap, journeyPage, portfolioRecords } from './portfolio-features.mjs';
 
 function homePage(data, { hasAbout, hasContact, selected }) {
   const { education, projects, portrait, writing, contact } = data;
@@ -84,7 +84,6 @@ function homePage(data, { hasAbout, hasContact, selected }) {
   ].join('');
   const nameLines = data.name.trim().split(/\s+(?=\S+$)/);
   return `
-    ${siteUpdateBrief(data.siteUpdate)}
     <section class="home-opening" aria-labelledby="home-title" data-header-surface="opening">
     <div class="container home-masthead${portraitMarkup ? ' home-masthead-portrait' : ''}">
       <div class="home-intro">

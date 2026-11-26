@@ -265,22 +265,3 @@ export function journeyPage(data, records) {
     </div>` : ''}
   </div>`;
 }
-
-export function siteUpdateBrief(update) {
-  if (!update?.items?.length) return '';
-  return `<aside class="site-update container" id="site-updates" data-site-update="${escape(update.id)}" aria-label="Site updates">
-    <div class="site-update-inner">
-      <details>
-        <summary>${toggleIcon('plus', 'minus')}<span>Site updates</span>
-          <span class="site-update-title">${escape(update.title || update.items[0].label)}</span>
-          <span class="site-update-unread" data-site-update-unread hidden>New since your last visit</span>
-        </summary>
-        <div class="site-update-content">
-          <p class="meta">${publicationDate(update.date)}</p>
-          <ul>${update.items.map(item => `<li>${action(item.href, item.label)}<p>${escape(item.description)}</p></li>`).join('')}</ul>
-        </div>
-      </details>
-      <button class="site-update-dismiss" type="button" data-dismiss-site-update hidden>Dismiss</button>
-    </div>
-  </aside>`;
-}

@@ -294,45 +294,4 @@
     addEventListener('scroll', closeDefinition, { passive: true });
     addEventListener('resize', closeDefinition);
   }
-
-  const briefing = document.querySelector('[data-site-update]');
-  if (briefing) {
-    const key = 'portfolio-seen-update';
-    const release = briefing.dataset.siteUpdate;
-    const details = briefing.querySelector('details');
-    const unread = briefing.querySelector('[data-site-update-unread]');
-    const dismiss = briefing.querySelector('[data-dismiss-site-update]');
-    function rememberRelease() {
-      try { localStorage.setItem(key, release); } catch { /* The updates link still works. */ }
-    }
-    try {
-      const seen = localStorage.getItem(key);
-      if (!seen) rememberRelease();
-      else if (seen !== release) {
-        briefing.setAttribute('data-new-release', '');
-        unread.hidden = false;
-        dismiss.hidden = false;
-      }
-    } catch { /* Visitors can open the briefing from the footer. */ }
-
-    function openFromLink() {
-      if (location.hash === '#site-updates') details.open = true;
-    }
-    addEventListener('hashchange', openFromLink);
-    openFromLink();
-    document.querySelector('footer a[href="#site-updates"]').addEventListener('click', openFromLink);
-    details.addEventListener('toggle', () => { if (details.open) rememberRelease(); });
-    dismiss.addEventListener('click', () => {
-      rememberRelease();
-      details.open = false;
-      unread.hidden = true;
-      dismiss.hidden = true;
-      briefing.removeAttribute('data-new-release');
-      if (location.hash === '#site-updates') {
-        const url = new URL(location.href);
-        url.hash = '';
-        history.replaceState(history.state, '', url);
-      }
-    });
-  }
 })();

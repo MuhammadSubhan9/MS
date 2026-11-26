@@ -482,16 +482,6 @@
     ],
     "cv": null
   },
-  "siteUpdate": {
-    "id": "2026-11-18-journey-and-evidence",
-    "date": "2026-11-18",
-    "title": "Journey, Evidence map and Capabilities",
-    "items": [
-      { "href": "/work/#evidence", "label": "Evidence map", "description": "Explore courses, events and projects by subject." },
-      { "href": "/journey/", "label": "Journey", "description": "Follow the milestones from independent courses to my current work." },
-      { "href": "/about/#capabilities", "label": "Capabilities", "description": "See what I’ve studied and where I’ve put it into practice." }
-    ]
-  },
   "analytics": {
     "clarityProject": "yu3io6wskv",
     "googleMeasurementId": "G-DGF6537VDH"

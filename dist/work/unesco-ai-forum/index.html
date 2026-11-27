@@ -18,7 +18,7 @@
   <link rel="preload" href="/fonts/dm-serif-text.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/source-sans-3.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/icons.css">
-  <link rel="stylesheet" href="/styles.css?v=first-press">
+  <link rel="stylesheet" href="/styles.css?v=scroll-motion">
   <link rel="stylesheet" href="/navigation-motion.css?v=first-press">
   <script src="/navigation-motion.js" blocking="render"></script>
   <link rel="stylesheet" href="/portfolio-features.css?v=viewer-controls">
@@ -30,9 +30,13 @@
   <link rel="stylesheet" href="/commands.css">
   <script src="/commands.js" defer></script>
 
-  <script src="/site.js?v=first-press" defer></script>
+  <script src="/site.js?v=scroll-motion" defer></script>
   <link rel="stylesheet" href="/header-surface.css">
   <script src="/header-surface.js" defer blocking="render"></script>
+  <link rel="stylesheet" href="/site-motion.css">
+  <script src="/top-menu-motion.js" type="module"></script>
+  <script src="/scroll-momentum.js" type="module"></script>
+  <script src="/scroll-reveals.js" type="module"></script>
   <script src="/clarity.js" data-clarity-project="yu3io6wskv" data-analytics-origin="https://muhammadsubhan.pages.dev" defer></script>
   <link rel="stylesheet" href="/analytics.css">
   <script src="/google-analytics.js" data-ga4-id="G-DGF6537VDH" data-analytics-origin="https://muhammadsubhan.pages.dev" defer></script>
@@ -44,7 +48,7 @@
   <header class="site-header" data-blended-header>
     <div class="container header-inner">
       <a class="wordmark" href="/"><span>Muhammad Subhan</span></a>
-      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span class="toggle-icon" aria-hidden="true"><svg class="site-icon icon-closed" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#list"></use></svg><svg class="site-icon icon-open" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#x"></use></svg></span></button><div class="header-nav"><nav class="nav" id="navigation" aria-label="Primary"><a href="/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#house-line"></use></svg>Home</a><a href="/about/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#user-circle"></use></svg>About</a><a href="/journey/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#path"></use></svg>Journey</a><a href="/work/" aria-current="page"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#notebook"></use></svg>Experiences</a><a href="/writing/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#pen-nib"></use></svg>Writing</a><a class="nav-contact" href="/contact/"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg>Contact</a></nav></div>
+      <button class="menu" aria-controls="navigation" aria-expanded="false" hidden>Menu<span class="toggle-icon" aria-hidden="true"><svg class="site-icon icon-closed" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#list"></use></svg><svg class="site-icon icon-open" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#x"></use></svg></span></button><div class="header-nav"><nav class="nav" id="navigation" aria-label="Primary"><a href="/"><span class="top-menu-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#house-line"></use></svg>Home</span></a><a href="/about/"><span class="top-menu-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#user-circle"></use></svg>About</span></a><a href="/journey/"><span class="top-menu-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#path"></use></svg>Journey</span></a><a href="/work/" aria-current="page"><span class="top-menu-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#notebook"></use></svg>Experiences</span></a><a href="/writing/"><span class="top-menu-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#pen-nib"></use></svg>Writing</span></a><a class="nav-contact" href="/contact/"><span class="top-menu-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#envelope-simple"></use></svg>Contact</span></a></nav></div>
     </div>
   </header>
   <main class="container" id="main" tabindex="-1">

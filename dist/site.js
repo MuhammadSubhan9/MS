@@ -31,31 +31,6 @@ if (button && navigation) {
 }
 document.querySelector('[data-year]').textContent = new Date().getFullYear();
 
-function prepareScrollReveals() {
-  if (!matchMedia('(prefers-reduced-motion: no-preference)').matches ||
-      !('IntersectionObserver' in window)) return;
-
-  const sections = document.querySelectorAll([
-    '[data-reveal]', '.featured-project', '.home-writing figure',
-    '.project-index > .project-entry', '.article-section', '.article-nav',
-  ].join(', '));
-  const observer = new IntersectionObserver(entries => {
-    for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      entry.target.classList.remove('reveal-pending');
-      observer.unobserve(entry.target);
-    }
-  }, { rootMargin: '0px 0px -5% 0px' });
-
-  for (const section of sections) {
-    if (section.getBoundingClientRect().top < window.innerHeight || section.matches(':target')) continue;
-    section.classList.add('scroll-reveal', 'reveal-pending');
-    observer.observe(section);
-  }
-}
-
-prepareScrollReveals();
-
 for (const link of document.querySelectorAll('.media-link')) {
   const canTrack = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
   let frame = 0;

@@ -16,7 +16,7 @@
   <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
   <link rel="preload" href="/fonts/welcome-editorial.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/icons.css">
-  <link rel="stylesheet" href="/novel.css">
+  <link rel="stylesheet" href="/novel.css?v=menu-motion">
   <link rel="stylesheet" href="/navigation-motion.css?v=first-press">
   <script src="/navigation-motion.js" blocking="render"></script>
   <link rel="stylesheet" href="/portfolio-features.css?v=viewer-controls">
@@ -24,6 +24,10 @@
   <script src="/novel.js" defer blocking="render"></script>
   <link rel="stylesheet" href="/header-surface.css">
   <script src="/header-surface.js" defer blocking="render"></script>
+  <link rel="stylesheet" href="/site-motion.css">
+  <script src="/top-menu-motion.js" type="module"></script>
+  <script src="/scroll-momentum.js" type="module"></script>
+  <script src="/scroll-reveals.js" type="module"></script>
   <script src="/novel-subscription.js" defer></script>
   <link rel="stylesheet" href="/commands.css">
   <script src="/commands.js" defer></script>
@@ -41,9 +45,9 @@
         <span class="novel-imprint-name">The Eleventh Rehearsal</span>
       </a>
       <nav class="novel-index" aria-label="Novel sections">
-        <a href="#synopsis"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#text-align-left"></use></svg>Synopsis</a>
-        <a href="#excerpt"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#book-open-text"></use></svg>Excerpt</a>
-        <a href="#release-updates"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#bell-simple"></use></svg>Release updates</a>
+        <a href="#synopsis"><span class="top-menu-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#text-align-left"></use></svg>Synopsis</span></a>
+        <a href="#excerpt"><span class="top-menu-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#book-open-text"></use></svg>Excerpt</span></a>
+        <a href="#release-updates"><span class="top-menu-label"><svg class="site-icon" width="16" height="16" aria-hidden="true" focusable="false"><use href="/icons/phosphor-regular.svg#bell-simple"></use></svg>Release updates</span></a>
       </nav>
     </div>
   </header>

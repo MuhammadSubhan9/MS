@@ -1,4 +1,4 @@
-import { action, escape, headerAssets, icon, image, pageIcons, safeLink, toggleIcon } from './components.mjs';
+import { action, escape, headerAssets, icon, image, motionAssets, pageIcons, safeLink, toggleIcon } from './components.mjs';
 import { renderNovelPage } from './novel.mjs';
 import { commandAssets, commandPalette } from './commands.mjs';
 import { clarityTag, googleAnalytics } from './analytics.mjs';
@@ -51,7 +51,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
     const isContact = item.path === '/contact/';
     const label = item.path === '/writing/' ? 'Writing' : item.label;
     const mark = pageIcons[item.path] ? icon(pageIcons[item.path]) : '';
-    return `<a${isContact ? ' class="nav-contact"' : ''} href="${item.path}"${active ? ' aria-current="page"' : ''}>${mark}${escape(label)}</a>`;
+    return `<a${isContact ? ' class="nav-contact"' : ''} href="${item.path}"${active ? ' aria-current="page"' : ''}><span class="top-menu-label">${mark}${escape(label)}</span></a>`;
   }).join('');
   const footerPages = navigation.filter(item => item.path !== '/' && item.path !== '/contact/');
   const footerContact = navigation.some(item => item.path === '/contact/');
@@ -77,7 +77,7 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   <link rel="preload" href="/fonts/dm-serif-text.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/source-sans-3.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/icons.css">
-  <link rel="stylesheet" href="/styles.css?v=first-press">
+  <link rel="stylesheet" href="/styles.css?v=scroll-motion">
   <link rel="stylesheet" href="/navigation-motion.css?v=first-press">
   <script src="/navigation-motion.js" blocking="render"></script>
   ${portfolioFeatures ? portfolioAssets : ''}
@@ -87,8 +87,9 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   ${contact ? '<link rel="stylesheet" href="/contact.css">\n  <script src="/contact.js" defer></script>\n  <script src="/contact-card.js" type="module"></script>' : ''}
   ${data.now ? commandAssets : ''}
   ${home && data.now ? '<script src="/now-editor.js" defer></script>' : ''}
-  <script src="/site.js?v=first-press" defer></script>
+  <script src="/site.js?v=scroll-motion" defer></script>
   ${headerAssets}
+  ${motionAssets}
   ${clarityTag(data, origin, ready)}
   ${google.head}
 </head>

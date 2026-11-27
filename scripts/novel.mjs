@@ -1,4 +1,4 @@
-import { copySectionButton, escape, headerAssets, icon, image, paragraphs, safeLink } from './components.mjs';
+import { copySectionButton, escape, headerAssets, icon, image, motionAssets, paragraphs, safeLink } from './components.mjs';
 import { commandAssets, commandPalette } from './commands.mjs';
 import { clarityTag, googleAnalytics } from './analytics.mjs';
 import excerpt from '../content/eleventh-rehearsal.json' with { type: 'json' };
@@ -187,12 +187,13 @@ export function renderNovelPage({ data, page, origin, ready }) {
   <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
   <link rel="preload" href="/fonts/welcome-editorial.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/icons.css">
-  <link rel="stylesheet" href="/novel.css">
+  <link rel="stylesheet" href="/novel.css?v=menu-motion">
   <link rel="stylesheet" href="/navigation-motion.css?v=first-press">
   <script src="/navigation-motion.js" blocking="render"></script>
   ${portfolioAssets}
   <script src="/novel.js" defer blocking="render"></script>
   ${headerAssets}
+  ${motionAssets}
   <script src="/novel-subscription.js" defer></script>
   ${data.now ? commandAssets : ''}
   ${clarityTag(data, origin, ready)}
@@ -208,9 +209,9 @@ export function renderNovelPage({ data, page, origin, ready }) {
         <span class="novel-imprint-name">${escape(page.label)}</span>
       </a>
       <nav class="novel-index" aria-label="Novel sections">
-        <a href="#synopsis">${icon('text-align-left')}Synopsis</a>
-        <a href="#excerpt">${icon('book-open-text')}Excerpt</a>
-        <a href="#release-updates">${icon('bell-simple')}Release updates</a>
+        <a href="#synopsis"><span class="top-menu-label">${icon('text-align-left')}Synopsis</span></a>
+        <a href="#excerpt"><span class="top-menu-label">${icon('book-open-text')}Excerpt</span></a>
+        <a href="#release-updates"><span class="top-menu-label">${icon('bell-simple')}Release updates</span></a>
       </nav>
     </div>
   </header>

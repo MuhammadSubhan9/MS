@@ -38,11 +38,15 @@ try {
     });
   ` });
 
-  async function press(selector, touch = false) {
-    const point = await chrome.evaluate(`(() => {
+  function positionOf(selector) {
+    return chrome.evaluate(`(() => {
       const box = document.querySelector(${JSON.stringify(selector)}).getBoundingClientRect();
       return { x: box.left + box.width / 2, y: box.top + box.height / 2 };
     })()`);
+  }
+
+  async function press(selector, touch = false) {
+    const point = await positionOf(selector);
     if (touch) {
       await chrome.call('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
       await chrome.call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
@@ -237,13 +241,69 @@ try {
   assert.equal(await chrome.evaluate('window.motionResult.native'), false, 'source opted out of the view transition');
   assert.equal(await chrome.evaluate("document.body.inert || !!document.querySelector('.route-line')"), false);
 
+  await chrome.navigate(origin + '/about/?motion=menu', 1440);
+  const experiencesLink = '.nav a[href="/work/"]';
+  const linkCenter = await positionOf(experiencesLink);
+  await chrome.call('Input.dispatchMouseEvent', { type: 'mouseMoved', ...linkCenter });
+  await waitFor(() => chrome.evaluate(`new DOMMatrix(getComputedStyle(document.querySelector('.top-menu-highlight')).transform).a > 1.05`), 'navigation highlight stretches in motion');
+  assert.deepEqual(await positionOf(experiencesLink), linkCenter, 'the hover effect never moves the click target');
+  assert.equal(await chrome.evaluate(`getComputedStyle(document.querySelector('.top-menu-highlight')).pointerEvents`), 'none');
+  await press(experiencesLink);
+  await waitFor(() => chrome.evaluate("location.pathname === '/work/' && document.readyState === 'complete'"), 'first click while the highlight is moving');
+
+  await chrome.navigate(origin + '/about/?motion=wheel', 1440);
+  await chrome.call('Input.dispatchMouseEvent', { type: 'mouseWheel', x: 720, y: 460, deltaX: 0, deltaY: 320 });
+  await waitFor(() => chrome.evaluate("scrollY > 5 && scrollY < 270 && document.documentElement.classList.contains('lenis-smooth')"), 'wheel movement eases into position');
+  await waitFor(() => chrome.evaluate("Math.abs(scrollY - 288) < 2 && !document.documentElement.classList.contains('lenis-smooth')"), 'wheel momentum settles at the intended distance');
+  await chrome.call('Input.dispatchMouseEvent', { type: 'mouseWheel', x: 720, y: 460, deltaX: 0, deltaY: 320 });
+  await waitFor(() => chrome.evaluate("scrollY > 288 && document.documentElement.classList.contains('lenis-smooth')"), 'a second wheel impulse');
+  await press('.nav a[href="/journey/"]');
+  await waitFor(() => chrome.evaluate("location.pathname === '/journey/' && document.readyState === 'complete'"), 'one click during scroll momentum');
+
+  await chrome.navigate(origin + '/?motion=stage', 1440);
+  const scene = await chrome.evaluate(`(() => {
+    const stage = document.querySelector('.experience-stage[data-pinned]');
+    const pin = parseFloat(stage.style.getPropertyValue('--experience-top'));
+    return { pin, start: stage.getBoundingClientRect().top + scrollY - pin, travel: parseFloat(stage.style.getPropertyValue('--experience-travel')) };
+  })()`);
+  assert.ok(scene.travel > 600, 'desktop experiences have sideways travel');
+  await chrome.evaluate(`scrollTo({top: ${scene.start + scene.travel / 2}, behavior: 'instant'})`);
+  await waitFor(() => chrome.evaluate(`Math.abs(parseFloat(document.querySelector('.experience-track').style.translate) + ${scene.travel / 2}) < 3`), 'scrolling moves the experience track sideways');
+  assert.ok(await chrome.evaluate(`Math.abs(document.querySelector('.home-section-heading').getBoundingClientRect().top - ${scene.pin}) < 3`), 'the Selected experiences heading stays in view');
+  await chrome.evaluate(`scrollTo({top: ${scene.start}, behavior: 'instant'}); document.querySelector('.experience-track .featured-project .project-action').focus({preventScroll: true})`);
+  await chrome.key('Tab', 'Tab', 9);
+  await waitFor(() => chrome.evaluate(`(() => {
+    const link = document.activeElement;
+    const bounds = link.getBoundingClientRect();
+    const windowBox = document.querySelector('.experience-window').getBoundingClientRect();
+    return link.matches('.home-work-list .project-action') && bounds.left >= windowBox.left && bounds.right <= windowBox.right;
+  })()`), 'tabbing brings the next panel and its link into view');
+
+  await chrome.call('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 2 });
+  await chrome.navigate(origin + '/?motion=touch', 390, 844);
+  assert.equal(await chrome.evaluate("document.querySelector('.experience-stage').hasAttribute('data-pinned')"), false, 'the phone layout reads vertically');
+  await chrome.call('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 195, y: 670 }] });
+  for (const y of [630, 575, 518, 465]) {
+    await chrome.call('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: 195, y }] });
+    await pause(24);
+  }
+  const swipePosition = await chrome.evaluate('scrollY');
+  assert.ok(swipePosition > 100, 'a real swipe moves the page');
+  await chrome.call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await waitFor(() => chrome.evaluate(`scrollY > ${swipePosition + 30}`), 'scroll momentum after finger lift');
+  await press('.menu', true);
+  await press('.nav a[href="/contact/"]', true);
+  await waitFor(() => chrome.evaluate("location.pathname === '/contact/' && document.readyState === 'complete'"), 'one tap on a link after a swipe');
+  await chrome.call('Emulation.setTouchEmulationEnabled', { enabled: false });
+
   await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   await chrome.navigate(origin + '/about/', 390);
+  assert.equal(await chrome.evaluate("document.documentElement.classList.contains('lenis') || !!document.querySelector('[data-menu-motion]')"), false);
   await chrome.evaluate("document.querySelector('.footer-contact').click()");
   await waitFor(() => chrome.evaluate("location.pathname==='/contact/' && document.readyState==='complete'"), 'reduced motion navigation');
   assert.equal(await chrome.evaluate("!!document.querySelector('.route-line')"), false);
   assert.deepEqual(errors, []);
-  console.log('Passed ' + results.length + ' native page transitions at phone/desktop widths, Back and rapid navigation, copy/send responses, reader turns, interruption cleanup, fallback and reduced motion.');
+  console.log('Passed ' + results.length + ' native page transitions, plus first-click navigation, wheel and touch momentum, the desktop scroll showcase, copy/send responses, reader turns, fallback and reduced motion.');
 } finally {
   try { await chrome.close(); } finally { server.closeAllConnections(); server.close(); }
 }

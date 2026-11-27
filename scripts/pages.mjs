@@ -35,14 +35,22 @@ function homePage(data, { hasAbout, hasContact, selected }) {
   const featuredWork = selected[0] || projects[0];
   const work = featuredWork ? `<section class="home-section home-work" id="selected-work" aria-labelledby="home-work-title" tabindex="-1" data-header-surface>
     <div class="container">
-      <div class="home-section-heading" data-reveal>
-        <h2 id="home-work-title">Selected experiences</h2>
-        ${action('/work/', 'Browse experiences')}
+      <div class="experience-stage">
+        <div class="experience-sticky">
+          <div class="home-section-heading" data-reveal>
+            <h2 id="home-work-title">Selected experiences</h2>
+            ${action('/work/', 'Browse experiences')}
+          </div>
+          <div class="experience-window">
+            <div class="experience-track">
+              ${projectEntry({ ...featuredWork, image: featuredWork.homeImage ?? featuredWork.image }, { heading: 'h3', featured: true, actionLabel: 'Read more' })}
+              ${selected.length > 1 ? `<div class="home-work-list">
+                ${selected.slice(1).map(item => projectEntry(item, { heading: 'h3', showSummary: !item.image, actionLabel: 'Read more' })).join('')}
+              </div>` : ''}
+            </div>
+          </div>
+        </div>
       </div>
-      ${projectEntry({ ...featuredWork, image: featuredWork.homeImage ?? featuredWork.image }, { heading: 'h3', featured: true, actionLabel: 'Read more' })}
-      ${selected.length > 1 ? `<div class="home-work-list">
-        ${selected.slice(1).map(item => projectEntry(item, { heading: 'h3', showSummary: !item.image, actionLabel: 'Read more' })).join('')}
-      </div>` : ''}
     </div>
   </section>` : '';
   const book = writing.find(item => item.selected) || writing[0];

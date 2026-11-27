@@ -167,7 +167,7 @@ a, button { touch-action: manipulation; }
   color: var(--gilt);
 }
 .novel-index a:focus-visible { outline-offset: -2px; }
-.novel-index a > .site-icon { width: 1.08em; height: 1.08em; color: var(--gilt); }
+.novel-index .top-menu-label > .site-icon { width: 1.08em; height: 1.08em; color: var(--gilt); }
 
 .novel-text-link .site-icon, .novel-button .site-icon {
   display: inline-block;

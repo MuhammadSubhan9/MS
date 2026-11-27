@@ -86,7 +86,7 @@ figcaption { margin-top: var(--space-1); color: var(--muted); font-size: .875rem
 .wordmark:hover { color: #605449; }
 .nav { display: flex; align-items: center; gap: .25rem; padding: .26rem; border: 1px solid #b7aa93; border-radius: .9rem; background: #f3e8d7; }
 .nav a { display: flex; align-items: center; gap: .48em; min-height: 44px; padding-inline: clamp(.55rem, 1vw, .95rem); border-radius: .65rem; color: #4b443c; font-size: 1rem; text-decoration: none; }
-.nav a > .site-icon { width: 1em; height: 1em; }
+.nav .top-menu-label > .site-icon { width: 1em; height: 1em; }
 .nav a:is(:hover, :focus-visible) { background: #e3d8c4; color: var(--ink); }
 .nav a[aria-current] { background: #d4dfcf; color: #263d35; font-weight: 700; }
 .nav a.nav-contact { margin-inline-start: .2rem; background: #653545; color: #fff0df; font-weight: 650; }
@@ -1062,17 +1062,6 @@ details p { padding: .2rem 0; }
   to { transform: translateY(0); }
 }
 
-@keyframes image-unmask {
-  from { clip-path: inset(5% 0 17%); }
-  to { clip-path: inset(0); }
-}
-
-@keyframes feature-drift {
-  from { transform: scale(1.065) translateY(-2.5%); }
-  to { transform: scale(1.065) translateY(2.5%); }
-}
-
-
 @media (prefers-reduced-motion: no-preference) {
   :root {
     --motion-cut: cubic-bezier(.23, 1, .32, 1);
@@ -1080,41 +1069,32 @@ details p { padding: .2rem 0; }
   html { scroll-behavior: smooth; }
 
   html:not(.page-transitioning, [data-route-arrived]) .home-title .eyebrow {
-    animation: 340ms var(--motion-enter) both rise-in;
+    animation: 440ms var(--motion-enter) both rise-in;
   }
   html:not(.page-transitioning, [data-route-arrived]) .name-line > span {
-    animation: 580ms var(--motion-cut) 35ms both name-enter;
+    animation: 745ms var(--motion-cut) 45ms both name-enter;
   }
   html:not(.page-transitioning, [data-route-arrived]) .name-line:nth-child(2) > span {
-    animation-delay: 90ms;
+    animation-delay: 130ms;
   }
   html:not(.page-transitioning, [data-route-arrived]) .home-intro > .lead {
-    animation: 440ms var(--motion-enter) 80ms both rise-in;
+    animation: 505ms var(--motion-enter) 180ms both rise-in;
   }
   html:not(.page-transitioning, [data-route-arrived]) .text-actions {
-    animation: 285ms var(--motion-enter) link-group-appear;
+    animation: 320ms var(--motion-enter) 235ms both link-group-appear;
   }
   @keyframes link-group-appear { from { opacity: .75; } to { opacity: 1; } }
   html:not(.page-transitioning, [data-route-arrived]) .home-masthead-portrait > figure {
-    animation: 500ms var(--motion-cut) 65ms both portrait-reveal;
+    animation: 700ms var(--motion-cut) 100ms both portrait-reveal;
   }
   html:not(.page-transitioning, [data-route-arrived]) .home-masthead-portrait > figure .media-window {
-    animation: 585ms var(--motion-cut) 65ms both portrait-settle;
+    animation: 780ms var(--motion-cut) 100ms both portrait-settle;
   }
   html:not(.page-transitioning, [data-route-arrived]) main:not(.home-page) > :first-child {
     animation: 250ms var(--motion-enter) both link-group-appear;
   }
 
 
-  .scroll-reveal {
-    transition: opacity 345ms var(--motion-enter), transform 425ms var(--motion-enter);
-  }
-  .reveal-pending:not(:focus-within):not(:target) { opacity: .42; }
-  .reveal-pending:not(:focus-within):not(:target):not(:has(a[href], button, summary, input, select, textarea)) { transform: translateY(9px); }
-  .scroll-reveal:focus-within { transition: none; }
-  .scroll-reveal:not(.reveal-pending):is(figure, .featured-project) .media-window {
-    animation: 525ms var(--motion-cut) both image-unmask;
-  }
   .arrow { transition: translate 220ms var(--motion-interactive); }
   a:is(:hover, :focus-visible) .arrow { translate: 4px 0; }
   a:is(:hover, :focus-visible) .arrow-left { translate: -4px 0; }
@@ -1136,11 +1116,11 @@ details p { padding: .2rem 0; }
     }
   }
 
-  :is(.nav a, .button-link, .work-event-link) > .site-icon,
+  :is(.button-link, .work-event-link) > .site-icon,
   .menu > .toggle-icon {
     transition: scale 185ms var(--motion-interactive);
   }
-  :is(.nav a, .button-link, .work-event-link):active > .site-icon,
+  :is(.button-link, .work-event-link):active > .site-icon,
   .menu:active > .toggle-icon {
     scale: .92;
     transition-duration: 75ms;
@@ -1158,16 +1138,6 @@ details p { padding: .2rem 0; }
     .project-entry:has(:is(.project-link, .project-action):focus-visible) .media-link img { scale: 1.035; }
   }
 
-  @supports (animation-timeline: scroll(root block)) {
-    .featured-with-image .media-window {
-      view-timeline: --feature-photo block;
-    }
-    .featured-with-image:not(.featured-with-cover) .media-window img {
-      animation: feature-drift linear both;
-      animation-timeline: --feature-photo;
-      animation-range: entry 20% exit 80%;
-    }
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

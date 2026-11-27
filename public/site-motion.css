@@ -1,0 +1,127 @@
+.top-menu-label {
+  display: inline-flex;
+  flex-direction: inherit;
+  align-items: center;
+  gap: inherit;
+}
+
+.top-menu-highlight { display: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-menu-motion] {
+    position: relative;
+    isolation: isolate;
+  }
+
+  [data-menu-motion] > .top-menu-highlight {
+    position: absolute;
+    z-index: -1;
+    inset: 0 auto auto 0;
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms var(--motion-interactive);
+  }
+
+  .top-menu-highlight::before {
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--header-rule);
+    border-radius: .65rem;
+    background: var(--header-hover);
+    content: '';
+    transition: scale 240ms var(--motion-interactive);
+  }
+
+  [data-menu-motion] > .top-menu-highlight[data-visible] { opacity: 1; }
+  .site-header[data-header-dark] .top-menu-highlight::before { background: color-mix(in srgb, var(--header-ink) 11%, transparent); }
+  .novel-index > .top-menu-highlight::before { border-radius: 2px; border-color: #b58b5c63; background: #b98b5529; }
+  .site-header[data-blended-header] .nav[data-menu-motion] a:not(.nav-contact):is(:hover, :focus-visible, [aria-current]),
+  .novel-index[data-menu-motion] a:is(:hover, :focus-visible, [aria-current]) {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  :is(.site-header .nav, .novel-index) .top-menu-label {
+    transition: scale 240ms var(--motion-interactive);
+  }
+
+  [data-menu-motion]:has(a:not(.nav-contact):active) > .top-menu-highlight::before,
+  :is(.site-header .nav, .novel-index) a:active > .top-menu-label {
+    scale: .95;
+    transition-duration: 110ms;
+  }
+
+  .scroll-reveal { transition: opacity 550ms var(--motion-enter); }
+  .reveal-pending:not(:focus-within, :target, :has(:target)) { opacity: .48; }
+  .reveal-part {
+    clip-path: inset(-.2em -.2em -.35em);
+    transition: translate 660ms var(--motion-enter), clip-path 720ms var(--motion-enter);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal-pending:not(:focus-within, :target, :has(:target)) .reveal-part {
+    translate: 0 .65em;
+    clip-path: inset(0 -.2em 100%);
+  }
+
+  .scroll-reveal:is(:focus-within, :target, :has(:target), .route-shared-settled),
+  .scroll-reveal:is(:focus-within, :target, :has(:target), .route-shared-settled) .reveal-part { transition: none; }
+  .scroll-reveal:not(.reveal-pending, :focus-within, .route-shared-settled):is(figure, .featured-project) .media-window {
+    animation: photo-unmask 780ms var(--motion-enter) both;
+  }
+
+  @keyframes photo-unmask {
+    from { clip-path: inset(9% 4% 18% 4% round 4px); }
+    to { clip-path: inset(0); }
+  }
+
+  @supports (animation-timeline: view()) {
+    .home-opening { view-timeline: --opening-scroll block; }
+    .home-masthead-portrait > figure img {
+      animation: portrait-scroll linear both;
+      animation-timeline: --opening-scroll;
+      animation-range: exit 7% exit 86%;
+    }
+
+    .featured-with-image:not(.featured-with-cover) .media-window { view-timeline: --feature-scroll block; }
+    .featured-with-image:not(.featured-with-cover) .media-window img {
+      animation: photograph-scroll linear both;
+      animation-timeline: --feature-scroll;
+      animation-range: entry 6% cover 45%;
+    }
+
+    @keyframes portrait-scroll {
+      from { translate: 0 0; rotate: 0deg; scale: 1; }
+      to { translate: 0 9%; rotate: 3deg; scale: 1.12; }
+    }
+
+    @keyframes photograph-scroll {
+      from { transform: perspective(60rem) translateY(5%) rotateX(7deg) rotateZ(-1.5deg) scale(1.19); }
+      to { transform: none; }
+    }
+  }
+
+  .experience-stage[data-pinned]::after {
+    display: block;
+    height: var(--experience-travel, 0px);
+    content: '';
+  }
+
+  .experience-stage[data-pinned] .experience-sticky {
+    position: sticky;
+    top: var(--experience-top);
+  }
+
+  .experience-stage[data-pinned] .experience-window { overflow: clip; }
+
+  .experience-stage[data-pinned] .experience-track {
+    position: relative;
+    display: flex;
+    gap: 1.2rem;
+  }
+
+  .experience-stage[data-pinned] .experience-track > * { flex: 0 0 100%; min-width: 0; }
+  .experience-stage[data-pinned] .home-work-list { margin-block-start: 0; }
+}

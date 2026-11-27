@@ -37,6 +37,11 @@ export const pageIcons = {
 export const headerAssets = `<link rel="stylesheet" href="/header-surface.css">
   <script src="/header-surface.js" defer blocking="render"></script>`;
 
+export const motionAssets = `<link rel="stylesheet" href="/site-motion.css">
+  <script src="/top-menu-motion.js" type="module"></script>
+  <script src="/scroll-momentum.js" type="module"></script>
+  <script src="/scroll-reveals.js" type="module"></script>`;
+
 export const sectionIcons = {
   education: 'graduation-cap', experience: 'briefcase', languages: 'translate',
   capabilities: 'list-checks', courses: 'notebook', achievements: 'trophy', interests: 'compass',

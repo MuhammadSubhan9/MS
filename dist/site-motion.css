@@ -123,5 +123,12 @@
   }
 
   .experience-stage[data-pinned] .experience-track > * { flex: 0 0 100%; min-width: 0; }
-  .experience-stage[data-pinned] .home-work-list { margin-block-start: 0; }
+  .experience-stage[data-pinned] .home-work-list {
+    display: flex;
+    flex-basis: 148%;
+    gap: 1.2rem;
+    margin-block-start: 0;
+  }
+  .experience-stage[data-pinned] .home-work-list > article { flex: 1 1 0; min-width: 0; }
+  .experience-stage[data-pinned] .home-work-list figure img { max-height: 14rem; }
 }

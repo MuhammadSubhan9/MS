@@ -284,6 +284,17 @@ try {
     return link.matches('.home-work-list .project-action') && bounds.left >= windowBox.left && bounds.right <= windowBox.right;
   })()`), 'tabbing brings the next panel and its link into view');
 
+  for (const target of ['graduation-volunteering', 'unesco-ai-forum', 'lead-influence-workshop']) {
+    const selector = `.experience-jumps a[href="#selected-${target}"]`;
+    await press(selector);
+    await waitFor(() => chrome.evaluate(`(() => {
+      const link = document.querySelector(${JSON.stringify(selector)});
+      const card = document.querySelector(link.hash).getBoundingClientRect();
+      const viewport = document.querySelector('.experience-window').getBoundingClientRect();
+      return link.getAttribute('aria-current') === 'location' && card.left >= viewport.left - 2 && card.right <= viewport.right + 2;
+    })()`), 'a single press brings the full ' + target + ' card into view');
+  }
+
   await chrome.call('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 2 });
   await chrome.navigate(origin + '/?motion=touch', 390, 844);
   assert.equal(await chrome.evaluate("document.querySelector('.experience-stage').hasAttribute('data-pinned')"), false, 'the phone layout reads vertically');
@@ -300,6 +311,22 @@ try {
   await press('.nav a[href="/contact/"]', true);
   await waitFor(() => chrome.evaluate("location.pathname === '/contact/' && document.readyState === 'complete'"), 'one tap on a link after a swipe');
   await chrome.call('Emulation.setTouchEmulationEnabled', { enabled: false });
+
+  await chrome.navigate(origin + '/?motion=mobile-anchor', 390);
+  await chrome.evaluate("document.querySelector('.experience-jumps').scrollIntoView({block:'center',behavior:'instant'})");
+  await press('.experience-jumps a[href="#selected-graduation-volunteering"]', true);
+  await waitFor(() => chrome.evaluate("location.hash === '#selected-graduation-volunteering' && document.querySelector(':target').getBoundingClientRect().top < 130"), 'mobile link jumps down to the volunteering card');
+
+  await chrome.navigate(origin + '/work/unesco-ai-forum/', 390);
+  assert.match(await chrome.evaluate("document.querySelector('.experience-question').textContent"), /Who is accountable/);
+  await chrome.evaluate("document.querySelector('.photo-reference').scrollIntoView({block:'center',behavior:'instant'})");
+  await press('.photo-reference a', true);
+  await waitFor(() => chrome.evaluate("location.hash === '#photo-1' && document.querySelector('#photo-1').getBoundingClientRect().top < 130"), 'article photo reference jumps to the numbered figure');
+  assert.match(await chrome.evaluate("document.querySelector('#photo-1 figcaption').textContent"), /Photo 1.*Saudi Press Agency/);
+  await chrome.evaluate("document.querySelector('.related-experience').scrollIntoView({block:'center',behavior:'instant'})");
+  await press('.related-experience > a', true);
+  await waitFor(() => chrome.evaluate("location.pathname === '/work/money2020-middle-east/' && !!document.querySelector('.experience-question')"), 'related experience opens the Money20/20 write-up');
+  assert.match(await chrome.evaluate("document.querySelector('.experience-question').textContent"), /AI agent prove it has permission/);
 
   await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   await chrome.navigate(origin + '/about/', 390);

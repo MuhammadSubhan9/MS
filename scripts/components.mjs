@@ -37,10 +37,10 @@ export const pageIcons = {
 export const headerAssets = `<link rel="stylesheet" href="/header-surface.css">
   <script src="/header-surface.js" defer blocking="render"></script>`;
 
-export const motionAssets = `<link rel="stylesheet" href="/site-motion.css">
+export const motionAssets = `<link rel="stylesheet" href="/site-motion.css?v=experience-jumps">
   <script src="/top-menu-motion.js" type="module"></script>
   <script src="/scroll-momentum.js" type="module"></script>
-  <script src="/scroll-reveals.js" type="module"></script>`;
+  <script src="/scroll-reveals.js?v=experience-jumps" type="module"></script>`;
 
 export const sectionIcons = {
   education: 'graduation-cap', experience: 'briefcase', languages: 'translate',
@@ -108,7 +108,7 @@ export function section(id, title, body, options) {
   </section>` : '';
 }
 
-export function image(asset, { eager = false, sizes = '(max-width: 700px) calc(100vw - 40px), 720px', link } = {}) {
+export function image(asset, { eager = false, sizes = '(max-width: 700px) calc(100vw - 40px), 720px', link, photoReference } = {}) {
   if (!asset) return '';
   if (!asset.alt?.trim() || !Number.isInteger(asset.width) || asset.width < 1 ||
       !Number.isInteger(asset.height) || asset.height < 1) {
@@ -123,8 +123,8 @@ export function image(asset, { eager = false, sizes = '(max-width: 700px) calc(1
   const photo = `<div class="media-window"><img src="${safeLink(asset.src)}" alt="${escape(asset.alt)}"
     width="${asset.width}" height="${asset.height}" loading="${eager ? 'eager' : 'lazy'}" decoding="async"${eager ? ' fetchpriority="high"' : ''}
     ${sources ? `srcset="${sources}" sizes="${sizes}"` : ''}></div>`;
-  return `<figure>${link ? `<a class="media-link" href="${safeLink(link.href)}" aria-label="${escape(link.label)}" tabindex="-1">${photo}</a>` : photo}
-    ${asset.caption ? `<figcaption>${escape(asset.caption)}</figcaption>` : ''}</figure>`;
+  return `<figure${photoReference ? ' id="photo-1" tabindex="-1"' : ''}>${link ? `<a class="media-link" href="${safeLink(link.href)}" aria-label="${escape(link.label)}" tabindex="-1">${photo}</a>` : photo}
+    ${asset.caption ? `<figcaption>${photoReference ? '<span class="figure-number">Photo 1</span> ' : ''}${escape(asset.caption)}${photoReference ? ` <a href="${safeLink(photoReference.source)}">Source</a>` : ''}</figcaption>` : ''}</figure>`;
 }
 
 export function chronology(items, { detailLabel, renderText = escape, heading = 'h3', showInstitution = true } = {}) {
@@ -166,8 +166,9 @@ export function publicationDate(value) {
 }
 
 export function projectEntry(item, {
-  collection = 'work', heading = 'h2', featured = false, showImage = true, eagerImage = false, showSummary = false, actionLabel,
+  collection = 'work', heading = 'h2', featured = false, showImage = true, eagerImage = false, showSummary = false, actionLabel, jumpId,
 } = {}) {
+  const anchor = jumpId ? ` id="${escape(jumpId)}" tabindex="-1"` : '';
   const destination = hasDetail(item) ? `/${collection}/${item.slug}/` : item.url;
   const motionRoute = hasDetail(item) ? ` data-motion-route="${safeLink(destination)}"` : '';
   const metadata = [escape(item.category), publicationDate(item.date)].filter(Boolean).join(' · ');
@@ -184,7 +185,7 @@ export function projectEntry(item, {
     sizes: featured ? sizes : undefined,
   }) : '';
   if (featured && imageMarkup) {
-    return `<article class="project-entry featured-project featured-with-image${isCover ? ' featured-with-cover' : ''}"${motionRoute}>
+    return `<article class="project-entry featured-project featured-with-image${isCover ? ' featured-with-cover' : ''}"${anchor}${motionRoute}>
       <div class="feature-copy">
         ${metadata ? `<p class="meta">${metadata}</p>` : ''}
         <${heading}>${title}</${heading}><p>${escape(item.description)}</p>
@@ -194,7 +195,7 @@ export function projectEntry(item, {
       ${imageMarkup}
     </article>`;
   }
-  return `<article class="project-entry${featured ? ' featured-project' : ''}"${motionRoute}>
+  return `<article class="project-entry${featured ? ' featured-project' : ''}"${anchor}${motionRoute}>
     ${metadata ? `<p class="meta">${metadata}</p>` : ''}
     <div><${heading}>${title}</${heading}><p>${escape(item.description)}</p>
       ${summary}

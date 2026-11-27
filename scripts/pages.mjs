@@ -33,6 +33,7 @@ function homePage(data, { hasAbout, hasContact, selected }) {
     </dl>` : ''}
   </section>` : '';
   const featuredWork = selected[0] || projects[0];
+  const jumpId = item => `selected-${item.slug}`;
   const work = featuredWork ? `<section class="home-section home-work" id="selected-work" aria-labelledby="home-work-title" tabindex="-1" data-header-surface>
     <div class="container">
       <div class="experience-stage">
@@ -41,11 +42,14 @@ function homePage(data, { hasAbout, hasContact, selected }) {
             <h2 id="home-work-title">Selected experiences</h2>
             ${action('/work/', 'Browse experiences')}
           </div>
+          ${selected.length > 1 ? `<nav class="experience-jumps" aria-label="Jump to a selected experience">
+            ${selected.map(item => `<a href="#${jumpId(item)}">${escape(item.showcaseLabel || item.title)}</a>`).join('')}
+          </nav>` : ''}
           <div class="experience-window">
             <div class="experience-track">
-              ${projectEntry({ ...featuredWork, image: featuredWork.homeImage ?? featuredWork.image }, { heading: 'h3', featured: true, actionLabel: 'Read more' })}
+              ${projectEntry({ ...featuredWork, image: featuredWork.homeImage ?? featuredWork.image }, { heading: 'h3', featured: true, actionLabel: 'Read more', jumpId: jumpId(featuredWork) })}
               ${selected.length > 1 ? `<div class="home-work-list">
-                ${selected.slice(1).map(item => projectEntry(item, { heading: 'h3', showSummary: !item.image, actionLabel: 'Read more' })).join('')}
+                ${selected.slice(1).map(item => projectEntry(item, { heading: 'h3', showSummary: !item.image, actionLabel: 'Read more', jumpId: jumpId(item) })).join('')}
               </div>` : ''}
             </div>
           </div>
@@ -268,6 +272,19 @@ function workIndex(items, label, introduction, evidence) {
   </div>`;
 }
 
+function relatedExperience(item, detailed) {
+  const related = detailed.find(entry => entry.slug === item.related.slug && entry !== item);
+  if (!related) throw new Error(`Invalid related experience for ${item.slug}`);
+  return `<aside class="related-experience" data-event="${escape(related.slug)}" aria-label="Read next">
+    <a href="${safeLink(`/work/${related.slug}/`)}">
+      ${related.eventLogo ? eventMark(related) : ''}
+      <div><span class="eyebrow">Read next</span><h2>${escape(related.title)}</h2>
+        <p>${escape(item.related.note)}</p></div>
+      ${icon('arrow-right', 'arrow')}
+    </a>
+  </aside>`;
+}
+
 function collectionPages(add, data, items, path, label, evidence = '') {
   if (!items.length) return;
   const slugs = new Set();
@@ -289,7 +306,8 @@ function collectionPages(add, data, items, path, label, evidence = '') {
         `<li><a href="${safeLink(source.url)}">${escape(source.label)}</a></li>`).join('')}</ul></section>` : '';
     const renderText = isWriting ? escape : glossary;
     const parts = (item.sections || []).map(part => `<section class="article-section"><h2>${escape(part.title)}</h2>${paragraphs(part.paragraphs, renderText)}</section>`).join('');
-    const photo = image(item.image, { eager: true, sizes: hasCover ? '(max-width: 650px) 190px, 240px' : '(max-width: 760px) 92vw, 640px' });
+    const photoReference = !isWriting && item.image?.caption ? item.photoReference : null;
+    const photo = image(item.image, { eager: true, sizes: hasCover ? '(max-width: 650px) 190px, 240px' : '(max-width: 760px) 92vw, 640px', photoReference });
     const headline = `<h1>${escape(item.title)}</h1><p class="lead">${renderText(item.description)}</p>`;
     const mark = isWorkEvent ? eventMark(item) : '';
     const opening = isWriting
@@ -298,7 +316,9 @@ function collectionPages(add, data, items, path, label, evidence = '') {
         ${photo}
         <div class="experience-opening-copy">
           ${mark || metadata ? `<div class="experience-identity">${mark}${metadata ? `<p class="meta">${metadata}</p>` : ''}</div>` : ''}
-          ${headline}
+          <h1>${escape(item.title)}</h1>
+          ${item.question ? `<p class="experience-question">${escape(item.question)}</p>` : ''}
+          <p class="lead">${renderText(item.description)}</p>
         </div>
       </header>`;
     const neighbours = isWriting ? [
@@ -310,9 +330,11 @@ function collectionPages(add, data, items, path, label, evidence = '') {
       <article class="detail${hasCover ? ' detail-with-cover' : ''}${isWriting ? '' : ' work-detail'}" data-motion-route="/${path}/${item.slug}/">
         ${opening}
         <div class="reading article-body">${paragraphs(item.body, renderText)}
+          ${photoReference ? `<p class="photo-reference"><a href="#photo-1">${escape(photoReference.label)} <span>(Photo 1)</span></a></p>` : ''}
           ${parts && !isWriting ? `<div class="work-detail-parts">${parts}</div>` : parts}
           ${item.url ? action(item.url, 'View supporting material') : ''}${sources}
         </div>
+        ${!isWriting && item.related ? relatedExperience(item, detailed) : ''}
         ${neighbours.length ? `<nav class="article-nav" aria-label="More writing">${neighbours.map(([entry, direction]) =>
           `<div><span class="eyebrow">${direction}</span>${action(`/${path}/${entry.slug}/`, entry.title)}</div>`).join('')}</nav>` : ''}
       </article>`, isWriting ? 'article' : 'website');

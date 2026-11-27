@@ -44,7 +44,8 @@ if (track?.children.length > 1 && CSS.supports('overflow', 'clip')) {
   const sticky = stage.querySelector('.experience-sticky');
   const viewport = stage.querySelector('.experience-window');
   const header = document.querySelector('.site-header');
-  const desktop = matchMedia('(min-width: 1100px) and (min-height: 700px) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+  const desktop = matchMedia('(min-width: 1100px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)');
+  const coarsePointer = matchMedia('(pointer: coarse)');
   let travel = 0;
   let pinTop = 0;
   let offset = 0;
@@ -61,9 +62,10 @@ if (track?.children.length > 1 && CSS.supports('overflow', 'clip')) {
   }
 
   function measure() {
-    stage.toggleAttribute('data-pinned', desktop.matches);
+    const wide = desktop.matches && !coarsePointer.matches;
+    stage.toggleAttribute('data-pinned', wide);
     travel = 0;
-    if (desktop.matches) {
+    if (wide) {
       const spareHeight = innerHeight - header.offsetHeight - sticky.offsetHeight;
       if (spareHeight >= 48) {
         pinTop = header.offsetHeight + Math.max(24, Math.round(spareHeight * .35));
@@ -90,6 +92,7 @@ if (track?.children.length > 1 && CSS.supports('overflow', 'clip')) {
   addEventListener('resize', measure);
   addEventListener('pageshow', measure);
   desktop.addEventListener('change', measure);
+  coarsePointer.addEventListener('change', measure);
   document.fonts.ready.then(measure);
   viewport.addEventListener('focusin', event => {
     if (!travel || !event.target.matches(':focus-visible')) return;

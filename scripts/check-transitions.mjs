@@ -262,11 +262,16 @@ try {
 
   await chrome.navigate(origin + '/?motion=stage', 1440);
   const scene = await chrome.evaluate(`(() => {
-    const stage = document.querySelector('.experience-stage[data-pinned]');
+    const stage = document.querySelector('.experience-stage');
     const pin = parseFloat(stage.style.getPropertyValue('--experience-top'));
-    return { pin, start: stage.getBoundingClientRect().top + scrollY - pin, travel: parseFloat(stage.style.getPropertyValue('--experience-travel')) };
+    return {
+      pin, start: stage.getBoundingClientRect().top + scrollY - pin,
+      travel: parseFloat(stage.style.getPropertyValue('--experience-travel')),
+      screen: [innerWidth, innerHeight],
+      coarse: matchMedia('(pointer: coarse)').matches,
+    };
   })()`);
-  assert.ok(scene.travel > 600, 'desktop experiences have sideways travel');
+  assert.ok(scene.travel > 600, 'desktop experiences have sideways travel ' + JSON.stringify(scene));
   await chrome.evaluate(`scrollTo({top: ${scene.start + scene.travel / 2}, behavior: 'instant'})`);
   await waitFor(() => chrome.evaluate(`Math.abs(parseFloat(document.querySelector('.experience-track').style.translate) + ${scene.travel / 2}) < 3`), 'scrolling moves the experience track sideways');
   assert.ok(await chrome.evaluate(`Math.abs(document.querySelector('.home-section-heading').getBoundingClientRect().top - ${scene.pin}) < 3`), 'the Selected experiences heading stays in view');

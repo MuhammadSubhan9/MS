@@ -242,7 +242,7 @@
   clip-path: inset(0 0 5% 0);
 }
 
-.intro-playing :is(.home-title .eyebrow, .name-line > span, .home-intro > .lead, .text-actions,
+.intro-playing :is(.home-title .eyebrow, .name-line > span, .home-intro-copy > .lead, .text-actions,
   .home-masthead-portrait > figure, .home-masthead-portrait > figure .media-window) {
   animation-play-state: paused;
 }

@@ -204,11 +204,11 @@
   --rail-axis: clamp(4.2rem, 9.6vw, 7.35rem);
   --rail-branch: clamp(1.2rem, 3.4vw, 2.85rem);
   --entry-inset: calc(var(--rail-axis) + var(--rail-branch));
-  --entry-pad: clamp(.8rem, 1.6vw, 1.35rem);
+  --entry-pad: clamp(.72rem, 1.25vw, 1.04rem);
   --pin-top: calc(var(--entry-pad) + .62rem);
   --end-space: 3.65rem;
   --year-gap: .8rem;
-  --year-height: 3.75rem;
+  --year-height: clamp(5.5rem, 9vw, 8rem);
   position: relative;
   isolation: isolate;
 }
@@ -246,26 +246,46 @@
   align-items: center;
   min-height: var(--year-height);
   margin-block-start: var(--year-gap);
+  padding-inline-start: var(--entry-inset);
 }
-.journey-year:not(:first-child) { margin-block-start: clamp(1.05rem, 2.3vw, 1.9rem); }
+.journey-year:not(:first-child) { margin-block-start: clamp(1.85rem, 3.9vw, 3.6rem); }
+.journey-year-opening {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .65rem 1.1rem;
+  min-width: 0;
+  padding: clamp(.8rem, 2vw, 1.4rem) clamp(.9rem, 2.9vw, 2.5rem);
+  border: 1px solid #566a59;
+  border-inline-start: 3px solid #a8ae85;
+  background: linear-gradient(110deg, #293c33, #435748);
+  color: #f6eddd;
+}
 .journey-year h3 {
-  color: var(--journey-accent);
-  font-size: clamp(1.6rem, 3.25vw, 2.7rem);
+  font-size: clamp(3.05rem, 6.6vw, 5.75rem);
   font-variant-numeric: lining-nums tabular-nums;
-  letter-spacing: -.027em;
+  letter-spacing: -.045em;
+  line-height: .9;
 }
-.journey-year::after {
+.journey-year-opening > span {
+  color: #e2dbc5;
+  font-size: .9rem;
+  font-variant-numeric: tabular-nums;
+}
+.journey-year::before {
   position: absolute;
-  inset: 50% 0 auto var(--rail-axis);
+  inset: 50% auto auto var(--rail-axis);
+  width: var(--rail-branch);
   height: 1px;
-  background: linear-gradient(90deg, #74896f, #b9bea8 60%, transparent);
+  background: #7e967a;
   content: '';
 }
 .journey-milestone {
   --milestone-accent: #355e4c;
   --milestone-wash: #dce5d7;
   padding-inline-start: var(--entry-inset);
-  margin-block-start: clamp(.5rem, 1.05vw, .88rem);
+  margin-block-start: clamp(.38rem, .75vw, .65rem);
 }
 .journey-milestone[data-topic="business"] { --milestone-accent: #785f3f; --milestone-wash: #ebdfca; }
 .journey-milestone[data-topic="technology"] { --milestone-accent: #455b55; --milestone-wash: #dce4dd; }
@@ -360,7 +380,7 @@
 }
 .journey-title {
   grid-area: 2 / 1;
-  font: 400 clamp(1.35rem, 2.65vw, 2.08rem)/1.12 var(--serif);
+  font: 400 clamp(1.3rem, 2.35vw, 1.9rem)/1.15 var(--serif);
   text-wrap: pretty;
   overflow-wrap: anywhere;
 }
@@ -378,7 +398,7 @@
   display: grid;
   grid-area: 1 / 2 / 4 / 3;
   place-items: center;
-  width: clamp(3.3rem, 6.5vw, 5.1rem);
+  width: clamp(2.9rem, 5vw, 4rem);
   aspect-ratio: 1;
   border: 1px solid var(--emblem-line);
   background: #fffaf064;
@@ -589,16 +609,11 @@
     --rail-axis: .4rem;
     --rail-branch: 1rem;
     --year-gap: .6rem;
-    --year-height: 3.3rem;
-    --entry-pad: .86rem;
+    --year-height: 5.65rem;
+    --entry-pad: .74rem;
   }
-  .journey-year h3 {
-    z-index: 1;
-    margin-inline-start: var(--entry-inset);
-    padding-inline: var(--entry-pad) .55rem;
-    background: #fbf5eaa8;
-  }
-  .journey-year::after { inset-inline-start: calc(var(--rail-axis) + .55rem); }
+  .journey-year-opening { align-items: center; }
+  .journey-year-opening > span { font-size: .82rem; }
   .journey-card > summary {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: .43rem .6rem;

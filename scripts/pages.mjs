@@ -11,7 +11,7 @@ function homePage(data, { hasAbout, hasContact, selected }) {
   const { education, projects, portrait, writing, contact } = data;
   const portraitMarkup = image(portrait, {
     eager: true,
-    sizes: '(max-width: 700px) min(100vw - 1.5rem, 336px), 352px',
+    sizes: '(max-width: 700px) min(100vw - 2.5rem, 352px), (max-width: 1200px) 41vw, 470px',
   });
   const currentEducation = education.find(item => item.current) || education[0];
   const profile = hasAbout ? `<section class="home-section home-profile container" id="background" aria-labelledby="profile-title" tabindex="-1">
@@ -97,19 +97,23 @@ function homePage(data, { hasAbout, hasContact, selected }) {
   const nameLines = data.name.trim().split(/\s+(?=\S+$)/);
   return `
     <section class="home-opening" aria-labelledby="home-title" data-header-surface="opening">
-    <div class="container home-masthead${portraitMarkup ? ' home-masthead-portrait' : ''}">
-      <div class="home-intro">
+      <div class="container home-masthead${portraitMarkup ? ' home-masthead-portrait' : ''}">
         <div class="home-title">
           ${data.descriptor ? `<p class="eyebrow">${escape(data.descriptor)}</p>` : ''}
           <h1 id="home-title">${nameLines.map(line => `<span class="name-line"><span>${escape(line)}</span></span>`).join(' ')}</h1>
         </div>
-        <div class="lead">${paragraphs(data.introduction)}</div>
-        ${note ? renderNowPreview(note) : ''}
-        ${actions ? `<nav class="text-actions" aria-label="Explore the portfolio">${actions}</nav>` : ''}
+        ${portraitMarkup}
       </div>
-      ${portraitMarkup}
-    </div>
     </section>
+    ${data.introduction.length || note || actions ? `<div class="home-intro-band">
+      <div class="container home-intro${note ? ' home-intro-with-now' : ''}">
+        <div class="home-intro-copy">
+          ${data.introduction.length ? `<div class="lead">${paragraphs(data.introduction)}</div>` : ''}
+          ${actions ? `<nav class="text-actions" aria-label="Explore the portfolio">${actions}</nav>` : ''}
+        </div>
+        ${note ? renderNowPreview(note) : ''}
+      </div>
+    </div>` : ''}
     ${profile}${now}${work}${writingFeature}${contactFeature}
   `;
 }
@@ -129,7 +133,7 @@ function aboutPage(data, background) {
         ${portrait}
       </header>
     </div>
-    ${background.length ? `<div class="container"><nav class="about-jumps" aria-label="On this page"><ul>
+    ${background.length ? `<div class="container about-continuation"><nav class="about-jumps" aria-label="On this page"><ul>
       ${background.map(([id, title]) => `<li>${action('#' + id, title, 'action-link', '', sectionIcons[id])}</li>`).join('')}
     </ul></nav>
     <div class="about-records">${background.map(([id, title, body]) => section(id, title, body, { share: id === 'courses' })).join('')}</div></div>` : ''}

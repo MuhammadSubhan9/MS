@@ -17,6 +17,27 @@ try {
   await chrome.call('Runtime.enable');
   await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
 
+  for (const width of [320, 701, 1440]) {
+    await chrome.navigate(origin + '/', width);
+    assert.equal(await chrome.evaluate(`(() => {
+      const masthead = document.querySelector('.home-opening');
+      const intro = document.querySelector('.home-intro-band');
+      return intro.getBoundingClientRect().top >= masthead.getBoundingClientRect().bottom &&
+        [...masthead.querySelectorAll('.name-line > span')].every(line => {
+          const text = document.createRange();
+          text.selectNodeContents(line);
+          return text.getClientRects().length === 1 && text.getBoundingClientRect().right <= line.getBoundingClientRect().right + 1;
+        });
+    })()`), true, `the name fits without wrapping and the introduction sits below it at ${width}px`);
+
+    await chrome.navigate(origin + '/about/', width);
+    assert.equal(await chrome.evaluate(`(() => {
+      const bounds = selector => document.querySelector(selector).getBoundingClientRect();
+      return bounds('.about-hero').bottom < bounds('.about-continuation').top &&
+        bounds('#education').top < bounds('.about-opening').bottom;
+    })()`), true, `education overlaps the fade and clears the biography at ${width}px`);
+  }
+
   await chrome.navigate(origin + '/journey/#milestone-igcses', 390);
   await chrome.evaluate("document.querySelector('.journey-milestone').scrollIntoView({ block: 'center', behavior: 'instant' })");
   await waitFor(() => chrome.evaluate("document.querySelector('.journey-scrubber').value === '0'"), 'scroll syncs the timeline scrubber');
@@ -227,6 +248,11 @@ try {
   assert.equal(await chrome.evaluate("document.querySelector('.journey-milestone').id"), 'milestone-course-crew-management');
   assert.equal(await chrome.evaluate("document.querySelector('.journey-milestone:last-child').id"), 'milestone-unesco-ai-forum');
   assert.equal(await chrome.evaluate("document.querySelector('#milestone-unesco-ai-forum .journey-mark img').getAttribute('src')"), '/images/event-unesco-ai-forum.webp');
+  assert.ok(await chrome.evaluate(`Array.from(document.querySelectorAll('.journey-year')).every(chapter => {
+    const year = chapter.dataset.calendarYear;
+    const count = document.querySelectorAll('[data-milestone-year="' + year + '"]').length;
+    return chapter.querySelector('h3').textContent === year && parseInt(chapter.querySelector('.journey-year-opening > span').textContent, 10) === count;
+  })`), 'each Journey year displays its milestone count');
 
   await chrome.call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
   await chrome.navigate(origin + '/journey/', 390);

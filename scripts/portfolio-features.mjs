@@ -13,7 +13,7 @@ const topics = [
 export const portfolioAssets = `<link rel="stylesheet" href="/portfolio-features.css?v=viewer-controls">
   <script src="/portfolio-features.js?v=viewer-controls" type="module"></script>`;
 
-export const journeyAssets = `<link rel="stylesheet" href="/journey.css?v=viewer-controls">
+export const journeyAssets = `<link rel="stylesheet" href="/journey.css?v=year-openings">
   <script src="/journey.js?v=viewer-controls" defer></script>`;
 
 export const sectionLinkDialog = `<dialog class="section-link-dialog" aria-labelledby="section-link-title">
@@ -170,12 +170,17 @@ function journeyMilestone({ record, date, year, logo, preview, icon: milestoneIc
 
 function journeyTimeline(milestones, hasCurrentWork) {
   const displayedYears = new Set();
+  const yearCounts = new Map();
+  for (const { year } of milestones) yearCounts.set(year, (yearCounts.get(year) || 0) + 1);
   return `<div class="journey-timeline" data-journey-timeline>
     <div class="journey-rail" aria-hidden="true"><span></span></div>
     <ol class="journey-list">${milestones.map(entry => {
       const { year } = entry;
       const divider = year && !displayedYears.has(year) ? `<li class="journey-year" id="journey-year-${year}" data-calendar-year="${year}">
-        <h3>${year}</h3><span class="journey-point" aria-hidden="true"></span>
+        <span class="journey-point" aria-hidden="true"></span>
+        <div class="journey-year-opening">
+          <h3>${year}</h3><span>${yearCounts.get(year)} ${yearCounts.get(year) === 1 ? 'milestone' : 'milestones'}</span>
+        </div>
       </li>` : '';
       displayedYears.add(year);
       return divider + journeyMilestone(entry);

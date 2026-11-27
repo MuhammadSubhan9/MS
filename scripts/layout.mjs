@@ -77,13 +77,13 @@ export function renderPage({ data, page, navigation, origin, ready, preview }) {
   <link rel="preload" href="/fonts/dm-serif-text.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/source-sans-3.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/icons.css">
-  <link rel="stylesheet" href="/styles.css?v=experience-jumps">
+  <link rel="stylesheet" href="/styles.css?v=page-openings">
   <link rel="stylesheet" href="/navigation-motion.css?v=first-press">
   <script src="/navigation-motion.js" blocking="render"></script>
   ${portfolioFeatures ? portfolioAssets : ''}
   ${about && data.courses?.some(course => course.certificateUrl && course.certificatePreview) ? '<script src="/certificate-viewer.js" type="module"></script>' : ''}
   ${journey ? journeyAssets : ''}
-  ${home ? '<link rel="stylesheet" href="/intro.css">\n  <script src="/intro.js" defer blocking="render"></script>' : ''}
+  ${home ? '<link rel="stylesheet" href="/intro.css?v=page-openings">\n  <script src="/intro.js" defer blocking="render"></script>' : ''}
   ${contact ? '<link rel="stylesheet" href="/contact.css">\n  <script src="/contact.js" defer></script>\n  <script src="/contact-card.js" type="module"></script>' : ''}
   ${data.now ? commandAssets : ''}
   ${home && data.now ? '<script src="/now-editor.js" defer></script>' : ''}

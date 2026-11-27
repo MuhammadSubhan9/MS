@@ -119,54 +119,61 @@ figcaption { margin-top: var(--space-1); color: var(--muted); font-size: .875rem
 body:has(.home-page) { --paper: #f4ebdf; }
 .home-page { --home-ink: #3b2b23; --home-wine: #682d3e; --home-bronze: #79563d; padding: 0; }
 .home-opening {
-  border-bottom: 1px solid var(--rule);
   background:
-    radial-gradient(ellipse at 80% 43%, #efdbc2, transparent 65%),
-    linear-gradient(115deg, #f7eee1, #ead8c1);
+    linear-gradient(to top, var(--paper), transparent 24%),
+    radial-gradient(ellipse at 79% 41%, #e9cdb1, transparent 65%),
+    linear-gradient(176deg, #f7eddf 3%, #f1e1cb 78%, var(--paper));
 }
 .home-masthead {
-  padding-block: clamp(3rem, 6.5vw, 5.6rem);
+  padding-block: clamp(2.3rem, 5.2vw, 4.65rem) clamp(1rem, 3vw, 2.6rem);
 }
 .home-masthead-portrait {
   display: grid;
-  grid-template-columns: minmax(0, 1.24fr) minmax(11rem, .76fr);
+  grid-template-columns: minmax(0, 1.24fr) minmax(0, .88fr);
   align-items: center;
-  gap: clamp(1.6rem, 5vw, 5rem);
+  gap: clamp(.9rem, 3vw, 3.1rem);
 }
 .home-masthead-portrait > figure {
-  width: min(100%, 22rem);
+  width: min(100%, 29.4rem);
   justify-self: center;
 }
 .home-masthead-portrait > figure .media-window {
   mask-image:
-    linear-gradient(90deg, transparent, #000 21%, #000 82%, transparent),
-    linear-gradient(180deg, transparent, #000 3%, #000 92%, transparent);
+    linear-gradient(90deg, transparent, #000 16%, #000 84%, transparent),
+    linear-gradient(180deg, transparent, #000 5%, #000 83%, transparent);
   mask-composite: intersect;
 }
 .home-masthead-portrait > figure img {
   width: 100%;
-  aspect-ratio: 4 / 5.8;
+  aspect-ratio: 5 / 5.65;
   object-fit: cover;
   object-position: center top;
   transform: translate(-4.8%, -1.1%) scale(1.12) rotate(-3deg);
   transform-origin: 50% 0;
 }
-.home-intro .eyebrow { margin-bottom: 1.2rem; color: var(--home-bronze); }
-.home-intro h1 {
+.home-title { container-type: inline-size; }
+.home-title .eyebrow { margin-bottom: clamp(.8rem, 2.1vw, 1.65rem); color: var(--home-bronze); }
+.home-title h1 {
   color: var(--home-ink);
-  font-size: clamp(3.35rem, 7.5vw, 6.625rem);
-  line-height: .97;
-  letter-spacing: -.05em;
+  font-size: clamp(2.75rem, 19cqi, 8.65rem);
+  line-height: .91;
+  letter-spacing: -.057em;
   text-wrap: initial;
 }
-.home-masthead-portrait h1 { max-width: 10ch; }
 .name-line { display: block; overflow: clip; overflow-clip-margin: .08em; }
-.name-line > span { display: block; }
-.home-intro .lead { max-width: 49ch; }
-.home-title + .lead:not(:empty) { margin-top: clamp(1rem, 2.2vw, 1.65rem); }
+.name-line > span { display: block; white-space: nowrap; }
+.home-intro-band { background: var(--paper); }
+.home-intro {
+  display: grid;
+  gap: 1.25rem clamp(2rem, 8vw, 8rem);
+  align-items: start;
+  padding-block: clamp(1.4rem, 3.85vw, 3.35rem);
+  border-block-end: 1px solid #d6c5b0;
+}
+.home-intro-with-now { grid-template-columns: minmax(0, 1.2fr) minmax(15rem, .72fr); }
+.home-intro .lead { max-width: 56ch; }
 .home-now-note {
   max-width: 45ch;
-  margin-block-start: 1.15rem;
   padding-inline-start: .85rem;
   border-inline-start: 2px solid #9e7c54;
   color: #5e4535;
@@ -351,6 +358,7 @@ body:has(.profile-page) .nav a[aria-current="page"] { background: #e1d2bb; color
   --profile-bronze: #78563c;
   --profile-heading: #584335;
   --profile-rule: #bc9e8d;
+  --about-overlap: clamp(8.5rem, 15vw, 14rem);
 }
 
 .about-opening { padding-block-start: clamp(2rem, 5vw, 4rem); }
@@ -459,6 +467,33 @@ body:has(.profile-page) .nav a[aria-current="page"] { background: #e1d2bb; color
 .about-jumps a { padding-block: .4rem; }
 .about-jumps .link-label { text-decoration-color: #997c60; }
 .about-jumps a:hover { background: #f0e1d6; }
+.about-opening-with-portrait + .about-continuation {
+  position: relative;
+  margin-block-start: calc(-1 * var(--about-overlap));
+}
+.about-opening-with-portrait + .about-continuation .about-jumps {
+  margin-block: 0 clamp(.85rem, 2vw, 1.7rem);
+  padding: .4rem clamp(.75rem, 2.4vw, 1.6rem);
+  border: 1px solid #c7aa92;
+  background: #f0e4d4;
+}
+.about-opening-with-portrait + .about-continuation :is(#education, #experience) {
+  box-shadow: 0 .6rem 1.8rem #3a20151a;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .about-opening-with-portrait + .about-continuation #education {
+      animation: education-settle linear both;
+      animation-timeline: view();
+      animation-range: entry 8% entry 72%;
+    }
+    @keyframes education-settle {
+      from { box-shadow: 0 1.25rem 2.35rem #3a20152e; }
+      to { box-shadow: 0 .6rem 1.8rem #3a20151a; }
+    }
+  }
+}
 
 .about-records { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(1.75rem, 4vw, 3.8rem) 1rem; }
 .about-records > .section { grid-column: 1 / -1; margin: 0; }
@@ -1020,14 +1055,17 @@ details p { padding: .2rem 0; }
   main { padding-bottom: var(--space-5); }
   .home-opening {
     background:
+      linear-gradient(to top, var(--paper), transparent 19%),
       radial-gradient(ellipse at 52% 76%, #efdbc2, transparent 66%),
       linear-gradient(155deg, #f7eee1, #ead8c1);
   }
   .home-masthead-portrait {
     grid-template-columns: minmax(0, 1fr);
-    gap: 2.1rem;
+    gap: 1rem;
   }
-  .home-masthead-portrait > figure { width: min(calc(100% + 1rem), 21rem); }
+  .home-masthead-portrait > figure { width: min(100%, 22rem); }
+  .home-title h1 { font-size: clamp(2.75rem, 19cqi, 6.2rem); }
+  .home-intro-with-now { grid-template-columns: minmax(0, 1fr); }
   .home-profile, .home-writing-layout, .home-work-list, .home-work .featured-with-image,
   .project-entry,
   .writing-index .project-entry, .index-heading {
@@ -1040,6 +1078,8 @@ details p { padding: .2rem 0; }
   .home-work .featured-with-image .media-window { height: auto; min-height: 0; }
   .home-work .featured-with-image img { height: auto; position: static; }
   .home-writing figure { width: min(100%, 210px); justify-self: start; }
+  .profile-page { --about-overlap: clamp(13.7rem, 47vw, 15rem); }
+  .about-opening-with-portrait { --portrait-fade: calc(var(--about-overlap) + 3.1rem); }
   .about-hero-with-portrait {
     --portrait-height: clamp(18rem, 98vw, 30rem);
     display: block;
@@ -1078,7 +1118,6 @@ details p { padding: .2rem 0; }
 }
 
 @media (max-width: 600px) {
-  .home-masthead-portrait h1 { font-size: clamp(3.3rem, 12vw, 5rem); }
   .home-writing-novel {
     --novel-shade: linear-gradient(180deg, #1b1410f5 3%, #1b1410e8 57%, #1b141099 100%);
   }
@@ -1127,7 +1166,7 @@ details p { padding: .2rem 0; }
   html:not(.page-transitioning, [data-route-arrived]) .name-line:nth-child(2) > span {
     animation-delay: 130ms;
   }
-  html:not(.page-transitioning, [data-route-arrived]) .home-intro > .lead {
+  html:not(.page-transitioning, [data-route-arrived]) .home-intro-copy > .lead {
     animation: 505ms var(--motion-enter) 180ms both rise-in;
   }
   html:not(.page-transitioning, [data-route-arrived]) .text-actions {
